@@ -1,0 +1,25 @@
+# CMake generated files and directories
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+Testing/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps/
+
+# Common build directories
+[Bb]uild/
+out/
+tmp/
+
+# IDE-specific build directories
+cmake-build-*/
+.idea/
+.vs/
+.vscode/
+
+# Misc. Files 
+*.DS_Store
