@@ -1,13 +1,29 @@
 cmake_minimum_required(VERSION 3.28)
 
 set(CMAKE_CXX_STANDARD 20)
-
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(Magnetar VERSION 1.0)
 
+include(FetchContent)
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
+
+FetchContent_Declare(
+  fmt
+  GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+  GIT_TAG        12.1.0
+)
+set(FMT_INSTALL ON CACHE BOOL "" FORCE)
+
+FetchContent_Declare(
+  spdlog
+  GIT_REPOSITORY https://github.com/gabime/spdlog.git
+  GIT_TAG        v1.17.0
+)
+set(SPDLOG_INSTALL ON CACHE BOOL "" FORCE)
+
+FetchContent_MakeAvailable(fmt spdlog)
 
 add_library(Magnetar STATIC
     src/core/application.cpp
@@ -21,6 +37,12 @@ target_include_directories(Magnetar
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
+)
+
+target_link_libraries(Magnetar
+    PUBLIC
+        fmt::fmt
+        spdlog::spdlog
 )
 
 install(
