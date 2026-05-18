@@ -79,7 +79,18 @@ add_library(Magnetar::Magnetar ALIAS magnetar)
 ########################################################
 target_sources(magnetar 
     PRIVATE
-       src/core/application.cpp
+        include/magnetar/magnetar.h
+        include/magnetar/core/application.h
+        include/magnetar/core/base.h
+        include/magnetar/core/file_system.h
+        include/magnetar/core/filesystems/native_file_system.h
+        include/magnetar/core/filesystems/memory_file_system.h
+        include/magnetar/utils/string_utils.h
+
+        src/core/application.cpp
+        src/core/filesystems/native_file_system.cpp
+        src/core/filesystems/memory_file_system.cpp
+        src/utils/string_utils.cpp
 )
 
 ########################################################
@@ -139,7 +150,7 @@ if(MAGNETAR_BUILD_TESTS)
     enable_testing()
 
     add_executable(magnetar_tests
-        tests/sample.cpp
+        tests/core/filesystems/memory_file_system_test.cpp
     )
 
     target_link_libraries(magnetar_tests GTest::gtest_main magnetar)

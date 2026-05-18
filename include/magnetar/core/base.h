@@ -3,6 +3,7 @@
 #include <string>
 #include <forward_list>
 #include <exception>
+#include <cstddef>
 #include <spdlog/spdlog.h>
 #define MAGNETAR_API
 #define MAGNETAR_USE_ASSERTS
@@ -17,13 +18,13 @@ namespace magnetar
     using UniqueRef = std::unique_ptr<T>;
 
     template <typename T, typename... TArgs>
-    MAGNETAR_API Ref<T> create_reference(const TArgs &&...args)
+    MAGNETAR_API Ref<T> create_reference(TArgs &&...args)
     {
         return std::make_shared<T>(std::forward<TArgs>(args)...);
     }
 
     template <typename T, typename... TArgs>
-    MAGNETAR_API UniqueRef<T> create_unqiue_reference(const TArgs &&...args)
+    MAGNETAR_API UniqueRef<T> create_unqiue_reference(TArgs &&...args)
     {
         return std::make_unique<T>(std::forward<TArgs>(args)...);
     }
