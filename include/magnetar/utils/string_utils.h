@@ -5,5 +5,5 @@
 
 namespace magnetar::string_utils
 {
-    std::vector<std::string> split(const std::string& str, char character);
+    MAGNETAR_API std::vector<std::string> split(const std::string& str, char character);
 }
