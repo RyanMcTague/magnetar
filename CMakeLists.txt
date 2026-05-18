@@ -16,6 +16,16 @@ include(CMakePackageConfigHelpers)
 option(MAGNETAR_BUILD_SHARED "Build shared library" OFF)
 
 #
+# Constants
+#
+if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    set(MAGNETAR_BUILD_ARCH "macOS")
+    message(STATUS "Building ${PROJECT_NAME} for macOS")
+else()
+    message(FATAL_ERROR "${PROJECT_NAME} does not support ${CMAKE_SYSTEM_NAME}")
+endif()
+
+#
 # Dependencies
 #
 find_package(fmt CONFIG QUIET)
@@ -35,7 +45,6 @@ if(NOT fmt_FOUND OR NOT spdlog_FOUND)
     )
 
     FetchContent_MakeAvailable(fmt spdlog)
-
 endif()
 
 #
@@ -79,6 +88,25 @@ target_link_libraries(magnetar
         fmt::fmt
         spdlog::spdlog
 )
+
+#
+# Defines
+#
+target_compile_definitions(magnetar PRIVATE MAGNETAR_BUILD)
+
+if(MAGNETAR_BUILD_SHARED)
+    target_compile_definitions(magnetar PUBLIC MAGNETAR_BUILD_SHARED)
+else()
+    target_compile_definitions(magnetar PUBLIC MAGNETAR_BUILD_STATIC)
+endif()
+
+if(NOT CMAKE_BUILD_TYPE STREQUAL "Release")
+    target_compile_definitions(magnetar PUBLIC MAGNETAR_BUILD_DEBUG)
+    message(STATUS "Building ${PROJECT_NAME} in Debug mode")
+elseif()
+    target_compile_definitions(magnetar PUBLIC MAGNETAR_BUILD_RELEASE)
+    message(STATUS "Building ${PROJECT_NAME} in Release mode")
+endif()
 
 install(
     TARGETS magnetar
