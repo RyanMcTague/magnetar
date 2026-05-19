@@ -6,7 +6,6 @@ project(
     LANGUAGES CXX
 )
 
-include(FetchContent)
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
@@ -28,26 +27,10 @@ endif()
 ########################################################
 # Dependencies
 ########################################################
-find_package(fmt CONFIG QUIET)
-if(NOT fmt_FOUND)
-    FetchContent_Declare(
-        fmt
-        GIT_REPOSITORY https://github.com/fmtlib/fmt.git
-        GIT_TAG 12.1.0
-    )
-    FetchContent_MakeAvailable(fmt)
-endif()
 
-find_package(spdlog CONFIG QUIET)
-if(NOT spdlog_FOUND)
-    FetchContent_Declare(
-        spdlog
-        GIT_REPOSITORY https://github.com/gabime/spdlog.git
-        GIT_TAG v1.17.0
-    )
-
-    FetchContent_MakeAvailable(spdlog)
-endif()
+find_package(fmt REQUIRED CONFIG)
+find_package(spdlog REQUIRED CONFIG)
+find_package(eventpp REQUIRED CONFIG)
 
 ########################################################
 # Library
@@ -100,6 +83,7 @@ target_link_libraries(magnetar
     PUBLIC
         fmt::fmt
         spdlog::spdlog
+        eventpp::eventpp
 )
 
 ########################################################
