@@ -114,7 +114,6 @@ endif()
 ########################################################
 # Sandbox
 ########################################################
-
 if(MAGNETAR_BUILD_SANDBOX)
     add_executable(sample sample/main.cpp)
     target_compile_features(sample PUBLIC cxx_std_20)
