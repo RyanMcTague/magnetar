@@ -4,7 +4,7 @@
 #include "magnetar/core/file_system.h"
 namespace magnetar
 {
-    class DiskFile : public File
+    class MAGNETAR_API DiskFile : public File
     {
     public:
         DiskFile(const std::string &path, FileMode mode);
@@ -30,7 +30,7 @@ namespace magnetar
         const char* file_mode_ios() const;
     };
 
-    class NativeFileSystem : public FileSystem
+    class MAGNETAR_API NativeFileSystem : public FileSystem
     {
     public:
         const std::string &name() const override;

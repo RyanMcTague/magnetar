@@ -150,7 +150,7 @@ namespace magnetar
             memfs::Node *node = current->find(parts[i]);
             if (!node)
             {
-                auto dir = create_unqiue_reference<memfs::DirectoryNode>(parts[i]);
+                auto dir = create_unique_reference<memfs::DirectoryNode>(parts[i]);
                 node = current->add(std::move(dir));
             }
 
@@ -165,7 +165,7 @@ namespace magnetar
         if (current->find(final_name))
             return false;
 
-        current->add(create_unqiue_reference<T>(final_name));
+        current->add(create_unique_reference<T>(final_name));
 
         return true;
     }

@@ -67,7 +67,7 @@ bool magnetar::MemoryFile::eof() const
 
 magnetar::UniqueRef<magnetar::File> magnetar::MemoryFileSystem::open(const std::string &path, FileMode mode)
 {
-    auto file = create_unqiue_reference<MemoryFile>(this, path, mode);
+    auto file = create_unique_reference<MemoryFile>(this, path, mode);
     if (!file->is_open() && mode == FileMode::READ)
     {
         return nullptr;
@@ -75,14 +75,14 @@ magnetar::UniqueRef<magnetar::File> magnetar::MemoryFileSystem::open(const std::
     else if (!file->is_open())
     {
         create_node<memfs::FileNode>(path);
-        file = create_unqiue_reference<MemoryFile>(this, path, mode);
+        file = create_unique_reference<MemoryFile>(this, path, mode);
     }
     return file;
 }
 
 magnetar::MemoryFileSystem::MemoryFileSystem()
 {
-    m_root = create_unqiue_reference<memfs::DirectoryNode>("/");
+    m_root = create_unique_reference<memfs::DirectoryNode>("/");
 }
 bool magnetar::MemoryFileSystem::exists(const std::string &path) const
 {

@@ -74,7 +74,7 @@ const char *magnetar::DiskFile::file_mode_ios() const
 
 magnetar::UniqueRef<magnetar::File> magnetar::NativeFileSystem::open(const std::string &path, FileMode mode)
 {
-    auto file = create_unqiue_reference<DiskFile>(path, mode);
+    auto file = create_unique_reference<DiskFile>(path, mode);
     if (!file->is_open())
         return nullptr;
 

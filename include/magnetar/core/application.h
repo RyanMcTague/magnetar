@@ -8,6 +8,7 @@ namespace magnetar
     {
     public:
         Application(int argc, char** argv);
+        ~Application();
 
         static int runApp(int argc, char** argv);
 

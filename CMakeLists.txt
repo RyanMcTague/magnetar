@@ -13,6 +13,7 @@ include(CMakePackageConfigHelpers)
 # Options 
 ########################################################
 option(MAGNETAR_BUILD_SHARED "Build shared library" OFF)
+option(MAGNETAR_BUILD_SANDBOX "Build sandbox" ON)
 
 ########################################################
 # Constants
@@ -30,6 +31,7 @@ endif()
 find_package(fmt REQUIRED CONFIG)
 find_package(spdlog REQUIRED CONFIG)
 find_package(eventpp REQUIRED CONFIG)
+find_package(glfw3 REQUIRED CONFIG)
 
 ########################################################
 # Library
@@ -54,8 +56,12 @@ target_sources(magnetar
         include/magnetar/core/filesystems/native_file_system.h
         include/magnetar/core/filesystems/memory_file_system.h
         include/magnetar/utils/string_utils.h
+        include/magnetar/core/window.h
+        include/magnetar/platforms/glfw/glfw_window.h
 
         src/core/application.cpp
+        src/core/window.cpp
+        src/core/platforms/glfw_window.cpp
         src/core/filesystems/native_file_system.cpp
         src/core/filesystems/memory_file_system.cpp
         src/utils/string_utils.cpp
@@ -83,6 +89,7 @@ target_link_libraries(magnetar
         fmt::fmt
         spdlog::spdlog
         eventpp::eventpp
+        glfw
 )
 
 ########################################################
@@ -104,6 +111,19 @@ elseif()
     message(STATUS "Building ${PROJECT_NAME} in Release mode")
 endif()
 
+########################################################
+# Sandbox
+########################################################
+
+if(MAGNETAR_BUILD_SANDBOX)
+    add_executable(sample sample/main.cpp)
+    target_compile_features(sample PUBLIC cxx_std_20)
+    target_link_libraries(sample PRIVATE magnetar)
+endif()
+
+########################################################
+# Install
+########################################################
 install(
     TARGETS magnetar
     EXPORT MagnetarTargets
@@ -111,6 +131,7 @@ install(
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
 
 ########################################################
 # Install headers

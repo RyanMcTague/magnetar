@@ -2,6 +2,7 @@
 fmt/12.1.0
 spdlog/1.17.0
 eventpp/0.1.3
+glfw/3.4
 
 [generators]
 CMakeDeps

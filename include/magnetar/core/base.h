@@ -7,7 +7,7 @@
 #include <spdlog/spdlog.h>
 #define MAGNETAR_API
 #define MAGNETAR_USE_ASSERTS
-#define MAGNETAR_LOG_LEVEL spdlog::level::debug
+#define MAGNETAR_LOG_LEVEL spdlog::level::trace
 
 namespace magnetar
 {
@@ -24,7 +24,7 @@ namespace magnetar
     }
 
     template <typename T, typename... TArgs>
-    MAGNETAR_API UniqueRef<T> create_unqiue_reference(TArgs &&...args)
+    MAGNETAR_API UniqueRef<T> create_unique_reference(TArgs &&...args)
     {
         return std::make_unique<T>(std::forward<TArgs>(args)...);
     }
@@ -34,13 +34,7 @@ namespace magnetar
     {
         return std::static_pointer_cast<T>(ptr);
     }
-
-    template <typename T, typename U>
-    MAGNETAR_API UniqueRef<T> cast_reference(UniqueRef<U> ptr)
-    {
-        return std::static_pointer_cast<T>(ptr);
-    }
-
+    
     class MAGNETAR_API Exception : public std::exception
     {
     };
