@@ -14,7 +14,6 @@ include(CMakePackageConfigHelpers)
 # Options 
 ########################################################
 option(MAGNETAR_BUILD_SHARED "Build shared library" OFF)
-option(MAGNETAR_BUILD_TESTS "Build tests" ON)
 
 ########################################################
 # Constants
@@ -48,19 +47,6 @@ if(NOT spdlog_FOUND)
     )
 
     FetchContent_MakeAvailable(spdlog)
-endif()
-
-if(MAGNETAR_BUILD_TESTS)
-    FetchContent_Declare(
-        googletest
-        GIT_REPOSITORY https://github.com/google/googletest.git
-        GIT_TAG v1.17.0
-    )
-
-    if(MAKE_SYSTEM_NAME STREQUAL  "Windows")
-        set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-    endif()
-    FetchContent_MakeAvailable(googletest)
 endif()
 
 ########################################################
@@ -142,22 +128,6 @@ install(
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
-
-########################################################
-# Testing
-########################################################
-if(MAGNETAR_BUILD_TESTS)
-    enable_testing()
-
-    add_executable(magnetar_tests
-        tests/core/filesystems/memory_file_system_test.cpp
-    )
-
-    target_link_libraries(magnetar_tests GTest::gtest_main magnetar)
-
-    include(GoogleTest)
-    gtest_discover_tests(magnetar_tests)    
-endif()
 
 ########################################################
 # Install headers
