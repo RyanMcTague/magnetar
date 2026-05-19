@@ -27,7 +27,6 @@ endif()
 ########################################################
 # Dependencies
 ########################################################
-
 find_package(fmt REQUIRED CONFIG)
 find_package(spdlog REQUIRED CONFIG)
 find_package(eventpp REQUIRED CONFIG)
