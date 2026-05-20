@@ -17,16 +17,12 @@ magnetar::Application::~Application()
 
 int magnetar::Application::run()
 {
-    auto window = Window::create({
-        .title = "Untitled",
-        .width = 800,
-        .height = 600,
-    });
+    m_window = Window::create({"Untitled", 800, 600});
 
-    while (!window->should_close())
+    while (!m_window->should_close())
     {
-        window->update();
-        window->swap_buffers();
+        m_window->update();
+        m_window->swap_buffers();
     }
 
     return 0;

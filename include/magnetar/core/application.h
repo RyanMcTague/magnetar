@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include "magnetar/core/base.h"
-
+#include "magnetar/core/window.h"
 namespace magnetar
 {
     class MAGNETAR_API Application
@@ -14,7 +14,7 @@ namespace magnetar
 
     private:
         std::vector<std::string> m_command_line_args;
-
+        Ref<Window> m_window;
         int run();
     };
 }
