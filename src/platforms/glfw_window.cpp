@@ -1,7 +1,7 @@
 #include <GLFW/glfw3.h>
 #include "magnetar/platforms/glfw/glfw_window.h"
 #include "magnetar/core/input/input_events.h"
-#include "magnetar/core/event_system.h"
+#include "magnetar/core/events/event_system.h"
 
 
 magnetar::GlfwWindow::GlfwWindow(const WindowProps &props)
@@ -161,7 +161,7 @@ void magnetar::GlfwWindow::update()
         int glfw_key = pair.first;
         VirtualKey vk = pair.second;
         bool was_pressed = glfwGetKey(m_handle, glfw_key) == GLFW_PRESS;
-        EventSystem::get()->emit(VirtualKeyboardEvent{vk, was_pressed});
+        EventSystem::emit(VirtualKeyboardEvent{vk, was_pressed});
     }
 }
 void magnetar::GlfwWindow::swap_buffers() const

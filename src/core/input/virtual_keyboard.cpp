@@ -1,8 +1,8 @@
 #include "magnetar/core/input/virtual_keyboard.h"
-
+#include "magnetar/core/events/event_system.h"
 magnetar::VirtualKeyboard::VirtualKeyboard()
 {
-    m_keyboard_handle = EventSystem::get()->subscribe<VirtualKeyboardEvent>(this, &VirtualKeyboard::on_keyboard_event);
+    m_keyboard_handle = EventSystem::subscribe<VirtualKeyboardEvent>(this, &VirtualKeyboard::on_keyboard_event);
 
     m_keystates[VirtualKey::SPACE] = VirtualKeyState::UP;
     m_keystates[VirtualKey::APOSTROPHE] = VirtualKeyState::UP;
@@ -128,7 +128,7 @@ magnetar::VirtualKeyboard::VirtualKeyboard()
 
 magnetar::VirtualKeyboard::~VirtualKeyboard()
 {
-    EventSystem::get()->unsubscribe(m_keyboard_handle);
+    EventSystem::unsubscribe(m_keyboard_handle);
 }
 
 magnetar::VirtualKeyState magnetar::VirtualKeyboard::key_state(VirtualKey key) const

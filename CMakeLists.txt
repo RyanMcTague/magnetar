@@ -60,18 +60,20 @@ target_sources(magnetar
         include/magnetar/platforms/glfw/glfw_window.h
         include/magnetar/core/input/virtual_key.h
         include/magnetar/core/input/virtual_keyboard.h
-        include/magnetar/core/event_system.h
         include/magnetar/core/input/input_events.h
         include/magnetar/core/input/input_manager.h
         include/magnetar/core/time.h
-        
+        include/magnetar/core/events/event_handle.h
+        include/magnetar/core/events/event_callback.h
+        include/magnetar/core/events/event_system.h
+
+        src/core/events/event_system.cpp
         src/core/application.cpp
         src/core/window.cpp
         src/core/filesystems/native_file_system.cpp
         src/core/filesystems/memory_file_system.cpp
         src/utils/string_utils.cpp
         src/platforms/glfw_window.cpp
-        src/core/event_system.cpp
         src/core/input/virtual_keyboard.cpp
         src/core/input/input_manager.cpp
         src/core/time.cpp

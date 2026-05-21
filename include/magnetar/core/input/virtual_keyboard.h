@@ -1,7 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include "magnetar/core/base.h"
-#include "magnetar/core/event_system.h"
+#include "magnetar/core/events/event_handle.h"
 #include "magnetar/core/input/input_events.h"
 namespace magnetar
 {
