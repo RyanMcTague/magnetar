@@ -3,6 +3,7 @@
 #include <string>
 #include <forward_list>
 #include <exception>
+#include <typeindex>
 #include <cstddef>
 #include <spdlog/spdlog.h>
 #define MAGNETAR_API
@@ -27,12 +28,6 @@ namespace magnetar
     MAGNETAR_API UniqueRef<T> create_unique_reference(TArgs &&...args)
     {
         return std::make_unique<T>(std::forward<TArgs>(args)...);
-    }
-
-    template <typename T, typename U>
-    MAGNETAR_API Ref<T> cast_reference(Ref<U> ptr)
-    {
-        return std::static_pointer_cast<T>(ptr);
     }
     
     class MAGNETAR_API Exception : public std::exception

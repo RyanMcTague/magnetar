@@ -30,7 +30,6 @@ endif()
 ########################################################
 find_package(fmt REQUIRED CONFIG)
 find_package(spdlog REQUIRED CONFIG)
-find_package(eventpp REQUIRED CONFIG)
 find_package(glfw3 REQUIRED CONFIG)
 
 ########################################################
@@ -49,6 +48,7 @@ add_library(Magnetar::Magnetar ALIAS magnetar)
 ########################################################
 target_sources(magnetar 
     PRIVATE
+        include/magnetar/core/containers/tree.h
         include/magnetar/magnetar.h
         include/magnetar/core/application.h
         include/magnetar/core/base.h
@@ -58,13 +58,23 @@ target_sources(magnetar
         include/magnetar/utils/string_utils.h
         include/magnetar/core/window.h
         include/magnetar/platforms/glfw/glfw_window.h
-
+        include/magnetar/core/input/virtual_key.h
+        include/magnetar/core/input/virtual_keyboard.h
+        include/magnetar/core/event_system.h
+        include/magnetar/core/input/input_events.h
+        include/magnetar/core/input/input_manager.h
+        include/magnetar/core/time.h
+        
         src/core/application.cpp
         src/core/window.cpp
-        src/core/platforms/glfw_window.cpp
         src/core/filesystems/native_file_system.cpp
         src/core/filesystems/memory_file_system.cpp
         src/utils/string_utils.cpp
+        src/platforms/glfw_window.cpp
+        src/core/event_system.cpp
+        src/core/input/virtual_keyboard.cpp
+        src/core/input/input_manager.cpp
+        src/core/time.cpp
 )
 
 ########################################################
@@ -88,7 +98,6 @@ target_link_libraries(magnetar
     PUBLIC
         fmt::fmt
         spdlog::spdlog
-        eventpp::eventpp
         glfw
 )
 
