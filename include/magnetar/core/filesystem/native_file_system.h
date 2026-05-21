@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdio>
 #include "magnetar/core/base.h"
-#include "magnetar/core/file_system.h"
+#include "magnetar/core/filesystem/file_system.h"
 namespace magnetar
 {
     class MAGNETAR_API DiskFile : public File

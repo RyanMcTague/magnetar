@@ -1,7 +1,7 @@
 #include <cstring>
 #include <iostream>
 #include <sstream>
-#include "magnetar/core/filesystems/memory_file_system.h"
+#include "magnetar/core/filesystem/memory_file_system.h"
 
 magnetar::MemoryFile::MemoryFile(MemoryFileSystem *fs, const std::string &path, FileMode mode)
 {

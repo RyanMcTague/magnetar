@@ -52,9 +52,9 @@ target_sources(magnetar
         include/magnetar/magnetar.h
         include/magnetar/core/application.h
         include/magnetar/core/base.h
-        include/magnetar/core/file_system.h
-        include/magnetar/core/filesystems/native_file_system.h
-        include/magnetar/core/filesystems/memory_file_system.h
+        include/magnetar/core/filesystem/file_system.h
+        include/magnetar/core/filesystem/native_file_system.h
+        include/magnetar/core/filesystem/memory_file_system.h
         include/magnetar/utils/string_utils.h
         include/magnetar/core/window.h
         include/magnetar/platforms/glfw/glfw_window.h
