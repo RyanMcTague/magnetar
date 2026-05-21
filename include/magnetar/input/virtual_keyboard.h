@@ -1,8 +1,8 @@
 #pragma once
 #include <unordered_map>
 #include "magnetar/core/base.h"
-#include "magnetar/core/events/event_handle.h"
-#include "magnetar/core/input/input_events.h"
+#include "magnetar/events/event_handle.h"
+#include "magnetar/input/input_events.h"
 namespace magnetar
 {
     class MAGNETAR_API VirtualKeyboard

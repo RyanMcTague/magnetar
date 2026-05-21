@@ -1,5 +1,5 @@
 #include <filesystem>
-#include "magnetar/core/filesystem/native_file_system.h"
+#include "magnetar/filesystem/native_file_system.h"
 
 magnetar::DiskFile::DiskFile(const std::string &path, FileMode mode)
     : m_handle(nullptr), m_path(path), m_mode(mode), m_size(0)

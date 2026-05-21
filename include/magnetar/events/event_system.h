@@ -5,8 +5,8 @@
 #include <unordered_map>
 #include <algorithm>
 #include "magnetar/core/base.h"
-#include "magnetar/core/events/event_handle.h"
-#include "magnetar/core/events/event_callback.h"
+#include "magnetar/events/event_handle.h"
+#include "magnetar/events/event_callback.h"
 
 namespace magnetar
 {

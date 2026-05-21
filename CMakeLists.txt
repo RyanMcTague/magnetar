@@ -48,34 +48,34 @@ add_library(Magnetar::Magnetar ALIAS magnetar)
 ########################################################
 target_sources(magnetar 
     PRIVATE
-        include/magnetar/core/containers/tree.h
+        include/magnetar/containers/tree.h
         include/magnetar/magnetar.h
         include/magnetar/core/application.h
         include/magnetar/core/base.h
-        include/magnetar/core/filesystem/file_system.h
-        include/magnetar/core/filesystem/native_file_system.h
-        include/magnetar/core/filesystem/memory_file_system.h
+        include/magnetar/filesystem/file_system.h
+        include/magnetar/filesystem/native_file_system.h
+        include/magnetar/filesystem/memory_file_system.h
         include/magnetar/utils/string_utils.h
         include/magnetar/core/window.h
         include/magnetar/platforms/glfw/glfw_window.h
-        include/magnetar/core/input/virtual_key.h
-        include/magnetar/core/input/virtual_keyboard.h
-        include/magnetar/core/input/input_events.h
-        include/magnetar/core/input/input_manager.h
+        include/magnetar/input/virtual_key.h
+        include/magnetar/input/virtual_keyboard.h
+        include/magnetar/input/input_events.h
+        include/magnetar/input/input_manager.h
         include/magnetar/core/time.h
-        include/magnetar/core/events/event_handle.h
-        include/magnetar/core/events/event_callback.h
-        include/magnetar/core/events/event_system.h
+        include/magnetar/events/event_handle.h
+        include/magnetar/events/event_callback.h
+        include/magnetar/events/event_system.h
 
-        src/core/events/event_system.cpp
+        src/events/event_system.cpp
         src/core/application.cpp
         src/core/window.cpp
-        src/core/filesystems/native_file_system.cpp
-        src/core/filesystems/memory_file_system.cpp
+        src/filesystems/native_file_system.cpp
+        src/filesystems/memory_file_system.cpp
         src/utils/string_utils.cpp
         src/platforms/glfw_window.cpp
-        src/core/input/virtual_keyboard.cpp
-        src/core/input/input_manager.cpp
+        src/input/virtual_keyboard.cpp
+        src/input/input_manager.cpp
         src/core/time.cpp
 )
 

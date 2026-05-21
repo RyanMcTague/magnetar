@@ -1,8 +1,8 @@
 #pragma once
 #include <array>
 #include "magnetar/core/base.h"
-#include "magnetar/core/input/virtual_keyboard.h"
-#include "magnetar/core/input/virtual_key.h"
+#include "magnetar/input/virtual_keyboard.h"
+#include "magnetar/input/virtual_key.h"
 namespace magnetar
 {
     class MAGNETAR_API InputManager

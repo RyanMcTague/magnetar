@@ -1,4 +1,4 @@
-#include "magnetar/core/input/input_manager.h"
+#include "magnetar/input/input_manager.h"
 
 void magnetar::InputManager::connect(uint8_t controller)
 {

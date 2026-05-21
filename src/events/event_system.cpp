@@ -1,4 +1,4 @@
-#include "magnetar/core/events/event_system.h"
+#include "magnetar/events/event_system.h"
 
 magnetar::EventTypeID magnetar::EventSystem::s_next_event_type_id = 1;
 std::unordered_map<std::type_index, magnetar::EventSystem::Entry> magnetar::EventSystem::s_entries;

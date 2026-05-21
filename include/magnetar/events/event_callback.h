@@ -1,5 +1,5 @@
 #pragma once
-#include "magnetar/core/events/event_handle.h"
+#include "magnetar/events/event_handle.h"
 #include "magnetar/core/base.h"
 
 namespace magnetar

@@ -1,5 +1,5 @@
-#include "magnetar/core/input/virtual_keyboard.h"
-#include "magnetar/core/events/event_system.h"
+#include "magnetar/input/virtual_keyboard.h"
+#include "magnetar/events/event_system.h"
 magnetar::VirtualKeyboard::VirtualKeyboard()
 {
     m_keyboard_handle = EventSystem::subscribe<VirtualKeyboardEvent>(this, &VirtualKeyboard::on_keyboard_event);

@@ -1,7 +1,7 @@
 #include <GLFW/glfw3.h>
 #include "magnetar/platforms/glfw/glfw_window.h"
-#include "magnetar/core/input/input_events.h"
-#include "magnetar/core/events/event_system.h"
+#include "magnetar/input/input_events.h"
+#include "magnetar/events/event_system.h"
 
 
 magnetar::GlfwWindow::GlfwWindow(const WindowProps &props)

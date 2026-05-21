@@ -1,7 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include "magnetar/core/base.h"
-#include "magnetar/core/filesystem/file_system.h"
+#include "magnetar/filesystem/file_system.h"
 #include "magnetar/utils/string_utils.h"
 
 namespace magnetar

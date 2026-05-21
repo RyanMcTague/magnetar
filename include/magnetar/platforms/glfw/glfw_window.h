@@ -2,7 +2,7 @@
 #include <unordered_map>
 #include "magnetar/core/base.h"
 #include "magnetar/core/window.h"
-#include "magnetar/core/input/virtual_key.h"
+#include "magnetar/input/virtual_key.h"
 struct GLFWwindow;
 
 namespace magnetar
