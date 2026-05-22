@@ -22,19 +22,6 @@ namespace magnetar
         bool action_active(MappedInputCode code);
         bool action_inactive(MappedInputCode code);
     };
-
-    class MAGNETAR_API InvalidInputActionException : public Exception
-    {
-    public:
-        InvalidInputActionException(const std::string &name)
-            : m_message("input action " + name + " does not exist") {}
-
-        const char *what() const noexcept { return m_message.c_str(); }
-
-    private:
-        std::string m_message;
-    };
-
     class MAGNETAR_API InputSystem
     {
     public:
