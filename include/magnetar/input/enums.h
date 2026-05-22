@@ -3,15 +3,28 @@
 
 namespace magnetar
 {
-    enum class MAGNETAR_API VirtualKeyState
+    enum class MAGNETAR_API InputDeviceType
+    {
+        KEYBOARD = 0,
+        MOUSE,
+    };
+
+    enum class MAGNETAR_API ButtonState
     {
         UP = 0,
         RELEASED,
         PRESSED,
-        DOWN  
+        DOWN
     };
 
-    enum class MAGNETAR_API VirtualKey
+    enum class MAGNETAR_API MouseButton
+    {
+        LEFT = 0,
+        MIDDLE,
+        RIGHT
+    };
+
+    enum class MAGNETAR_API KeyboardKey
     {
         SPACE = 0,
         APOSTROPHE,
@@ -135,4 +148,3 @@ namespace magnetar
         MENU,
     };
 }
-

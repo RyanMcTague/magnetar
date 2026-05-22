@@ -2,7 +2,7 @@
 #include <unordered_map>
 #include "magnetar/core/base.h"
 #include "magnetar/core/window.h"
-#include "magnetar/input/virtual_key.h"
+
 struct GLFWwindow;
 
 namespace magnetar
@@ -27,6 +27,6 @@ namespace magnetar
         int m_height;
         std::string m_title;
         GLFWwindow* m_handle;
-        std::unordered_map<int, VirtualKey> m_keymap;
+        
     };
 }

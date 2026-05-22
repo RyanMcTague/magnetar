@@ -58,15 +58,22 @@ target_sources(magnetar
         include/magnetar/utils/string_utils.h
         include/magnetar/core/window.h
         include/magnetar/platforms/glfw/glfw_window.h
-        include/magnetar/input/virtual_key.h
-        include/magnetar/input/virtual_keyboard.h
-        include/magnetar/input/input_events.h
-        include/magnetar/input/input_manager.h
         include/magnetar/core/time.h
         include/magnetar/events/event_handle.h
         include/magnetar/events/event_callback.h
         include/magnetar/events/event_system.h
+        include/magnetar/input/input_device.h
+        include/magnetar/input/keyboard_device.h
+        include/magnetar/input/mouse_device.h
+        include/magnetar/platforms/glfw/glfw_keyboard_device.h
+        include/magnetar/math/vector2d.h
+        include/magnetar/platforms/glfw/glfw_mouse_device.h
+        include/magnetar/input/input_action.h
+        include/magnetar/input/enums.h
+        include/magnetar/input/input_system.h
+        include/magnetar/input/mapped_input_code.h
 
+        src/input/input_system.cpp
         src/events/event_system.cpp
         src/core/application.cpp
         src/core/window.cpp
@@ -74,9 +81,11 @@ target_sources(magnetar
         src/filesystems/memory_file_system.cpp
         src/utils/string_utils.cpp
         src/platforms/glfw_window.cpp
-        src/input/virtual_keyboard.cpp
-        src/input/input_manager.cpp
         src/core/time.cpp
+        src/input/keyboard_device.cpp
+        src/input/mouse_device.cpp
+        src/platforms/glfw_keyboard_device.cpp
+        src/platforms/glfw_mouse_device.cpp
 )
 
 ########################################################
