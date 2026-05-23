@@ -40,6 +40,7 @@ namespace magnetar
             }
             void *data = nullptr;
             size_t size = 0;
+            Timestamp last_changed_at;
         };
 
         class MAGNETAR_API DirectoryNode : public Node
@@ -89,6 +90,7 @@ namespace magnetar
         size_t tell() const override;
         size_t size() const override;
         bool eof() const override;
+        Timestamp last_changed_at() const override;
 
     private:
         FileMode m_mode;
@@ -117,7 +119,7 @@ namespace magnetar
         size_t read(const std::string &path, void *buffer, size_t offset, size_t size);
         size_t write(const std::string &path, const void *buffer, size_t offset, size_t size, FileMode mode);
         size_t file_size(const std::string &path) const override;
-
+        
         bool set_file(const std::string& path, void* buffer, size_t size);
         bool set_file(const std::string& path, const std::string& text);
 

@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include "magnetar/core/base.h"
-
+#include "magnetar/core/time.h"
 namespace magnetar
 {
     enum class MAGNETAR_API FileMode
@@ -37,6 +37,8 @@ namespace magnetar
         virtual size_t tell() const = 0;
         virtual size_t size() const = 0;
         virtual bool eof() const = 0;
+        virtual Timestamp last_changed_at() const = 0;
+        
     };
 
     class MAGNETAR_API FileSystem
@@ -52,6 +54,7 @@ namespace magnetar
         virtual bool is_file(const std::string &path) const = 0;
         virtual bool is_directory(const std::string &path) const = 0;
         virtual size_t file_size(const std::string &path) const = 0;
+        virtual Timestamp last_changed_at(const std::string& path) const = 0;
 
         virtual const std::string &name() const = 0;
     };

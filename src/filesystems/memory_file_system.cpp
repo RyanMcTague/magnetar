@@ -65,6 +65,11 @@ bool magnetar::MemoryFile::eof() const
     return m_cursor == size();
 }
 
+magnetar::Timestamp magnetar::MemoryFile::last_changed_at() const
+{
+    return m_fs->last_changed_at(m_path);
+}
+
 magnetar::UniqueRef<magnetar::File> magnetar::MemoryFileSystem::open(const std::string &path, FileMode mode)
 {
     auto file = create_unique_reference<MemoryFile>(this, path, mode);
@@ -186,7 +191,7 @@ size_t magnetar::MemoryFileSystem::write(const std::string &path, const void *bu
         return 0;
 
     auto file_node = static_cast<memfs::FileNode *>(node);
-
+    file_node->last_changed_at = Timestamp();
     if (mode == FileMode::APPEND)
     {
         long new_bytes_to_add = file_node->size - offset - size;

@@ -1,4 +1,5 @@
 #include <filesystem>
+#include <chrono>
 #include "magnetar/filesystem/native_file_system.h"
 
 magnetar::DiskFile::DiskFile(const std::string &path, FileMode mode)
@@ -57,6 +58,13 @@ bool magnetar::DiskFile::eof() const
 {
     return tell() == (size_t)fseek(m_handle, 0, SEEK_END);
 }
+magnetar::Timestamp magnetar::DiskFile::last_changed_at() const
+{
+    auto ftime = std::filesystem::last_write_time(m_path);
+    auto sctp = std::chrono::time_point_cast<std::chrono::system_clock::duration>(
+        ftime - std::filesystem::file_time_type::clock::now() + std::chrono::system_clock::now());
+    return sctp;
+}
 const char *magnetar::DiskFile::file_mode_ios() const
 {
     switch (m_mode)
@@ -114,4 +122,12 @@ size_t magnetar::NativeFileSystem::file_size(const std::string &path) const
 const std::string &magnetar::NativeFileSystem::name() const
 {
     return m_name;
+}
+
+magnetar::Timestamp magnetar::NativeFileSystem::last_changed_at(const std::string &path) const
+{
+    auto ftime = std::filesystem::last_write_time(path);
+    auto sctp = std::chrono::time_point_cast<std::chrono::system_clock::duration>(
+        ftime - std::filesystem::file_time_type::clock::now() + std::chrono::system_clock::now());
+    return sctp;
 }

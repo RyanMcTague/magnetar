@@ -20,7 +20,7 @@ namespace magnetar
         size_t tell() const override;
         size_t size() const override;
         bool eof() const override;
-
+        virtual Timestamp last_changed_at() const override;
     private:
         FILE *m_handle;
         std::string m_path;
@@ -43,7 +43,7 @@ namespace magnetar
         bool is_file(const std::string &path) const override;
         bool is_directory(const std::string &path) const override;
         size_t file_size(const std::string &path) const override;
-
+        Timestamp last_changed_at(const std::string& path) const override;
     private:
         std::string m_name = "disk";
     };
