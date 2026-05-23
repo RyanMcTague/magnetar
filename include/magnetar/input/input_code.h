@@ -24,7 +24,7 @@ namespace magnetar
         InputDeviceType type() const { return m_type; }
 
     private:
-        Variant m_code;
         InputDeviceType m_type;
+        Variant m_code;
     };
 }

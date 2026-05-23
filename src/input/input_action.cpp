@@ -6,7 +6,7 @@ magnetar::InputAction::InputAction()
     : m_mapped_code(0) {}
 
 magnetar::InputAction::InputAction(MappedInputCode code, const InputCode &input_code)
-    : m_mapped_code(code), m_input_code(input_code)
+    :  m_input_code(input_code), m_mapped_code(code)
 {
 }
 
