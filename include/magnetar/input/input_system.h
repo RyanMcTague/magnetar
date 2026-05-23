@@ -25,31 +25,25 @@ namespace magnetar
     class MAGNETAR_API InputSystem
     {
     public:
-        static void initialize();
         static void shutdown();
-        static InputSystem* get();
+        static void update();
+        static void add_device(UniqueRef<InputDevice> device);
+        static void register_action(MappedInputCode code, MouseButton button);
+        static void register_action(MappedInputCode code, KeyboardKey key);
 
-        void update();
-        void add_device(UniqueRef<InputDevice> device);
-        void register_action(MappedInputCode code, MouseButton button);
-        void register_action(MappedInputCode code, KeyboardKey key);
+        static ButtonState action_state(MappedInputCode code);
 
-        ButtonState action_state(MappedInputCode code) const;
+        static bool action_pressed(MappedInputCode code);
+        static bool action_down(MappedInputCode code);
 
-        bool action_pressed(MappedInputCode code) const;
-        bool action_down(MappedInputCode code) const;
+        static bool action_released(MappedInputCode code);
+        static bool action_up(MappedInputCode code);
 
-        bool action_released(MappedInputCode code) const;
-        bool action_up(MappedInputCode code) const;
-
-        bool action_active(MappedInputCode code) const;
-        bool action_inactive(MappedInputCode code) const;
+        static bool action_active(MappedInputCode code);
+        static bool action_inactive(MappedInputCode code);
 
     private:
-        static InputSystem *s_instance;
-        std::vector<UniqueRef<InputDevice>> m_devices;
-        std::unordered_map<MappedInputCode, InputAction> m_actions;
-
-        InputSystem() = default;
+        static std::vector<UniqueRef<InputDevice>> s_devices;
+        static std::unordered_map<MappedInputCode, InputAction> s_actions;
     };
 }

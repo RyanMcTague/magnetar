@@ -14,8 +14,8 @@ magnetar::GlfwWindow::GlfwWindow(const WindowProps &props)
     m_handle = glfwCreateWindow(m_width, m_height, m_title.c_str(), nullptr, nullptr);
     glfwMakeContextCurrent(m_handle);
 
-    InputSystem::get()->add_device(create_unique_reference<GlfwKeyboardDevice>(m_handle));
-    InputSystem::get()->add_device(create_unique_reference<GlfwMouseDevice>(m_handle));
+    InputSystem::add_device(create_unique_reference<GlfwKeyboardDevice>(m_handle));
+    InputSystem::add_device(create_unique_reference<GlfwMouseDevice>(m_handle));
 
 }
 magnetar::GlfwWindow::~GlfwWindow()

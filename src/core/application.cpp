@@ -11,7 +11,6 @@ magnetar::Application::Application(int argc, char **argv)
         m_command_line_args.push_back(argv[i]);
     LOG_DEBUG("Starting Magnetar");
 
-    InputSystem::initialize();
 }
 
 magnetar::Application::~Application()
@@ -20,21 +19,16 @@ magnetar::Application::~Application()
     InputSystem::shutdown();
 }
 
-struct MessageEvent
-{
-    std::string message = "I am a message";
-};
-
 int magnetar::Application::run()
 {
     m_window = Window::create({"Untitled", 800, 600});
 
-    EventSystem::enqueue(MessageEvent{});
     while (!m_window->should_close())
     {
         m_window->update();
-        InputSystem::get()->update();
+        InputSystem::update();
         m_window->swap_buffers();
+        EventSystem::process();
     }
 
     return 0;
