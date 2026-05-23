@@ -4,6 +4,7 @@
 #include <vector>
 #include <unordered_map>
 #include <algorithm>
+#include <queue>
 #include "magnetar/core/base.h"
 #include "magnetar/events/event_handle.h"
 #include "magnetar/events/event_callback.h"
@@ -22,7 +23,12 @@ namespace magnetar
         template <typename T>
         static void emit(const T &event);
 
+        template <typename T>
+        static void enqueue(const T &event);
+
         static void unsubscribe(EventHandle handle);
+
+        static void process();
 
     private:
         struct Entry
@@ -33,7 +39,27 @@ namespace magnetar
             std::vector<Ref<IEventCallback>> callbacks;
         };
 
+        struct IQueuedEvent
+        {
+            virtual ~IQueuedEvent() = default;
+            virtual void dispatch() = 0;
+        };
+
+        template<typename T>
+        struct QueuedEvent: public IQueuedEvent
+        {
+            T event;
+
+            void dispatch() override
+            {
+                EventSystem::emit(event);
+            }
+        };
+        
+        
+
         static EventTypeID s_next_event_type_id;
+        static std::queue<Ref<IQueuedEvent>> s_queued_events;
         static std::unordered_map<std::type_index, Entry> s_entries;
     };
 
@@ -88,5 +114,13 @@ namespace magnetar
 
         for (Ref<IEventCallback> &callback : it->second.callbacks)
             callback->call(&event);
+    }
+
+    template <typename T>
+    void EventSystem::enqueue(const T &event)
+    {
+        auto ref = create_reference<QueuedEvent<T>>();
+        ref->event = event;
+        s_queued_events.push(std::static_pointer_cast<IQueuedEvent>(ref));
     }
 }

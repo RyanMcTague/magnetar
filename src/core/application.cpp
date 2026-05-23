@@ -20,16 +20,16 @@ magnetar::Application::~Application()
     InputSystem::shutdown();
 }
 
-namespace magnetar::actions
+struct MessageEvent
 {
-    static constexpr MappedInputCode print_message = 1;
-}
+    std::string message = "I am a message";
+};
+
 int magnetar::Application::run()
 {
     m_window = Window::create({"Untitled", 800, 600});
 
-    InputSystem::get()->register_action(actions::print_message, KeyboardKey::A);
-
+    EventSystem::enqueue(MessageEvent{});
     while (!m_window->should_close())
     {
         m_window->update();

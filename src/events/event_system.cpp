@@ -2,6 +2,7 @@
 
 magnetar::EventTypeID magnetar::EventSystem::s_next_event_type_id = 1;
 std::unordered_map<std::type_index, magnetar::EventSystem::Entry> magnetar::EventSystem::s_entries;
+std::queue<magnetar::Ref<magnetar::EventSystem::IQueuedEvent>> magnetar::EventSystem::s_queued_events;
 
 void magnetar::EventSystem::unsubscribe(EventHandle handle)
 {
@@ -23,5 +24,15 @@ void magnetar::EventSystem::unsubscribe(EventHandle handle)
             }
             break;
         }
+    }
+}
+
+void magnetar::EventSystem::process()
+{
+    while (!s_queued_events.empty())
+    {
+        auto& event = s_queued_events.back();
+        event->dispatch();
+        s_queued_events.pop();
     }
 }
