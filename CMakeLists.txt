@@ -72,6 +72,7 @@ target_sources(magnetar
         include/magnetar/input/enums.h
         include/magnetar/input/input_system.h
         include/magnetar/input/mapped_input_code.h
+        include/magnetar/input/input_code.h
 
         src/input/input_system.cpp
         src/events/event_system.cpp
@@ -86,6 +87,7 @@ target_sources(magnetar
         src/input/mouse_device.cpp
         src/platforms/glfw_keyboard_device.cpp
         src/platforms/glfw_mouse_device.cpp
+        src/input/input_action.cpp
 )
 
 ########################################################

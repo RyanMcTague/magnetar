@@ -9,27 +9,13 @@ namespace magnetar
 {
     class InputDevice;
 
-    namespace input
-    {
-        ButtonState action_state(MappedInputCode code);
-
-        bool action_pressed(MappedInputCode code);
-        bool action_down(MappedInputCode code);
-
-        bool action_released(MappedInputCode code);
-        bool action_up(MappedInputCode code);
-
-        bool action_active(MappedInputCode code);
-        bool action_inactive(MappedInputCode code);
-    };
     class MAGNETAR_API InputSystem
     {
     public:
         static void shutdown();
         static void update();
         static void add_device(UniqueRef<InputDevice> device);
-        static void register_action(MappedInputCode code, MouseButton button);
-        static void register_action(MappedInputCode code, KeyboardKey key);
+        static void register_action(MappedInputCode code, const std::vector<InputCode>& input_codes);
 
         static ButtonState action_state(MappedInputCode code);
 
@@ -46,4 +32,6 @@ namespace magnetar
         static std::vector<UniqueRef<InputDevice>> s_devices;
         static std::unordered_map<MappedInputCode, InputAction> s_actions;
     };
+
+    using input = InputSystem;
 }

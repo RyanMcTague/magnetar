@@ -22,11 +22,13 @@ magnetar::Application::~Application()
 int magnetar::Application::run()
 {
     m_window = Window::create({"Untitled", 800, 600});
-
+    input::register_action(0, { KeyboardKey::A, MouseButton::LEFT });
     while (!m_window->should_close())
     {
         m_window->update();
         InputSystem::update();
+        if(input::action_pressed(0))
+            LOG_DEBUG("a button was pressed");
         m_window->swap_buffers();
         EventSystem::process();
     }
