@@ -5,39 +5,26 @@
 magnetar::InputAction::InputAction()
     : m_mapped_code(0) {}
 
-magnetar::InputAction::InputAction(MappedInputCode code, const std::vector<InputCode> &input_codes)
-    : m_mapped_code(code)
+magnetar::InputAction::InputAction(MappedInputCode code, const InputCode &input_code)
+    : m_mapped_code(code), m_input_code(input_code)
 {
-    for (const auto &input_code : input_codes)
-        m_input_codes[input_code.type()] = input_code;
 }
 
-magnetar::ButtonState magnetar::InputAction::check_state(InputDevice *device, bool *found) const
+magnetar::ButtonState magnetar::InputAction::check_state(InputDevice *device) const
 {
-    auto it = m_input_codes.find(device->type());
     ButtonState state = ButtonState::UP;
 
-    if (it == m_input_codes.end())
-    {
-        if (found)
-            *found = false;
-        return ButtonState::UP;
-    }
+    MAGNETAR_ASSERT(m_input_code.type()== device->type(), "Wrong input type {} for input code", (uint32_t)device->type());
+    
 
     switch (device->type())
     {
     case InputDeviceType::KEYBOARD:
-        state = static_cast<KeyboardDevice *>(device)->get_key_state(it->second.get<KeyboardKey>());
-        if (found)
-            *found = true;
+        state = static_cast<KeyboardDevice *>(device)->get_key_state(m_input_code.get<KeyboardKey>());
         break;
     case InputDeviceType::MOUSE:
-        state = static_cast<MouseDevice *>(device)->get_button_state(it->second.get<MouseButton>());
-        if (found)
-            *found = true;
+        state = static_cast<MouseDevice *>(device)->get_button_state(m_input_code.get<MouseButton>());
     default:
-        if (found)
-            *found = false;
         break;
     }
 

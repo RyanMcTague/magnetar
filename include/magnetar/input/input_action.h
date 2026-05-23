@@ -14,16 +14,17 @@ namespace magnetar
     {
     public:
         InputAction();
-        InputAction(MappedInputCode code, const std::vector<InputCode> &input_codes);
+        InputAction(MappedInputCode code, const InputCode &input_code);
         virtual ~InputAction() = default;
 
         bool operator==(MappedInputCode code) const { return m_mapped_code == code; }
         bool operator!=(MappedInputCode code) const { return !(*this == code); }
 
-        ButtonState check_state(InputDevice *device, bool *found = nullptr) const;
+        ButtonState check_state(InputDevice *device) const;
+        InputDeviceType input_device_type() const { return m_input_code.type(); }
 
     private:
-        std::unordered_map<InputDeviceType, InputCode> m_input_codes;
+        InputCode m_input_code;
         MappedInputCode m_mapped_code;
     };
 }

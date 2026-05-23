@@ -24,28 +24,30 @@ void magnetar::InputSystem::update()
         device->update();
 }
 
-void magnetar::InputSystem::register_action(MappedInputCode code, const std::vector<InputCode> &input_codes)
+void magnetar::InputSystem::register_action(MappedInputCode code, const InputCode &input_code)
 {
     auto it = s_actions.find(code);
     MAGNETAR_ASSERT(it == s_actions.end(), "Input action {} already exists", code);
-    s_actions[code] = InputAction(code, input_codes);
+    s_actions[code] = InputAction(code, input_code);
 }
 
 magnetar::ButtonState magnetar::InputSystem::action_state(MappedInputCode code)
 {
-    bool was_found = false;
     ButtonState state = ButtonState::UP;
-    
+
     auto action_it = s_actions.find(code);
     MAGNETAR_ASSERT(action_it != s_actions.end(), "Input action {} does not exist", code);
 
-    for (const auto &device : s_devices)
-    {
-        state = action_it->second.check_state(device.get(), &was_found);
-        if (was_found)
-            break;
-    }
-    return state;
+    const InputAction &action = action_it->second;
+    auto it = std::find_if(
+        s_devices.begin(),
+        s_devices.end(),
+        [action](const UniqueRef<InputDevice> &device)
+        { return device->type() == action.input_device_type(); });
+
+    if(it == s_devices.end())
+        return state;
+    return action_it->second.check_state(it->get());
 }
 
 bool magnetar::InputSystem::action_pressed(MappedInputCode code)

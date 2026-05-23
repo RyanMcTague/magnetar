@@ -22,7 +22,6 @@ magnetar::Application::~Application()
 int magnetar::Application::run()
 {
     m_window = Window::create({"Untitled", 800, 600});
-    input::register_action(0, { KeyboardKey::A, MouseButton::LEFT });
     while (!m_window->should_close())
     {
         m_window->update();
