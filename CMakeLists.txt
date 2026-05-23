@@ -50,7 +50,6 @@ target_sources(magnetar
     PRIVATE
         include/magnetar/containers/tree.h
         include/magnetar/magnetar.h
-        include/magnetar/core/application.h
         include/magnetar/core/base.h
         include/magnetar/filesystem/file_system.h
         include/magnetar/filesystem/native_file_system.h
@@ -76,7 +75,6 @@ target_sources(magnetar
 
         src/input/input_system.cpp
         src/events/event_system.cpp
-        src/core/application.cpp
         src/core/window.cpp
         src/filesystems/native_file_system.cpp
         src/filesystems/memory_file_system.cpp

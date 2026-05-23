@@ -6,9 +6,19 @@
 #include <typeindex>
 #include <cstddef>
 #include <spdlog/spdlog.h>
+
+#ifdef MAGNETAR_BUILD_SHARED
 #define MAGNETAR_API
+#elif defined(MAGNETAR_BUILD_STATIC)
+#define MAGNETAR_API
+#endif
+
+#ifdef MAGNETAR_BUILD_DEBUG
 #define MAGNETAR_USE_ASSERTS
 #define MAGNETAR_LOG_LEVEL spdlog::level::trace
+#else
+#define MAGNETAR_LOG_LEVEL spdlog::level::info
+#endif
 
 namespace magnetar
 {
@@ -29,7 +39,7 @@ namespace magnetar
     {
         return std::make_unique<T>(std::forward<TArgs>(args)...);
     }
-    
+
     class MAGNETAR_API Exception : public std::exception
     {
     };
