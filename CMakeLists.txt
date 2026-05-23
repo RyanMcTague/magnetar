@@ -16,16 +16,6 @@ option(MAGNETAR_BUILD_SHARED "Build shared library" OFF)
 option(MAGNETAR_BUILD_SANDBOX "Build sandbox" ON)
 
 ########################################################
-# Constants
-########################################################
-if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-    set(MAGNETAR_BUILD_ARCH "macOS")
-    message(STATUS "Building ${PROJECT_NAME} for macOS")
-else()
-    message(FATAL_ERROR "${PROJECT_NAME} does not support ${CMAKE_SYSTEM_NAME}")
-endif()
-
-########################################################
 # Dependencies
 ########################################################
 find_package(fmt REQUIRED CONFIG)
@@ -48,44 +38,25 @@ add_library(Magnetar::Magnetar ALIAS magnetar)
 ########################################################
 target_sources(magnetar 
     PRIVATE
-        include/magnetar/containers/tree.h
-        include/magnetar/magnetar.h
-        include/magnetar/core/base.h
-        include/magnetar/filesystem/file_system.h
-        include/magnetar/filesystem/native_file_system.h
-        include/magnetar/filesystem/memory_file_system.h
-        include/magnetar/utils/string_utils.h
-        include/magnetar/core/window.h
-        include/magnetar/platforms/glfw/glfw_window.h
-        include/magnetar/core/time.h
-        include/magnetar/events/event_handle.h
-        include/magnetar/events/event_callback.h
-        include/magnetar/events/event_system.h
-        include/magnetar/input/input_device.h
-        include/magnetar/input/keyboard_device.h
-        include/magnetar/input/mouse_device.h
-        include/magnetar/platforms/glfw/glfw_keyboard_device.h
-        include/magnetar/math/vector2d.h
-        include/magnetar/platforms/glfw/glfw_mouse_device.h
-        include/magnetar/input/input_action.h
-        include/magnetar/input/enums.h
-        include/magnetar/input/input_system.h
-        include/magnetar/input/mapped_input_code.h
-        include/magnetar/input/input_code.h
-
         src/input/input_system.cpp
-        src/events/event_system.cpp
-        src/core/window.cpp
-        src/filesystems/native_file_system.cpp
-        src/filesystems/memory_file_system.cpp
-        src/utils/string_utils.cpp
-        src/platforms/glfw_window.cpp
-        src/core/time.cpp
         src/input/keyboard_device.cpp
         src/input/mouse_device.cpp
+        src/input/input_action.cpp
+
+        src/events/event_system.cpp
+
+        src/core/window.cpp
+        src/core/time.cpp
+
+        src/filesystems/native_file_system.cpp
+        src/filesystems/memory_file_system.cpp
+
+        src/utils/string_utils.cpp
+
+        src/platforms/glfw_window.cpp
         src/platforms/glfw_keyboard_device.cpp
         src/platforms/glfw_mouse_device.cpp
-        src/input/input_action.cpp
+
 )
 
 ########################################################
@@ -101,6 +72,26 @@ target_include_directories(magnetar
 # C++ Standard
 ########################################################
 target_compile_features(magnetar PUBLIC cxx_std_20)
+
+
+########################################################
+# Properties
+########################################################
+set_target_properties(magnetar PROPERTIES
+    POSITION_INDEPENDENT_CODE ON
+)
+########################################################
+# C++ Warnings
+########################################################
+if(MSVC)
+    target_compile_options(magnetar PRIVATE /W4)
+else()
+    target_compile_options(magnetar PRIVATE
+        -Wall
+        -Wextra
+        -Wpedantic
+    )
+endif()
 
 ########################################################
 # Dependencies
@@ -123,13 +114,21 @@ else()
     target_compile_definitions(magnetar PUBLIC MAGNETAR_BUILD_STATIC)
 endif()
 
-if(NOT CMAKE_BUILD_TYPE STREQUAL "Release")
-    target_compile_definitions(magnetar PUBLIC MAGNETAR_BUILD_DEBUG)
-    message(STATUS "Building ${PROJECT_NAME} in Debug mode")
-elseif()
-    target_compile_definitions(magnetar PUBLIC MAGNETAR_BUILD_RELEASE)
-    message(STATUS "Building ${PROJECT_NAME} in Release mode")
+target_compile_definitions(magnetar
+    PUBLIC
+        $<$<CONFIG:Debug>:MAGNETAR_BUILD_DEBUG>
+        $<$<CONFIG:Release>:MAGNETAR_BUILD_RELEASE>
+)
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    target_compile_definitions(magnetar
+        PUBLIC
+            MAGNETAR_PLATFORM_MACOS
+    )
+else()
+    message(FATAL_ERROR "${PROJECT_NAME} does not support ${CMAKE_SYSTEM_NAME}")
 endif()
+
 
 ########################################################
 # Sandbox
@@ -137,7 +136,7 @@ endif()
 if(MAGNETAR_BUILD_SANDBOX)
     add_executable(sample sample/main.cpp)
     target_compile_features(sample PUBLIC cxx_std_20)
-    target_link_libraries(sample PRIVATE magnetar)
+    target_link_libraries(sample PRIVATE Magnetar::Magnetar)
 endif()
 
 ########################################################
