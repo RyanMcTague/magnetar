@@ -11,8 +11,11 @@ magnetar::Timestamp::Timestamp(long long milliseconds)
     std::chrono::system_clock::time_point tp{std::chrono::system_clock::duration{std::chrono::milliseconds(milliseconds)}};
     m_time_point = tp;
 }
-magnetar::Timestamp::Timestamp(const std::__1::chrono::system_clock::time_point &tp)
-    : m_time_point(tp) {}
+magnetar::Timestamp::Timestamp(const std::filesystem::file_time_type &tp)
+{
+    m_time_point = std::chrono::time_point_cast<std::chrono::system_clock::duration>(
+        tp - std::filesystem::file_time_type::clock::now() + std::chrono::system_clock::now());
+}
 
 magnetar::Timestamp::Timestamp(const std::chrono::system_clock::duration &duration)
     : m_time_point(duration) {}

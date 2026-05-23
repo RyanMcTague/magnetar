@@ -26,8 +26,6 @@ int magnetar::Application::run()
     {
         m_window->update();
         InputSystem::update();
-        if(input::action_pressed(0))
-            LOG_DEBUG("a button was pressed");
         m_window->swap_buffers();
         EventSystem::process();
     }

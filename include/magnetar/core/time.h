@@ -1,5 +1,6 @@
 #pragma once
 #include <chrono>
+#include <filesystem>
 #include "magnetar/core/base.h"
 namespace magnetar
 {
@@ -9,7 +10,7 @@ namespace magnetar
         Timestamp();
         Timestamp(long long milliseconds);
         Timestamp(const std::chrono::system_clock::duration& duration);
-        Timestamp(const std::__1::chrono::system_clock::time_point& tp);
+        Timestamp(const std::filesystem::file_time_type& tp);
         Timestamp operator+(long long rhs) const;
         Timestamp operator-(long long rhs) const;
 

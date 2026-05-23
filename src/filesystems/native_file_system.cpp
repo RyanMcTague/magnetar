@@ -60,10 +60,7 @@ bool magnetar::DiskFile::eof() const
 }
 magnetar::Timestamp magnetar::DiskFile::last_changed_at() const
 {
-    auto ftime = std::filesystem::last_write_time(m_path);
-    auto sctp = std::chrono::time_point_cast<std::chrono::system_clock::duration>(
-        ftime - std::filesystem::file_time_type::clock::now() + std::chrono::system_clock::now());
-    return sctp;
+    return std::filesystem::last_write_time(m_path);
 }
 const char *magnetar::DiskFile::file_mode_ios() const
 {
@@ -126,8 +123,5 @@ const std::string &magnetar::NativeFileSystem::name() const
 
 magnetar::Timestamp magnetar::NativeFileSystem::last_changed_at(const std::string &path) const
 {
-    auto ftime = std::filesystem::last_write_time(path);
-    auto sctp = std::chrono::time_point_cast<std::chrono::system_clock::duration>(
-        ftime - std::filesystem::file_time_type::clock::now() + std::chrono::system_clock::now());
-    return sctp;
+   return std::filesystem::last_write_time(path);
 }
