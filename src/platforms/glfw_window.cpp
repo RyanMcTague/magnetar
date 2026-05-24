@@ -7,7 +7,7 @@
 
 
 magnetar::GlfwWindow::GlfwWindow(const WindowProps &props)
-    : m_handle(nullptr), m_height(props.height), m_width(props.width), m_title(props.title)
+    :  m_width(props.width), m_height(props.height), m_title(props.title), m_handle(nullptr)
 {
     LOG_TRACE("Creating window");
     glfwInit();

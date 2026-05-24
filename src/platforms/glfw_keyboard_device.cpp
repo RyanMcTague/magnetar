@@ -128,7 +128,7 @@ namespace magnetar
 }
 
 magnetar::GlfwKeyboardDevice::GlfwKeyboardDevice(GLFWwindow *window)
-    : m_name("GlfwKeyboardDevice"), m_window(window)
+    :  m_window(window), m_name("GlfwKeyboardDevice")
 {
 
     for (auto &pair : s_keymap)

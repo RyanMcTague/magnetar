@@ -1,5 +1,6 @@
 #pragma once
 #include <unordered_map>
+#include <algorithm>
 #include "magnetar/core/base.h"
 #include "magnetar/filesystem/file_system.h"
 #include "magnetar/utils/string_utils.h"
@@ -17,13 +18,13 @@ namespace magnetar
         class MAGNETAR_API Node
         {
         public:
-            Node(const std::string &name, NodeType type) : m_name{name}, m_type{type} {}
+            Node(const std::string &name, NodeType type, Node* parent = nullptr) : parent(parent), m_name{name}, m_type{type} {}
 
             virtual ~Node() = default;
 
             const std::string &name() const { return m_name; }
             NodeType type() const { return m_type; }
-
+            Node* parent;
         private:
             std::string m_name;
             NodeType m_type;
@@ -53,6 +54,7 @@ namespace magnetar
             {
                 T *ptr = node.get();
                 m_children[ptr->name()] = std::move(node);
+                m_children[ptr->name()]->parent = this;
                 return ptr;
             }
 
@@ -62,6 +64,15 @@ namespace magnetar
                 if (it == m_children.end())
                     return nullptr;
                 return it->second.get();
+            }
+
+            bool remove(Node* node)
+            {
+                auto it = m_children.find(node->name());
+                if(it == m_children.end())
+                    return false;
+                m_children.erase(it);
+                return true;
             }
 
             const auto &children() const { return m_children; }
@@ -119,7 +130,8 @@ namespace magnetar
         size_t read(const std::string &path, void *buffer, size_t offset, size_t size);
         size_t write(const std::string &path, const void *buffer, size_t offset, size_t size, FileMode mode);
         size_t file_size(const std::string &path) const override;
-        
+        Timestamp last_changed_at(const std::string& path) const override;
+
         bool set_file(const std::string& path, void* buffer, size_t size);
         bool set_file(const std::string& path, const std::string& text);
 

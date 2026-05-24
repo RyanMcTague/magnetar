@@ -100,7 +100,11 @@ bool magnetar::MemoryFileSystem::create_directory(const std::string &path)
 bool magnetar::MemoryFileSystem::remove(const std::string &path)
 {
     LOG_DEBUG("MemoryFileSystem::remove() not implemented");
-    return false;
+    auto node = resolve(path);
+    if(!node || !node->parent)
+        return false;
+
+    return static_cast<memfs::DirectoryNode*>(node->parent)->remove(node);
 }
 bool magnetar::MemoryFileSystem::is_file(const std::string &path) const
 {
@@ -175,6 +179,13 @@ size_t magnetar::MemoryFileSystem::file_size(const std::string &path) const
     return static_cast<memfs::FileNode *>(node)->size;
 }
 
+magnetar::Timestamp magnetar::MemoryFileSystem::last_changed_at(const std::string& path) const
+{
+    auto node = resolve(path);
+    MAGNETAR_ASSERT(node->type() == memfs::NodeType::FILE, "{} is not a file", path);
+    return static_cast<memfs::FileNode*>(node)->last_changed_at;
+}
+
 size_t magnetar::MemoryFileSystem::write(const std::string &path, const void *buffer, size_t offset, size_t size, FileMode mode)
 {
     LOG_DEBUG("Need to revist magnetar::MemoryFileSystem::write() for appending");
@@ -232,7 +243,6 @@ void magnetar::MemoryFileSystem::print_node(const memfs::Node *node, int depth)
 
         for (const auto &pair : dir->children())
         {
-            const auto &name = pair.first;
             const auto &child = pair.second;
             print_node(child.get(), depth + 1);
         }

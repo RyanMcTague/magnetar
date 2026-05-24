@@ -11,7 +11,7 @@ namespace magnetar
 }
 
 magnetar::GlfwMouseDevice::GlfwMouseDevice(GLFWwindow *window)
-    : m_name("GlfwMouseDevice"), m_window(window)
+    : m_window(window), m_name("GlfwMouseDevice")
 {
     for(auto& pair: s_buttonmap)
         m_buttonstates[pair.second] = ButtonState::UP;

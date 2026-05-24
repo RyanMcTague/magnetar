@@ -10,8 +10,8 @@ namespace magnetar
     public:
         virtual ButtonState get_button_state(MouseButton button) const = 0;
 
-        bool is_mouse_down(MouseButton button) const;
-        bool is_mouse_released(MouseButton button) const;
+        bool is_button_down(MouseButton button) const;
+        bool is_button_released(MouseButton button) const;
 
         bool is_button_up(MouseButton button) const;
         bool is_button_pressed(MouseButton button) const;
