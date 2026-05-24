@@ -147,7 +147,7 @@ namespace magnetar
 
         static void print_node(const memfs::Node *node, int depth);
 
-        std::string m_name = "memory-file-system";
+        std::string m_name = "memory";
     };
 
     template <typename T>

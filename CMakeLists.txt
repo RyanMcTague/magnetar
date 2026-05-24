@@ -48,6 +48,7 @@ target_sources(magnetar
         src/core/window.cpp
         src/core/time.cpp
 
+        src/filesystems/file_system.cpp
         src/filesystems/native_file_system.cpp
         src/filesystems/memory_file_system.cpp
 
