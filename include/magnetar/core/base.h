@@ -62,21 +62,22 @@ namespace magnetar
     };
 }
 
-#define LOG(...)  Logger::log(__VA_ARGS__)
-
 #define LOG_TRACE(tag, ...) Logger::get(tag)->trace(__VA_ARGS__)
 #define LOG_DEBUG(tag, ...) Logger::get(tag)->debug(__VA_ARGS__)
 #define LOG_INFO(tag, ...) Logger::get(tag)->info(__VA_ARGS__)
 #define LOG_WARN(tag, ...) Logger::get(tag)->warn(__VA_ARGS__)
 #define LOG_ERROR(tag, ...) Logger::get(tag)->error(__VA_ARGS__)
-#define LOG_FATAL(tag, ...) Logger::get(tag)->fatal(__VA_ARGS__)
+#define LOG_FATAL(tag, ...) Logger::get(tag)->critical(__VA_ARGS__)
 
 #ifdef MAGNETAR_USE_ASSERTS
 #define MAGNETAR_ASSERT(condition, ...)                                                       \
     do                                                                                        \
     {                                                                                         \
         if (!(condition))                                                                     \
+        {                                                                                     \
+            LOG_FATAL(nullptr, __VA_ARGS__);                                                  \
             throw magnetar::AssertionException(__FILE__, __LINE__, fmt::format(__VA_ARGS__)); \
+        }                                                                                     \
     } while (false)
 
 #else
