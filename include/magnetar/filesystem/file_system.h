@@ -80,7 +80,7 @@ namespace magnetar
     FileSystem* FileSystem::get()
     {
         auto it = s_filesystems.find(typeid(T));
-        MAGNETAR_ASSERT(it != s_filesystems.end(), "Filesystem not found");
+        MT_ASSERT(it != s_filesystems.end(), "Filesystem not found");
         return it->second.get();
     }
 }

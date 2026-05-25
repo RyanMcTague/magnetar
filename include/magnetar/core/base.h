@@ -5,7 +5,7 @@
 #include <exception>
 #include <typeindex>
 #include <cstddef>
-#include <spdlog/spdlog.h>
+#include <fmt/format.h>
 
 #ifdef MAGNETAR_BUILD_SHARED
 #define MAGNETAR_API
@@ -15,9 +15,9 @@
 
 #ifdef MAGNETAR_BUILD_DEBUG
 #define MAGNETAR_USE_ASSERTS
-#define MAGNETAR_LOG_LEVEL spdlog::level::debug
+#define MAGNETAR_LOG_LEVEL LogLevel::debug
 #else
-#define MAGNETAR_LOG_LEVEL spdlog::level::info
+#define MAGNETAR_LOG_LEVEL LogLevel::info
 #endif
 
 namespace magnetar
@@ -70,7 +70,7 @@ namespace magnetar
 #define LOG_FATAL(tag, ...) Logger::get(tag)->critical(__VA_ARGS__)
 
 #ifdef MAGNETAR_USE_ASSERTS
-#define MAGNETAR_ASSERT(condition, ...)                                                       \
+#define MT_ASSERT(condition, ...)                                                             \
     do                                                                                        \
     {                                                                                         \
         if (!(condition))                                                                     \
@@ -81,7 +81,7 @@ namespace magnetar
     } while (false)
 
 #else
-#define MAGNETAR_ASSERT(condition, ...)
+#define MT_ASSERT(condition, ...)
 #endif
 
 #include "magnetar/core/logger.h"

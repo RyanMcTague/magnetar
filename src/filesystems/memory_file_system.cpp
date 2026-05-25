@@ -180,7 +180,7 @@ size_t magnetar::MemoryFileSystem::file_size(const std::string &path) const
 magnetar::Timestamp magnetar::MemoryFileSystem::last_changed_at(const std::string& path) const
 {
     auto node = resolve(path);
-    MAGNETAR_ASSERT(node->type() == memfs::NodeType::FILE, "{} is not a file", path);
+    MT_ASSERT(node->type() == memfs::NodeType::FILE, "{} is not a file", path);
     return static_cast<memfs::FileNode*>(node)->last_changed_at;
 }
 

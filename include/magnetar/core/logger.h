@@ -10,6 +10,7 @@ namespace magnetar
     namespace logger::tags
     {
         static constexpr const char *application = "application";
+        static constexpr const char *memory = "memory";
     }
 
     class Logger

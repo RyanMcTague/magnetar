@@ -14,7 +14,7 @@ magnetar::ButtonState magnetar::InputAction::check_state(InputDevice *device) co
 {
     ButtonState state = ButtonState::UP;
 
-    MAGNETAR_ASSERT(m_input_code.type()== device->type(), "Wrong input type {} for input code", (uint32_t)device->type());
+    MT_ASSERT(m_input_code.type()== device->type(), "Wrong input type {} for input code", (uint32_t)device->type());
     
 
     switch (device->type())

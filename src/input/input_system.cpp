@@ -27,7 +27,7 @@ void magnetar::InputSystem::update()
 void magnetar::InputSystem::register_action(MappedInputCode code, const InputCode &input_code)
 {
     auto it = s_actions.find(code);
-    MAGNETAR_ASSERT(it == s_actions.end(), "Input action {} already exists", code);
+    MT_ASSERT(it == s_actions.end(), "Input action {} already exists", code);
     s_actions[code] = InputAction(code, input_code);
 }
 
@@ -36,7 +36,7 @@ magnetar::ButtonState magnetar::InputSystem::action_state(MappedInputCode code)
     ButtonState state = ButtonState::UP;
 
     auto action_it = s_actions.find(code);
-    MAGNETAR_ASSERT(action_it != s_actions.end(), "Input action {} does not exist", code);
+    MT_ASSERT(action_it != s_actions.end(), "Input action {} does not exist", code);
 
     const InputAction &action = action_it->second;
     auto it = std::find_if(

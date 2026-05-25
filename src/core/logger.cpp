@@ -8,6 +8,7 @@ void magnetar::Logger::initialize(LogLevel level)
 {
     static std::vector<const char*> tags = {
         logger::tags::application,
+        logger::tags::memory
     };
 
     s_level = level;

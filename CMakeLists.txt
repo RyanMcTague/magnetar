@@ -57,7 +57,6 @@ target_sources(magnetar
             include/magnetar/filesystem/native_file_system.h
             include/magnetar/filesystem/file_system.h
 
-
             include/magnetar/input/input_device.h
             include/magnetar/input/input_action.h
             include/magnetar/input/input_code.h
@@ -69,6 +68,9 @@ target_sources(magnetar
 
             include/magnetar/math/vector2d.h
 
+            include/magnetar/memory/allocators/allocator.h
+            include/magnetar/memory/allocators/linear_allocator.h
+
             include/magnetar/platforms/glfw/glfw_keyboard_device.h
             include/magnetar/platforms/glfw/glfw_mouse_device.h
             include/magnetar/platforms/glfw/glfw_window.h
@@ -79,28 +81,29 @@ target_sources(magnetar
              
 
     PRIVATE
-        src/input/input_system.cpp
-        src/input/keyboard_device.cpp
-        src/input/mouse_device.cpp
-        src/input/input_action.cpp
-
-        src/events/event_system.cpp
-
         src/core/application.cpp
         src/core/logger.cpp
         src/core/window.cpp
         src/core/time.cpp
 
+        src/events/event_system.cpp
+
         src/filesystems/file_system.cpp
         src/filesystems/native_file_system.cpp
         src/filesystems/memory_file_system.cpp
 
-        src/utils/string_utils.cpp
+        src/input/input_system.cpp
+        src/input/keyboard_device.cpp
+        src/input/mouse_device.cpp
+        src/input/input_action.cpp
+
+        src/memory/allocators/linear_allocator.cpp
 
         src/platforms/glfw_window.cpp
         src/platforms/glfw_keyboard_device.cpp
         src/platforms/glfw_mouse_device.cpp
 
+        src/utils/string_utils.cpp
 )
 
 ########################################################
