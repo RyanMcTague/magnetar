@@ -37,6 +37,47 @@ add_library(Magnetar::Magnetar ALIAS magnetar)
 # Source Files
 ########################################################
 target_sources(magnetar 
+    PUBLIC 
+        FILE_SET HEADERS
+        BASE_DIRS include
+        FILES
+            include/magnetar/containers/tree.h
+
+            include/magnetar/core/time.h
+            include/magnetar/core/application.h
+            include/magnetar/core/window.h
+            include/magnetar/core/logger.h
+            include/magnetar/core/base.h
+
+            include/magnetar/events/event_handle.h
+            include/magnetar/events/event_system.h
+            include/magnetar/events/event_callback.h
+
+            include/magnetar/filesystem/memory_file_system.h
+            include/magnetar/filesystem/native_file_system.h
+            include/magnetar/filesystem/file_system.h
+
+
+            include/magnetar/input/input_device.h
+            include/magnetar/input/input_action.h
+            include/magnetar/input/input_code.h
+            include/magnetar/input/enums.h
+            include/magnetar/input/mouse_device.h
+            include/magnetar/input/mapped_input_code.h
+            include/magnetar/input/keyboard_device.h
+            include/magnetar/input/input_system.h
+
+            include/magnetar/math/vector2d.h
+
+            include/magnetar/platforms/glfw/glfw_keyboard_device.h
+            include/magnetar/platforms/glfw/glfw_mouse_device.h
+            include/magnetar/platforms/glfw/glfw_window.h
+
+            include/magnetar/utils/string_utils.h
+            
+            include/magnetar/magnetar.h
+             
+
     PRIVATE
         src/input/input_system.cpp
         src/input/keyboard_device.cpp
@@ -148,18 +189,10 @@ endif()
 install(
     TARGETS magnetar
     EXPORT MagnetarTargets
+    FILE_SET HEADERS
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
-
-
-########################################################
-# Install headers
-########################################################
-install(
-    DIRECTORY include/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
 ########################################################
