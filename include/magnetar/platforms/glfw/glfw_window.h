@@ -17,7 +17,7 @@ namespace magnetar
         int height() const override;
         const std::string& title() const override;
 
-        void update() override;
+        void poll_events() override;
         void swap_buffers() const override;
         bool should_close() const override;
         void* handle() override;

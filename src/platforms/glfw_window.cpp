@@ -37,7 +37,7 @@ const std::string &magnetar::GlfwWindow::title() const
 {
     return m_title;
 }
-void magnetar::GlfwWindow::update()
+void magnetar::GlfwWindow::poll_events()
 {
     glfwPollEvents();
 }

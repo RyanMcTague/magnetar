@@ -1,8 +1,8 @@
 #pragma once
 #include "magnetar/containers/tree.h"
 
-
 #include "magnetar/core/base.h"
+#include "magnetar/core/application.h"
 #include "magnetar/core/time.h"
 #include "magnetar/core/window.h"
 
