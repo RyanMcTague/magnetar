@@ -48,6 +48,7 @@ target_sources(magnetar
             include/magnetar/core/window.h
             include/magnetar/core/logger.h
             include/magnetar/core/base.h
+            include/magnetar/core/uuid.h
 
             include/magnetar/events/event_handle.h
             include/magnetar/events/event_system.h
@@ -85,6 +86,7 @@ target_sources(magnetar
         src/core/logger.cpp
         src/core/window.cpp
         src/core/time.cpp
+        src/core/uuid.cpp
 
         src/events/event_system.cpp
 
