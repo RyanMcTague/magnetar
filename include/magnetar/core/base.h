@@ -84,4 +84,15 @@ namespace magnetar
 #define MT_ASSERT(condition, ...)
 #endif
 
+#define MT_DECLARE_CLASS_NAME(name)                  \
+    static constexpr const char *static_class_name() \
+    {                                                \
+        return #name;                                \
+    }                                                \
+                                                     \
+    virtual const char *class_name() const           \
+    {                                                \
+        return #name;                                \
+    }
+
 #include "magnetar/core/logger.h"

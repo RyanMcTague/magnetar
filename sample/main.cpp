@@ -27,8 +27,7 @@ void SandboxApp::on_update(float delta_time)
 int main(int argc, char **argv)
 {
     SandboxApp app;
-    UUID id;
-    LOG_DEBUG(nullptr, "{:x}" ,id.value());
+    Logger::set_level(LogLevel::trace);
     InputSystem::register_action(actions::quit, KeyboardKey::ESCAPE);
     app.run();
     return 0;

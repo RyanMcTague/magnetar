@@ -11,12 +11,14 @@ namespace magnetar
     {
         static constexpr const char *application = "application";
         static constexpr const char *memory = "memory";
+        static constexpr const char *events = "events";
     }
 
     class Logger
     {
     public:
         static void initialize(LogLevel level);
+        static void set_level(LogLevel level);
         static void add_tag(const std::string &name);
         static std::shared_ptr<spdlog::logger> get(const char* name);
 

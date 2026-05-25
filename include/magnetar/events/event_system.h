@@ -108,6 +108,7 @@ namespace magnetar
     template <typename T>
     void EventSystem::emit(const T &event)
     {
+        LOG_TRACE(logger::tags::events, "emitting event {}", T::static_class_name());
         auto it = s_entries.find(typeid(T));
         if (it == s_entries.end())
             return;
