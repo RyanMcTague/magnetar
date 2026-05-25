@@ -5,22 +5,20 @@
 #include "magnetar/events/event_system.h"
 #include "magnetar/input/input_system.h"
 
-
 magnetar::GlfwWindow::GlfwWindow(const WindowProps &props)
-    :  m_width(props.width), m_height(props.height), m_title(props.title), m_handle(nullptr)
+    : m_width(props.width), m_height(props.height), m_title(props.title), m_handle(nullptr)
 {
-    LOG_TRACE("Creating window");
+    LOG_TRACE(logger::tags::application, "Creating window");
     glfwInit();
     m_handle = glfwCreateWindow(m_width, m_height, m_title.c_str(), nullptr, nullptr);
     glfwMakeContextCurrent(m_handle);
 
     InputSystem::add_device(create_unique_reference<GlfwKeyboardDevice>(m_handle));
     InputSystem::add_device(create_unique_reference<GlfwMouseDevice>(m_handle));
-
 }
 magnetar::GlfwWindow::~GlfwWindow()
 {
-    LOG_TRACE("destroying window");
+    LOG_TRACE(logger::tags::application, "destroying window");
     if (m_handle)
         glfwDestroyWindow(m_handle);
     glfwTerminate();

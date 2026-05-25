@@ -25,9 +25,9 @@ void magnetar::Application::run()
 
         m_window->poll_events();
         InputSystem::update();
-        
+
         on_update(delta_time);
-        
+
         m_window->swap_buffers();
         EventSystem::process();
 
@@ -48,15 +48,15 @@ magnetar::Window *magnetar::Application::get_window()
 
 void magnetar::Application::initialize()
 {
-    MAGNETAR_INITIALIZE_LOGGER;
-    LOG_DEBUG("Starting Magnetar");
+    Logger::initialize(MAGNETAR_LOG_LEVEL);
+    LOG_DEBUG(logger::tags::application, "Starting Magnetar");
     m_window = Window::create({"Untitled", 800, 600});
     on_initialize();
 }
 
 void magnetar::Application::shutdown()
 {
-    LOG_DEBUG("Stopping Magnetar");
+    LOG_DEBUG(logger::tags::application, "Stopping Magnetar");
     on_shutdown();
 }
 

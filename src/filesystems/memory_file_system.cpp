@@ -99,7 +99,6 @@ bool magnetar::MemoryFileSystem::create_directory(const std::string &path)
 }
 bool magnetar::MemoryFileSystem::remove(const std::string &path)
 {
-    LOG_DEBUG("MemoryFileSystem::remove() not implemented");
     auto node = resolve(path);
     if(!node || !node->parent)
         return false;
@@ -150,7 +149,6 @@ magnetar::memfs::Node *magnetar::MemoryFileSystem::resolve(const std::string &pa
 
 size_t magnetar::MemoryFileSystem::read(const std::string &path, void *buffer, size_t offset, size_t size)
 {
-    LOG_DEBUG("Need to revist magnetar::MemoryFileSystem::read() for cursor");
     auto node = resolve(path);
     if (node->type() != memfs::NodeType::FILE)
         return 0;
@@ -188,8 +186,6 @@ magnetar::Timestamp magnetar::MemoryFileSystem::last_changed_at(const std::strin
 
 size_t magnetar::MemoryFileSystem::write(const std::string &path, const void *buffer, size_t offset, size_t size, FileMode mode)
 {
-    LOG_DEBUG("Need to revist magnetar::MemoryFileSystem::write() for appending");
-
     if (mode == FileMode::READ)
         return 0;
 

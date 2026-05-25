@@ -17,7 +17,6 @@ protected:
 
 void SandboxApp::on_initialize()
 {
-    LOG_DEBUG("here");
 }
 void SandboxApp::on_update(float delta_time)
 {
@@ -31,19 +30,4 @@ int main(int argc, char **argv)
     InputSystem::register_action(actions::quit, KeyboardKey::ESCAPE);
     app.run();
     return 0;
-    // MAGNETAR_INITIALIZE_LOGGER;
-    // LOG_DEBUG("Starting Magnetar");
-
-    // auto window = Window::create({"Untitled", 800, 600});
-    // while (!window->should_close())
-    // {
-    //     window->poll_events();
-    //     InputSystem::update();
-    //     window->swap_buffers();
-    //     EventSystem::process();
-    // }
-
-
-    // LOG_DEBUG("Stopping Magnetar");
-    // InputSystem::shutdown();
 }

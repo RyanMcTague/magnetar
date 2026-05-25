@@ -15,7 +15,7 @@
 
 #ifdef MAGNETAR_BUILD_DEBUG
 #define MAGNETAR_USE_ASSERTS
-#define MAGNETAR_LOG_LEVEL spdlog::level::trace
+#define MAGNETAR_LOG_LEVEL spdlog::level::debug
 #else
 #define MAGNETAR_LOG_LEVEL spdlog::level::info
 #endif
@@ -62,13 +62,14 @@ namespace magnetar
     };
 }
 
-#define MAGNETAR_INITIALIZE_LOGGER spdlog::set_level(MAGNETAR_LOG_LEVEL)
-#define LOG_TRACE(...) spdlog::trace(__VA_ARGS__)
-#define LOG_DEBUG(...) spdlog::debug(__VA_ARGS__)
-#define LOG_INFO(...) spdlog::info(__VA_ARGS__)
-#define LOG_WARN(...) spdlog::warn(__VA_ARGS__)
-#define LOG_ERROR(...) spdlog::error(__VA_ARGS__)
-#define LOG_FATAL(...) spdlog::critical(__VA_ARGS__)
+#define LOG(...)  Logger::log(__VA_ARGS__)
+
+#define LOG_TRACE(tag, ...) Logger::get(tag)->trace(__VA_ARGS__)
+#define LOG_DEBUG(tag, ...) Logger::get(tag)->debug(__VA_ARGS__)
+#define LOG_INFO(tag, ...) Logger::get(tag)->info(__VA_ARGS__)
+#define LOG_WARN(tag, ...) Logger::get(tag)->warn(__VA_ARGS__)
+#define LOG_ERROR(tag, ...) Logger::get(tag)->error(__VA_ARGS__)
+#define LOG_FATAL(tag, ...) Logger::get(tag)->fatal(__VA_ARGS__)
 
 #ifdef MAGNETAR_USE_ASSERTS
 #define MAGNETAR_ASSERT(condition, ...)                                                       \
@@ -81,3 +82,5 @@ namespace magnetar
 #else
 #define MAGNETAR_ASSERT(condition, ...)
 #endif
+
+#include "magnetar/core/logger.h"

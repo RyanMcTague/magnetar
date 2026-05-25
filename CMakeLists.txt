@@ -46,6 +46,7 @@ target_sources(magnetar
         src/events/event_system.cpp
 
         src/core/application.cpp
+        src/core/logger.cpp
         src/core/window.cpp
         src/core/time.cpp
 
