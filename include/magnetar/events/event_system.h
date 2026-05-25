@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <queue>
 #include "magnetar/core/base.h"
+#include "magnetar/core/uuid.h"
 #include "magnetar/events/event_handle.h"
 #include "magnetar/events/event_callback.h"
 
@@ -33,9 +34,9 @@ namespace magnetar
     private:
         struct Entry
         {
-            EventTypeID event_type_id;
-            EventCallbackID next_callback_id;
-            std::stack<EventCallbackID> free_callback_ids;
+            uint32_t event_type_id;
+            uint32_t next_callback_id;
+            std::stack<uint32_t> free_callback_ids;
             std::vector<Ref<IEventCallback>> callbacks;
         };
 
@@ -45,20 +46,25 @@ namespace magnetar
             virtual void dispatch() = 0;
         };
 
-        template<typename T>
-        struct QueuedEvent: public IQueuedEvent
+        template <typename T>
+        struct QueuedEvent : public IQueuedEvent
         {
             T event;
+            UUID id;
+
+            QueuedEvent()
+            {
+                LOG_DEBUG(logger::tags::events, "enqueued event {}#{}", MT_STATIC_CLASS_NAME(T), id.to_hex());
+            }
 
             void dispatch() override
             {
+                LOG_TRACE(logger::tags::events, "dispatching event {}#{}", MT_STATIC_CLASS_NAME(T), id.to_hex());
                 EventSystem::emit(event);
             }
         };
-        
-        
 
-        static EventTypeID s_next_event_type_id;
+        static uint32_t s_next_event_type_id;
         static std::queue<Ref<IQueuedEvent>> s_queued_events;
         static std::unordered_map<std::type_index, Entry> s_entries;
     };
@@ -76,8 +82,8 @@ namespace magnetar
         }
 
         Entry &entry = it->second;
-        EventTypeID event_type_id = entry.event_type_id;
-        EventCallbackID callback_id = 0;
+        uint32_t event_type_id = entry.event_type_id;
+        uint32_t callback_id = 0;
 
         if (entry.free_callback_ids.empty())
         {
@@ -92,7 +98,9 @@ namespace magnetar
         auto callback = create_reference<EventCallback<T>>(callback_id, function);
         entry.callbacks.push_back(std::static_pointer_cast<IEventCallback>(callback));
 
-        return ((EventHandle)(event_type_id) << 32) | (EventHandle)callback_id;
+
+        EventHandle handle(event_type_id, callback_id);
+        return handle;
     }
 
     template <typename T, typename U>

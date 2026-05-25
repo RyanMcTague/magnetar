@@ -1,13 +1,13 @@
 #include "magnetar/events/event_system.h"
 
-magnetar::EventTypeID magnetar::EventSystem::s_next_event_type_id = 1;
+uint32_t magnetar::EventSystem::s_next_event_type_id = 1;
 std::unordered_map<std::type_index, magnetar::EventSystem::Entry> magnetar::EventSystem::s_entries;
 std::queue<magnetar::Ref<magnetar::EventSystem::IQueuedEvent>> magnetar::EventSystem::s_queued_events;
 
 void magnetar::EventSystem::unsubscribe(EventHandle handle)
 {
-    EventTypeID event_type_id = (EventTypeID)(handle >> 32);
-    EventCallbackID callback_id = (EventCallbackID)(handle & 0xffffffff);
+    uint32_t event_type_id = handle.event_type_id();
+    uint32_t callback_id = handle.event_callback_id();
     for (auto &pair : s_entries)
     {
         Entry &entry = pair.second;

@@ -95,4 +95,6 @@ namespace magnetar
         return #name;                                \
     }
 
+#define MT_STATIC_CLASS_NAME(Klass) Klass::static_class_name()
+
 #include "magnetar/core/logger.h"

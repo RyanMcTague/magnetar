@@ -24,10 +24,16 @@ void SandboxApp::on_update(float delta_time)
         close();
 }
 
+struct MyEvent
+{
+    MT_DECLARE_CLASS_NAME(MyEvent)
+};
+
 int main(int argc, char **argv)
 {
     SandboxApp app;
     Logger::set_level(LogLevel::trace);
+    EventSystem::enqueue(MyEvent());
     InputSystem::register_action(actions::quit, KeyboardKey::ESCAPE);
     app.run();
     return 0;
