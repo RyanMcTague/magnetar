@@ -28,9 +28,9 @@ void magnetar::Logger::add_tag(const std::string& name)
 }
 
 
-std::shared_ptr<spdlog::logger> magnetar::Logger::get(const std::string& name)
+std::shared_ptr<spdlog::logger> magnetar::Logger::get(const char* name)
 {
-    if(!name.length())
+    if(!name)
         return spdlog::default_logger();
     return spdlog::get(name);
 }

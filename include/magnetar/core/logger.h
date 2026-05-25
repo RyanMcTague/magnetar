@@ -18,7 +18,7 @@ namespace magnetar
     public:
         static void initialize(LogLevel level);
         static void add_tag(const std::string &name);
-        static std::shared_ptr<spdlog::logger> get(const std::string &name);
+        static std::shared_ptr<spdlog::logger> get(const char* name);
 
         template <typename... TArgs>
         static void log(const char *subsystem, LogLevel level, TArgs &&...args);
@@ -33,25 +33,30 @@ namespace magnetar
     template <typename... TArgs>
     void Logger::log(const char *subsystem, LogLevel level, TArgs &&...args)
     {
+        std::shared_ptr<spdlog::logger> logger = spdlog::default_logger();
+
+        if(subsystem)
+            logger = get(subsystem);
+
         switch (level)
         {
         case LogLevel::critical:
-            get(subsystem)->critical(std::forward<TArgs>(args)...);
+            logger->critical(std::forward<TArgs>(args)...);
             break;
         case LogLevel::err:
-            get(subsystem)->error(std::forward<TArgs>(args)...);
+            logger->error(std::forward<TArgs>(args)...);
             break;
         case LogLevel::warn:
-            get(subsystem)->warn(std::forward<TArgs>(args)...);
+            logger->warn(std::forward<TArgs>(args)...);
             break;
         case LogLevel::info:
-            get(subsystem)->info(std::forward<TArgs>(args)...);
+            logger->info(std::forward<TArgs>(args)...);
             break;
         case LogLevel::debug:
-            get(subsystem)->debug(std::forward<TArgs>(args)...);
+            logger->debug(std::forward<TArgs>(args)...);
             break;
         case LogLevel::trace:
-            get(subsystem)->trace(std::forward<TArgs>(args)...);
+            logger->trace(std::forward<TArgs>(args)...);
             break;
         default:
             break;

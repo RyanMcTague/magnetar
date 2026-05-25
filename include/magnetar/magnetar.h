@@ -4,6 +4,7 @@
 #include "magnetar/core/base.h"
 #include "magnetar/core/application.h"
 #include "magnetar/core/time.h"
+#include "magnetar/core/uuid.h"
 #include "magnetar/core/window.h"
 
 #include "magnetar/events/event_callback.h"
