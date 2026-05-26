@@ -81,8 +81,11 @@ magnetar::UniqueRef<magnetar::File> magnetar::NativeFileSystem::open(const std::
 {
     auto file = create_unique_reference<DiskFile>(path, mode);
     if (!file->is_open())
+    {
+        LOG_WARN(logger::tags::application, "could not open file {} in {} file system", path, m_name);
         return nullptr;
-
+    }
+    LOG_TRACE(logger::tags::application, "opened file {} in {} file system", path, m_name);
     return file;
 }
 

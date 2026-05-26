@@ -3,6 +3,8 @@
 #include "magnetar/core/time.h"
 #include "magnetar/input/input_system.h"
 #include "magnetar/events/event_system.h"
+#include "magnetar/filesystem/native_file_system.h"
+
 magnetar::Application::Application()
     : m_is_running(true), m_window(nullptr)
 {
@@ -50,6 +52,7 @@ magnetar::Window *magnetar::Application::get_window()
 void magnetar::Application::initialize()
 {
     LOG_INFO(logger::tags::application, "initialzing application");
+    FileSystem::register_filesystem<NativeFileSystem>();
     m_window = Window::create({"Untitled", 800, 600});
     on_initialize();
 }

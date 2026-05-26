@@ -33,7 +33,12 @@ void magnetar::InputSystem::register_action(MappedInputCode code, const InputCod
 {
     auto it = s_actions.find(code);
     MT_ASSERT(it == s_actions.end(), "Input action {} already exists", code);
-    LOG_DEBUG(logger::tags::input, "registed input action {} to", code);
+    std::string input_type_string(magic_enum::enum_name(input_code.type()));
+    std::string code_string(input_code.code_string());
+    LOG_DEBUG(logger::tags::input, "registed input action {} to {}->{}",
+              code,
+              string_utils::lowercase(input_type_string),
+              string_utils::lowercase(code_string));
     s_actions[code] = InputAction(code, input_code);
 }
 

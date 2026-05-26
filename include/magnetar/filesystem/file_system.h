@@ -58,29 +58,30 @@ namespace magnetar
 
         virtual const std::string &name() const = 0;
 
-        template<typename T>
-        static FileSystem* register_filesystem();
+        template <typename T>
+        static FileSystem *register_filesystem();
 
-        template<typename T>
-        static FileSystem* get();
+        template <typename T>
+        static FileSystem *get();
 
     private:
         static std::unordered_map<std::type_index, UniqueRef<FileSystem>> s_filesystems;
     };
 
-    template<typename T>
-    FileSystem* FileSystem::register_filesystem()
+    template <typename T>
+    FileSystem *FileSystem::register_filesystem()
     {
         UniqueRef<T> fs = create_unique_reference<T>();
+        LOG_DEBUG(logger::tags::application, "registered {} file system", fs->name());
         s_filesystems.emplace(typeid(T), std::move(fs));
         return s_filesystems[typeid(T)].get();
     }
 
-    template<typename T>
-    FileSystem* FileSystem::get()
+    template <typename T>
+    FileSystem *FileSystem::get()
     {
         auto it = s_filesystems.find(typeid(T));
-        MT_ASSERT(it != s_filesystems.end(), "Filesystem not found");
+        MT_ASSERT(it != s_filesystems.end(), "file system not found");
         return it->second.get();
     }
 }
