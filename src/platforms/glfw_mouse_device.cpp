@@ -22,7 +22,7 @@ magnetar::ButtonState magnetar::GlfwMouseDevice::get_button_state(MouseButton bu
     auto it = m_buttonstates.find(button);
     return it->second;
 }
-magnetar::Vector2D magnetar::GlfwMouseDevice::get_position() const
+const glm::dvec2& magnetar::GlfwMouseDevice::get_position() const
 {
     return m_position;
 }

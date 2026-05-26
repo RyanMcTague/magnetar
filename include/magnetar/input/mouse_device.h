@@ -1,8 +1,8 @@
 #pragma once
+#include <glm/glm.hpp>
 #include "magnetar/core/base.h"
 #include "magnetar/input/input_device.h"
 #include "magnetar/input/enums.h"
-#include "magnetar/math/vector2d.h"
 namespace magnetar
 {
     class MAGNETAR_API MouseDevice : public InputDevice
@@ -19,7 +19,7 @@ namespace magnetar
         bool is_button_active(MouseButton button) const;
         bool is_button_inactive(MouseButton button) const;
 
-        virtual Vector2D get_position() const = 0;
+        virtual const glm::dvec2& get_position() const = 0;
 
         InputDeviceType type() const override { return InputDeviceType::MOUSE; }
     };

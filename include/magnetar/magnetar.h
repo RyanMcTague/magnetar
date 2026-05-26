@@ -24,6 +24,4 @@
 #include "magnetar/input/mapped_input_code.h"
 #include "magnetar/input/mouse_device.h"
 
-#include "magnetar/math/vector2d.h"
-
 #include "magnetar/utils/string_utils.h"
