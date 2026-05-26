@@ -26,6 +26,4 @@
 
 #include "magnetar/math/vector2d.h"
 
-#include "magnetar/memory/allocators/linear_allocator.h"
-
 #include "magnetar/utils/string_utils.h"

@@ -71,7 +71,6 @@ target_sources(magnetar
             include/magnetar/math/vector2d.h
 
             include/magnetar/memory/allocators/allocator.h
-            include/magnetar/memory/allocators/linear_allocator.h
 
             include/magnetar/platforms/glfw/glfw_keyboard_device.h
             include/magnetar/platforms/glfw/glfw_mouse_device.h
@@ -99,8 +98,6 @@ target_sources(magnetar
         src/input/keyboard_device.cpp
         src/input/mouse_device.cpp
         src/input/input_action.cpp
-
-        src/memory/allocators/linear_allocator.cpp
 
         src/platforms/glfw_window.cpp
         src/platforms/glfw_keyboard_device.cpp

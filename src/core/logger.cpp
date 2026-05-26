@@ -8,7 +8,6 @@ namespace magnetar
 {
     static std::vector<const char *> s_tag_list = {
         logger::tags::application,
-        logger::tags::memory,
         logger::tags::events,
         logger::tags::input,
     };
