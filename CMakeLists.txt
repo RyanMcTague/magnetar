@@ -73,11 +73,13 @@ target_sources(magnetar
             include/magnetar/platforms/glfw/glfw_mouse_device.h
             include/magnetar/platforms/glfw/glfw_window.h
 
+            include/magnetar/platforms/opengl/glad.h
+            include/magnetar/platforms/opengl/khrplatform.h
+
             include/magnetar/utils/string_utils.h
             
             include/magnetar/magnetar.h
              
-
     PRIVATE
         src/core/application.cpp
         src/core/logger.cpp
@@ -96,9 +98,11 @@ target_sources(magnetar
         src/input/mouse_device.cpp
         src/input/input_action.cpp
 
-        src/platforms/glfw_window.cpp
-        src/platforms/glfw_keyboard_device.cpp
-        src/platforms/glfw_mouse_device.cpp
+        src/platforms/glfw/glfw_window.cpp
+        src/platforms/glfw/glfw_keyboard_device.cpp
+        src/platforms/glfw/glfw_mouse_device.cpp
+
+        src/platforms/opengl/glad.c
 
         src/utils/string_utils.cpp
 )
@@ -153,6 +157,7 @@ target_link_libraries(magnetar
 # Defines
 ########################################################
 target_compile_definitions(magnetar PRIVATE MAGNETAR_BUILD)
+target_compile_definitions(magnetar PUBLIC GLFW_INCLUDE_NONE)
 
 if(MAGNETAR_BUILD_SHARED)
     target_compile_definitions(magnetar PUBLIC MAGNETAR_BUILD_SHARED)
