@@ -22,6 +22,7 @@ find_package(fmt REQUIRED CONFIG)
 find_package(spdlog REQUIRED CONFIG)
 find_package(glfw3 REQUIRED CONFIG)
 find_package(magic_enum REQUIRED)
+find_package(glm REQUIRED)
 
 ########################################################
 # Library
@@ -147,6 +148,7 @@ target_link_libraries(magnetar
         spdlog::spdlog
         glfw
         magic_enum::magic_enum
+        glm::glm
 )
 
 ########################################################
