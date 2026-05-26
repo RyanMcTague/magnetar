@@ -70,8 +70,6 @@ target_sources(magnetar
 
             include/magnetar/math/vector2d.h
 
-            include/magnetar/memory/allocators/allocator.h
-
             include/magnetar/platforms/glfw/glfw_keyboard_device.h
             include/magnetar/platforms/glfw/glfw_mouse_device.h
             include/magnetar/platforms/glfw/glfw_window.h
