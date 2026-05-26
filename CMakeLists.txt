@@ -21,6 +21,7 @@ option(MAGNETAR_BUILD_SANDBOX "Build sandbox" ON)
 find_package(fmt REQUIRED CONFIG)
 find_package(spdlog REQUIRED CONFIG)
 find_package(glfw3 REQUIRED CONFIG)
+find_package(magic_enum REQUIRED)
 
 ########################################################
 # Library
@@ -150,6 +151,7 @@ target_link_libraries(magnetar
         fmt::fmt
         spdlog::spdlog
         glfw
+        magic_enum::magic_enum
 )
 
 ########################################################

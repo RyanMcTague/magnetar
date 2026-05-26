@@ -8,17 +8,17 @@
 magnetar::GlfwWindow::GlfwWindow(const WindowProps &props)
     : m_width(props.width), m_height(props.height), m_title(props.title), m_handle(nullptr)
 {
-    LOG_TRACE(logger::tags::application, "Creating window");
     glfwInit();
     m_handle = glfwCreateWindow(m_width, m_height, m_title.c_str(), nullptr, nullptr);
     glfwMakeContextCurrent(m_handle);
 
     InputSystem::add_device(create_unique_reference<GlfwKeyboardDevice>(m_handle));
     InputSystem::add_device(create_unique_reference<GlfwMouseDevice>(m_handle));
+    LOG_INFO(logger::tags::application, "created window '{}'", props.title);
 }
 magnetar::GlfwWindow::~GlfwWindow()
 {
-    LOG_TRACE(logger::tags::application, "destroying window");
+    LOG_INFO(logger::tags::application, "destroying window '{}'", m_title);
     if (m_handle)
         glfwDestroyWindow(m_handle);
     glfwTerminate();

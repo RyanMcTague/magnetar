@@ -5,10 +5,10 @@ using namespace magnetar;
 
 namespace actions
 {
-    static constexpr int quit =0;
+    static constexpr int quit = 0;
 }
 
-class SandboxApp final: public Application
+class SandboxApp final : public Application
 {
 protected:
     void on_initialize() override;
@@ -20,7 +20,7 @@ void SandboxApp::on_initialize()
 }
 void SandboxApp::on_update(float delta_time)
 {
-    if(InputSystem::action_pressed(actions::quit))
+    if (InputSystem::action_pressed(actions::quit))
         close();
 }
 

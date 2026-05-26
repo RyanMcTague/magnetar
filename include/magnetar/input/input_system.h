@@ -14,8 +14,9 @@ namespace magnetar
     public:
         static void shutdown();
         static void update();
+
         static void add_device(UniqueRef<InputDevice> device);
-        static void register_action(MappedInputCode code, const InputCode& input_code);
+        static void register_action(MappedInputCode code, const InputCode &input_code);
 
         static ButtonState action_state(MappedInputCode code);
 

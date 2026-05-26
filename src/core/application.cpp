@@ -6,6 +6,7 @@
 magnetar::Application::Application()
     : m_is_running(true), m_window(nullptr)
 {
+    Logger::initialize(MAGNETAR_LOG_LEVEL);
     initialize();
 }
 
@@ -48,16 +49,15 @@ magnetar::Window *magnetar::Application::get_window()
 
 void magnetar::Application::initialize()
 {
-    Logger::initialize(MAGNETAR_LOG_LEVEL);
-    LOG_DEBUG(logger::tags::application, "Starting Magnetar");
+    LOG_INFO(logger::tags::application, "initialzing application");
     m_window = Window::create({"Untitled", 800, 600});
     on_initialize();
 }
 
 void magnetar::Application::shutdown()
 {
-    LOG_DEBUG(logger::tags::application, "Stopping Magnetar");
     on_shutdown();
+    LOG_INFO(logger::tags::application, "destroying application");
 }
 
 void magnetar::Application::on_initialize()

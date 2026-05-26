@@ -21,6 +21,7 @@ namespace magnetar
 
         template <typename T>
         T get() const { return std::get<T>(m_code); }
+        
         InputDeviceType type() const { return m_type; }
 
     private:
