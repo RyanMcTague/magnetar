@@ -24,6 +24,8 @@ namespace magnetar
         OpenGLShader(const std::string& name, GLuint handle);
         ~OpenGLShader();
 
+        static Ref<OpenGLShader> factory(const std::string& name, const std::string& source);
+
         void bind() const override;
         void unbind() const override;
 

@@ -2,7 +2,7 @@
 #include "magnetar/platforms/opengl/shader.h"
 #include "magnetar/utils/enum_utils.h"
 #include "magnetar/platforms/opengl/helpers.h"
-
+#include "magnetar/platforms/opengl/shader_compiler.h"
 magnetar::OpenGLShader::OpenGLShader(const std::string &name, GLuint handle)
     : m_handle(handle), m_name(name)
 {
@@ -44,6 +44,22 @@ magnetar::OpenGLShader::OpenGLShader(const std::string &name, GLuint handle)
         var.type = OpenGLHelpers::convert_renderer_type(type);
         m_uniforms.emplace(var.name, var);
     }
+}
+
+magnetar::Ref<magnetar::OpenGLShader> magnetar::OpenGLShader::factory(const std::string &name, const std::string &source)
+{
+    OpenGLShaderCompiler compiler(source);
+    compiler.compile();
+    compiler.link();
+
+    if (compiler.has_errors())
+    {
+        for (auto &error : compiler.errors())
+            LOG_ERROR(logger::tags::renderer, "{}: {}", name, error.to_string());
+        return nullptr;
+    }
+
+    return create_reference<OpenGLShader>(name, compiler.program());
 }
 
 magnetar::OpenGLShader::~OpenGLShader()

@@ -35,6 +35,12 @@ magnetar::OpenGLShaderCompiler::OpenGLShaderCompiler(const std::string &source)
     }
 }
 
+magnetar::OpenGLShaderCompiler::~OpenGLShaderCompiler()
+{
+    for(auto& shader: m_shaders)
+        glDeleteShader(shader);
+}
+
 bool magnetar::OpenGLShaderCompiler::compile()
 {
     bool result = true;
@@ -98,6 +104,8 @@ bool magnetar::OpenGLShaderCompiler::link()
         m_program = 0;
         return false;
     }
+
+    m_shaders.clear();
     return true;
 }
 

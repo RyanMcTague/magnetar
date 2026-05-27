@@ -33,7 +33,7 @@ namespace magnetar
 
     public:
         OpenGLShaderCompiler(const std::string &text);
-
+        ~OpenGLShaderCompiler();
         bool compile();
         bool link();
 

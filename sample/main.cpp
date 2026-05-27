@@ -1,6 +1,5 @@
 #include <magnetar/magnetar.h>
 #include <iostream>
-#include "magnetar/platforms/opengl/shader_compiler.h"
 #include "magnetar/platforms/opengl/shader.h"
 using namespace magnetar;
 
@@ -41,7 +40,7 @@ void main()
 out vec4 FragColor;
 void main()
 {
-    FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+    FragColor = vec4(1.0, 1.0, 1.0, 1.0)
 }
 )""";
 
@@ -51,20 +50,7 @@ int main(int argc, char **argv)
     SandboxApp app;
     Logger::set_level(LogLevel::trace);
     InputSystem::register_action(actions::quit, KeyboardKey::ESCAPE);
-
-    OpenGLShaderCompiler compiler(source);
-    compiler.compile();
-    compiler.link();
-
-    if(compiler.has_errors())
-    {
-        for(auto& error : compiler.errors())
-        {
-            LOG_ERROR(logger::tags::renderer, error.to_string());
-        }
-    }
-
-    OpenGLShader shader("GL_test.glsl", compiler.program());
+    auto shader = OpenGLShader::factory("GL_test.glsl", source);
     app.run();
     return 0;
 }
