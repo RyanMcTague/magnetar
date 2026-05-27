@@ -5,16 +5,26 @@
 #include "magnetar/events/event_system.h"
 #include "magnetar/input/input_system.h"
 
+#include "magnetar/platforms/opengl/glad.h"
 magnetar::GlfwWindow::GlfwWindow(const WindowProps &props)
     : m_width(props.width), m_height(props.height), m_title(props.title), m_handle(nullptr)
 {
     glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+#ifdef MAGNETAR_PLATFORM_MACOS
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#endif
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, true);
+
     m_handle = glfwCreateWindow(m_width, m_height, m_title.c_str(), nullptr, nullptr);
     glfwMakeContextCurrent(m_handle);
 
     InputSystem::add_device(create_unique_reference<GlfwKeyboardDevice>(m_handle));
     InputSystem::add_device(create_unique_reference<GlfwMouseDevice>(m_handle));
     LOG_INFO(logger::tags::application, "created window '{}'", props.title);
+    LOG_WARN(logger::tags::renderer, "need to replace 'gladLoadGLLoader' {}:{}", "src/platforms/glfw/glfw_window.cpp", __LINE__ + 1);
+    gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 }
 magnetar::GlfwWindow::~GlfwWindow()
 {

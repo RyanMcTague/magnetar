@@ -10,11 +10,11 @@ namespace magnetar
         logger::tags::application,
         logger::tags::events,
         logger::tags::input,
+        logger::tags::renderer,
     };
 }
 void magnetar::Logger::initialize(LogLevel level)
 {
-
     s_level = level;
     spdlog::default_logger()->set_level(level);
 

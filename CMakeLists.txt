@@ -21,8 +21,8 @@ option(MAGNETAR_BUILD_SANDBOX "Build sandbox" ON)
 find_package(fmt REQUIRED CONFIG)
 find_package(spdlog REQUIRED CONFIG)
 find_package(glfw3 REQUIRED CONFIG)
-find_package(magic_enum REQUIRED)
-find_package(glm REQUIRED)
+find_package(magic_enum REQUIRED CONFIG)
+find_package(glm REQUIRED CONFIG)
 
 ########################################################
 # Library
@@ -75,6 +75,9 @@ target_sources(magnetar
 
             include/magnetar/platforms/opengl/glad.h
             include/magnetar/platforms/opengl/khrplatform.h
+            include/magnetar/platforms/opengl/shader_compiler.h
+
+            include/magnetar/renderer/enums.h
 
             include/magnetar/utils/string_utils.h
             
@@ -102,7 +105,8 @@ target_sources(magnetar
         src/platforms/glfw/glfw_keyboard_device.cpp
         src/platforms/glfw/glfw_mouse_device.cpp
 
-        src/platforms/opengl/glad.c
+        src/platforms/opengl/glad.cpp
+        src/platforms/opengl/shader_compiler.cpp
 
         src/utils/string_utils.cpp
 )
@@ -120,7 +124,6 @@ target_include_directories(magnetar
 # C++ Standard
 ########################################################
 target_compile_features(magnetar PUBLIC cxx_std_20)
-
 
 ########################################################
 # Properties
