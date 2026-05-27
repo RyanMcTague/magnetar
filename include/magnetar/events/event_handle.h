@@ -3,10 +3,6 @@
 
 namespace magnetar
 {
-    // using EventHandle = uint64_t;
-    // using EventTypeID = uint32_t;
-    // using EventCallbackID = uint32_t;
-
     class EventHandle
     {
     public:
