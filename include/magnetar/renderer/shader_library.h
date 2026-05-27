@@ -9,6 +9,7 @@ namespace magnetar
     class MAGNETAR_API ShaderLibrary
     {
     public:
+        ShaderLibrary() = default;
         ShaderLibrary(const ShaderLibrary &) = delete;
         ShaderLibrary &operator=(const ShaderLibrary &) = delete;
 

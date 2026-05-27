@@ -27,5 +27,6 @@
 #include "magnetar/renderer/enums.h"
 #include "magnetar/renderer/shader_library.h"
 #include "magnetar/renderer/shader.h"
+#include "magnetar/renderer/vertex_buffer.h"
 
 #include "magnetar/utils/string_utils.h"
