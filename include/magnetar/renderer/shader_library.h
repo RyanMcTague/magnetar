@@ -9,9 +9,12 @@ namespace magnetar
     class MAGNETAR_API ShaderLibrary
     {
     public:
-        Ref<Shader> create(const std::string& name, const std::string& source);
-        Ref<Shader> get(const std::string& name);
-        void remove(const std::string& name);        
+        ShaderLibrary(const ShaderLibrary &) = delete;
+        ShaderLibrary &operator=(const ShaderLibrary &) = delete;
+
+        Ref<Shader> create(const std::string &name, const std::string &source);
+        Ref<Shader> get(const std::string &name);
+        void remove(const std::string &name);
 
     private:
         std::unordered_map<std::string, Ref<Shader>> m_shaders;
