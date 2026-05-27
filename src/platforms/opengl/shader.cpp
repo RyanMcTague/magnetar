@@ -58,7 +58,6 @@ magnetar::Ref<magnetar::OpenGLShader> magnetar::OpenGLShader::factory(const std:
             LOG_ERROR(logger::tags::renderer, "{}: {}", name, error.to_string());
         return nullptr;
     }
-
     return create_reference<OpenGLShader>(name, compiler.program());
 }
 

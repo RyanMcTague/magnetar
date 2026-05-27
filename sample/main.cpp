@@ -1,6 +1,5 @@
 #include <magnetar/magnetar.h>
 #include <iostream>
-#include "magnetar/platforms/opengl/shader.h"
 using namespace magnetar;
 
 namespace actions
@@ -50,7 +49,7 @@ int main(int argc, char **argv)
     SandboxApp app;
     Logger::set_level(LogLevel::trace);
     InputSystem::register_action(actions::quit, KeyboardKey::ESCAPE);
-    auto shader = OpenGLShader::factory("GL_test.glsl", source);
+    auto shader = Shader::create("GL_test.glsl", source);
     app.run();
     return 0;
 }

@@ -48,8 +48,8 @@ namespace magnetar
         void set_mat4x3(const std::string& name, const glm::mat4x3& value) const override;
 
         bool exists() const override;
-
         const std::string& name() const override { return m_name; }
+        
     private:
         GLuint m_handle;
         std::string m_name;
