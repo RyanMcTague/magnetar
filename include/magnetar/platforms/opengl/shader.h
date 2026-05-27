@@ -53,9 +53,7 @@ namespace magnetar
         std::string m_name;
         std::unordered_map<std::string, Variable> m_attributes;
         std::unordered_map<std::string, Variable> m_uniforms;
-
-
-
+        
         GLint uniform_location(const std::string& name, RendererDataType target_type) const;
     };
 }
