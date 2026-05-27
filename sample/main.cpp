@@ -39,7 +39,7 @@ void main()
 out vec4 FragColor;
 void main()
 {
-    FragColor = vec4(1.0, 1.0, 1.0, 1.0)
+    FragColor = vec4(1.0, 1.0, 1.0, 1.0);
 }
 )""";
 
@@ -49,7 +49,8 @@ int main(int argc, char **argv)
     SandboxApp app;
     Logger::set_level(LogLevel::trace);
     InputSystem::register_action(actions::quit, KeyboardKey::ESCAPE);
-    auto shader = Shader::create("GL_test.glsl", source);
+    ShaderLibrary lib;
+    auto shader = lib.create("GL_test.glsl", source);
     app.run();
     return 0;
 }

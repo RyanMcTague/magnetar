@@ -80,6 +80,7 @@ target_sources(magnetar
             include/magnetar/platforms/opengl/shader.h
 
             include/magnetar/renderer/enums.h
+            include/magnetar/renderer/shader_library.h
             include/magnetar/renderer/shader.h
 
             include/magnetar/utils/enum_utils.h
@@ -115,6 +116,7 @@ target_sources(magnetar
         src/platforms/opengl/shader.cpp
 
         src/renderer/shader.cpp
+        src/renderer/shader_library.cpp
 
         src/utils/string_utils.cpp
 )
