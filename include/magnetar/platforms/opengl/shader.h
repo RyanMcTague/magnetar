@@ -8,7 +8,7 @@
 
 namespace magnetar
 {
-    class MAGNETAR_API OpenGLShader : public magnetar::Shader
+    class MAGNETAR_API OpenGLShader : public Shader
     {
     public:
         struct Variable
