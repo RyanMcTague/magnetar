@@ -5,7 +5,7 @@
 #include "magnetar/platforms/opengl/shader_compiler.h"
 #include "magnetar/utils/string_utils.h"
 
-magnetar::opengl::ShaderCompiler::ShaderCompiler(const std::string &source)
+magnetar::OpenGLShaderCompiler::OpenGLShaderCompiler(const std::string &source)
     : m_text(source)
 {
     std::stringstream ss(m_text);
@@ -35,7 +35,7 @@ magnetar::opengl::ShaderCompiler::ShaderCompiler(const std::string &source)
     }
 }
 
-bool magnetar::opengl::ShaderCompiler::compile()
+bool magnetar::OpenGLShaderCompiler::compile()
 {
     bool result = true;
     for (auto &pair : m_sources)
@@ -74,7 +74,7 @@ bool magnetar::opengl::ShaderCompiler::compile()
     return result;
 }
 
-bool magnetar::opengl::ShaderCompiler::link()
+bool magnetar::OpenGLShaderCompiler::link()
 {
     int success;
 
@@ -101,7 +101,7 @@ bool magnetar::opengl::ShaderCompiler::link()
     return true;
 }
 
-void magnetar::opengl::ShaderCompiler::add_compile_error(GLuint shader, int line_offset)
+void magnetar::OpenGLShaderCompiler::add_compile_error(GLuint shader, int line_offset)
 {
     Error error;
     error.error_type = ShaderErrorType::COMPILE;
@@ -169,7 +169,7 @@ void magnetar::opengl::ShaderCompiler::add_compile_error(GLuint shader, int line
     m_errors.push_back(error);
 }
 
-void magnetar::opengl::ShaderCompiler::add_link_error(GLuint program)
+void magnetar::OpenGLShaderCompiler::add_link_error(GLuint program)
 {
     Error error;
     error.error_type = ShaderErrorType::LINK;

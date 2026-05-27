@@ -7,9 +7,9 @@
 #include "magnetar/platforms/opengl/glad.h"
 #include "magnetar/utils/string_utils.h"
 
-namespace magnetar::opengl
+namespace magnetar
 {
-    class MAGNETAR_API ShaderCompiler
+    class MAGNETAR_API OpenGLShaderCompiler
     {
     public:
         struct Error
@@ -32,7 +32,7 @@ namespace magnetar::opengl
         };
 
     public:
-        ShaderCompiler(const std::string &text);
+        OpenGLShaderCompiler(const std::string &text);
 
         bool compile();
         bool link();

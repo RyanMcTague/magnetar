@@ -74,11 +74,15 @@ target_sources(magnetar
             include/magnetar/platforms/glfw/glfw_window.h
 
             include/magnetar/platforms/opengl/glad.h
+            include/magnetar/platforms/opengl/helpers.h
             include/magnetar/platforms/opengl/khrplatform.h
             include/magnetar/platforms/opengl/shader_compiler.h
+            include/magnetar/platforms/opengl/shader.h
 
             include/magnetar/renderer/enums.h
+            include/magnetar/renderer/shader.h
 
+            include/magnetar/utils/enum_utils.h
             include/magnetar/utils/string_utils.h
             
             include/magnetar/magnetar.h
@@ -106,7 +110,11 @@ target_sources(magnetar
         src/platforms/glfw/glfw_mouse_device.cpp
 
         src/platforms/opengl/glad.cpp
+        src/platforms/opengl/helpers.cpp
         src/platforms/opengl/shader_compiler.cpp
+        src/platforms/opengl/shader.cpp
+
+        src/renderer/shader.cpp
 
         src/utils/string_utils.cpp
 )

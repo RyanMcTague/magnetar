@@ -25,5 +25,6 @@
 #include "magnetar/input/mouse_device.h"
 
 #include "magnetar/renderer/enums.h"
+#include "magnetar/renderer/shader.h"
 
 #include "magnetar/utils/string_utils.h"

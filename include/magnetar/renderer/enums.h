@@ -19,4 +19,22 @@ namespace magnetar
         COMPILE = 0,
         LINK
     };
+
+    enum class MAGNETAR_API RendererDataType
+    {
+        INT = 0,
+        FLOAT,
+        VEC2,
+        VEC3,
+        VEC4,
+        MAT2,
+        MAT3,
+        MAT4,
+        MAT2X3,
+        MAT2X4,
+        MAT3X2,
+        MAT3X4,
+        MAT4X2,
+        MAT4X3,
+    };
 }

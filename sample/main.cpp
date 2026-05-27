@@ -1,6 +1,7 @@
 #include <magnetar/magnetar.h>
 #include <iostream>
-
+#include "magnetar/platforms/opengl/shader_compiler.h"
+#include "magnetar/platforms/opengl/shader.h"
 using namespace magnetar;
 
 namespace actions
@@ -29,7 +30,6 @@ const char* source = R"""(
 #version 330 core
 #line 1 0
 layout (location = 0) in vec3 a_position;
-
 void main()
 {
     gl_Position = vec4(a_position, 1.0);
@@ -45,7 +45,6 @@ void main()
 }
 )""";
 
-#include "magnetar/platforms/opengl/shader_compiler.h"
 
 int main(int argc, char **argv)
 {
@@ -53,7 +52,7 @@ int main(int argc, char **argv)
     Logger::set_level(LogLevel::trace);
     InputSystem::register_action(actions::quit, KeyboardKey::ESCAPE);
 
-    opengl::ShaderCompiler compiler(source);
+    OpenGLShaderCompiler compiler(source);
     compiler.compile();
     compiler.link();
 
@@ -64,6 +63,8 @@ int main(int argc, char **argv)
             LOG_ERROR(logger::tags::renderer, error.to_string());
         }
     }
+
+    OpenGLShader shader("GL_test.glsl", compiler.program());
     app.run();
     return 0;
 }
