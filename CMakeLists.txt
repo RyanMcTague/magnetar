@@ -75,12 +75,14 @@ target_sources(magnetar
 
             include/magnetar/platforms/opengl/glad.h
             include/magnetar/platforms/opengl/helpers.h
+            include/magnetar/platforms/opengl/index_buffer.h
             include/magnetar/platforms/opengl/khrplatform.h
             include/magnetar/platforms/opengl/shader_compiler.h
             include/magnetar/platforms/opengl/shader.h
             include/magnetar/platforms/opengl/vertex_buffer.h
 
             include/magnetar/renderer/enums.h
+            include/magnetar/renderer/index_buffer.h
             include/magnetar/renderer/shader_library.h
             include/magnetar/renderer/shader.h
             include/magnetar/renderer/vertex_buffer.h
@@ -116,9 +118,11 @@ target_sources(magnetar
         src/platforms/opengl/helpers.cpp
         src/platforms/opengl/shader_compiler.cpp
         src/platforms/opengl/shader.cpp
+        src/platforms/opengl/index_buffer.cpp
         src/platforms/opengl/vertex_buffer.cpp
 
         src/renderer/shader.cpp
+        src/renderer/index_buffer.cpp
         src/renderer/shader_library.cpp
         src/renderer/vertex_buffer.cpp
 

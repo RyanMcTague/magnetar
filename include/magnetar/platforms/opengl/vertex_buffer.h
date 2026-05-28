@@ -8,7 +8,7 @@ namespace magnetar
     class OpenGLVertexBuffer : public VertexBuffer
     {
     public:
-        OpenGLVertexBuffer(size_t size, const void *data = nullptr);
+        OpenGLVertexBuffer(size_t size, const void *data);
         ~OpenGLVertexBuffer();
         
         void bind() const override;
