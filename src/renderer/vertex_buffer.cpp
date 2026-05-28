@@ -6,3 +6,8 @@ magnetar::Ref<magnetar::VertexBuffer> magnetar::VertexBuffer::create(size_t size
     auto vbo = create_reference<OpenGLVertexBuffer>(size, data);
     return std::static_pointer_cast<VertexBuffer>(vbo);
 }
+
+void magnetar::VertexBuffer::push_layout_element(const std::string& name, RendererDataType type, bool normalized)
+{
+    m_layout.push(name, type, normalized);
+}

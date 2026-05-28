@@ -1,6 +1,6 @@
 #pragma once
 #include "magnetar/core/base.h"
-
+#include "magnetar/renderer/buffer_layout.h"
 namespace magnetar
 {
     class MAGNETAR_API VertexBuffer
@@ -24,5 +24,12 @@ namespace magnetar
         virtual bool exists() const = 0;
 
         operator bool() const { return exists(); }
+
+        const BufferLayout& layout() const { return m_layout; }
+
+        void push_layout_element(const std::string& name, RendererDataType type, bool normalized = false);
+
+    private:
+        BufferLayout m_layout;
     };
 }

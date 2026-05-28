@@ -81,6 +81,7 @@ target_sources(magnetar
             include/magnetar/platforms/opengl/shader.h
             include/magnetar/platforms/opengl/vertex_buffer.h
 
+            include/magnetar/renderer/buffer_layout.h
             include/magnetar/renderer/enums.h
             include/magnetar/renderer/index_buffer.h
             include/magnetar/renderer/shader_library.h
@@ -125,7 +126,8 @@ target_sources(magnetar
         src/renderer/index_buffer.cpp
         src/renderer/shader_library.cpp
         src/renderer/vertex_buffer.cpp
-
+        src/renderer/buffer_layout.cpp
+        
         src/utils/string_utils.cpp
 )
 

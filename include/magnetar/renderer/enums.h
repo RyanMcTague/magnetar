@@ -1,4 +1,4 @@
-#pragma once 
+#pragma once
 #include "magnetar/core/base.h"
 
 namespace magnetar
@@ -37,4 +37,57 @@ namespace magnetar
         MAT4X2,
         MAT4X3,
     };
+
+    MAGNETAR_API inline size_t renderer_data_type_size(RendererDataType type)
+    {
+        size_t size = 0;
+        switch (type)
+        {
+        case RendererDataType::INT:
+            size = sizeof(int);
+            break;
+        case RendererDataType::FLOAT:
+            size = sizeof(float);
+            break;
+        case RendererDataType::VEC2:
+            size = 2 * sizeof(float);
+            break;
+        case RendererDataType::VEC3:
+            size = 3 * sizeof(float);
+            break;
+        case RendererDataType::VEC4:
+            size = 4 * sizeof(float);
+            break;
+        case RendererDataType::MAT2:
+            size = 2 * 2 * sizeof(float);
+            break;
+        case RendererDataType::MAT3:
+            size = 3 * 3 * sizeof(float);
+            break;
+        case RendererDataType::MAT4:
+            size = 4 * 4 * sizeof(float);
+            break;
+        case RendererDataType::MAT2X3:
+            size = 2 * 3 * sizeof(float);
+            break;
+        case RendererDataType::MAT2X4:
+            size = 2 * 4 * sizeof(float);
+            break;
+        case RendererDataType::MAT3X2:
+            size = 3 * 2 * sizeof(float);
+            break;
+        case RendererDataType::MAT3X4:
+            size = 3 * 4 * sizeof(float);
+            break;
+        case RendererDataType::MAT4X2:
+            size = 4 * 2 * sizeof(float);
+            break;
+        case RendererDataType::MAT4X3:
+            size = 4 * 3 * sizeof(float);
+            break;
+        default:
+            break;
+        }
+        return size;
+    }
 }
