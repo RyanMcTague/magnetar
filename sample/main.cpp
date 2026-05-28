@@ -24,25 +24,20 @@ void SandboxApp::on_update(float delta_time)
 }
 
 const char* source = R"""(
-#pragma stage(vertex)
-#version 330 core
-#line 1 0
+#stage vertex
 layout (location = 0) in vec3 a_position;
 void main()
 {
     gl_Position = vec4(a_position, 1.0);
 }
 
-#pragma stage(fragment)
-#version 330 core
-#line 1 0
+#stage fragment
 out vec4 FragColor;
 void main()
 {
     FragColor = vec4(1.0, 1.0, 1.0, 1.0);
 }
 )""";
-
 
 int main(int argc, char **argv)
 {

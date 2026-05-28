@@ -1,4 +1,3 @@
-#include <regex>
 #include <sstream>
 #include <iostream>
 #include <magic_enum/magic_enum.hpp>
@@ -11,33 +10,37 @@ magnetar::OpenGLShaderCompiler::OpenGLShaderCompiler(const std::string &source)
     std::stringstream ss(m_text);
     std::string line;
     ShaderType type;
-    int current_line = 1;
-    std::regex pattern(R"(^\s*#pragma\s+stage\s*\(\s*(vertex|fragment)\s*\)\s*$)");
+    int current_line = 0;
     while (std::getline(ss, line, '\n'))
     {
-        std::smatch match;
-        if (std::regex_match(line, match, pattern))
-        {
-            std::string stage = match[1];
-
-            if (stage == "vertex")
-                type = ShaderType::VERTEX;
-            else if (stage == "fragment")
-                type = ShaderType::FRAGMENT;
-
-            m_sources[type] = SourceEntry{"", current_line};
-        }
-        else
-        {
-            m_sources[type].source += line + "\n";
-        }
         current_line++;
+        auto trimmed = string_utils::trim(line);
+
+        if (trimmed.starts_with('#'))
+        {
+            auto index = trimmed.find_first_of(" \n\t\r");
+            auto str = trimmed.substr(1, index - 1);
+            if (str == "stage")
+            {
+                auto stage = string_utils::trim(trimmed.substr(str.length() + 1));
+                if (stage == "vertex")
+                    type = ShaderType::VERTEX;
+                else if (stage == "fragment")
+                    type = ShaderType::FRAGMENT;
+
+                m_sources[type] = SourceEntry{"", current_line};
+                continue;
+            }
+        }
+        
+
+        m_sources[type].source += line + "\n";
     }
 }
 
 magnetar::OpenGLShaderCompiler::~OpenGLShaderCompiler()
 {
-    for(auto& shader: m_shaders)
+    for (auto &shader : m_shaders)
         glDeleteShader(shader);
 }
 
@@ -63,8 +66,11 @@ bool magnetar::OpenGLShaderCompiler::compile()
 
         int success;
         GLuint shader = glCreateShader(shader_type);
-        const char *cstr = source.source.c_str();
-        glShaderSource(shader, 1, &cstr, nullptr);
+        const char* sources[] = {
+            "#version 330 core\n#line 1 0\n",
+            source.source.c_str()
+        };
+        glShaderSource(shader, 2, sources, nullptr);
         glCompileShader(shader);
         glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 
@@ -85,7 +91,7 @@ bool magnetar::OpenGLShaderCompiler::link()
     int success;
 
     m_program = glCreateProgram();
-    
+
     for (auto shader : m_shaders)
         glAttachShader(m_program, shader);
     glLinkProgram(m_program);
@@ -97,8 +103,7 @@ bool magnetar::OpenGLShaderCompiler::link()
     for (auto shader : m_shaders)
         glDeleteShader(shader);
 
-
-    if(has_errors())
+    if (has_errors())
     {
         glDeleteProgram(m_program);
         m_program = 0;
