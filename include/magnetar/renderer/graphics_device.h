@@ -13,7 +13,7 @@ namespace magnetar
     public:
         GraphicsDevice()
             : m_shader_library(create_reference<ShaderLibrary>()) {}
-            
+
         virtual ~GraphicsDevice() = default;
 
         GraphicsDevice(const GraphicsDevice &) = delete;
@@ -28,6 +28,7 @@ namespace magnetar
         virtual Ref<IndexBuffer> create_index_buffer(size_t count, uint32_t *data) = 0;
 
         virtual void clear() const = 0;
+        virtual void draw_arrays(Ref<VertexArray> vao, int count, int offset) const = 0;
 
         virtual const std::string &name() const = 0;
 

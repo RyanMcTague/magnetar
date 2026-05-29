@@ -6,10 +6,9 @@
 #include "magnetar/filesystem/native_file_system.h"
 
 magnetar::Application::Application()
-    : m_is_running(true), m_window(nullptr)
+    : m_is_running(true), m_is_initialized(false), m_window(nullptr)
 {
     Logger::initialize(MAGNETAR_LOG_LEVEL);
-    initialize();
 }
 
 magnetar::Application::~Application()
@@ -51,6 +50,9 @@ magnetar::Window *magnetar::Application::get_window()
 
 void magnetar::Application::initialize()
 {
+    if (m_is_initialized)
+        return;
+    m_is_initialized = true;
     LOG_INFO(logger::tags::application, "initialzing application");
     FileSystem::register_filesystem<NativeFileSystem>();
     m_window = Window::create({"Untitled", 800, 600});

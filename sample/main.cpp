@@ -3,7 +3,7 @@
 #include <iostream>
 using namespace magnetar;
 
-const char* source = R"""(
+const char *source = R"""(
 #stage vertex
 layout (location = 0) in vec3 a_position;
 void main()
@@ -19,6 +19,13 @@ void main()
 }
 )""";
 
+// clang-format off
+float data[] = {
+     1.0f, -1.0f, 0.0f,
+    -1.0f, -1.0f, 0.0f,
+     0.0f,  1.0f, 0.0f,
+};
+// clang-format on
 
 namespace actions
 {
@@ -30,38 +37,42 @@ class SandboxApp final : public Application
 protected:
     void on_initialize() override;
     void on_update(float delta_time) override;
+
+private:
+    Ref<OpenGLGraphicsDevice> m_device;
+    Ref<Shader> m_shader;
+    Ref<VertexArray> m_vao;
+    Ref<VertexBuffer> m_vbo;
 };
 
 void SandboxApp::on_initialize()
 {
+    Logger::set_level(LogLevel::trace);
+    InputSystem::register_action(actions::quit, KeyboardKey::ESCAPE);
+
+    m_device = create_reference<OpenGLGraphicsDevice>();
+    m_shader = m_device->create_shader("GL_test.glsl", source);
+
+    m_vbo = m_device->create_vertex_buffer(sizeof(data), data);
+    m_vao = m_device->create_vertex_array();
+    m_vbo->push_layout_element("a_position", RendererDataType::VEC3);
+    m_vao->add_vertex_buffer(m_vbo);
 }
+
 void SandboxApp::on_update(float delta_time)
 {
     if (InputSystem::action_pressed(actions::quit))
         close();
+
+    m_device->clear();
+    m_shader->bind();
+    m_device->draw_arrays(m_vao, 3);
 }
 
 int main(int argc, char **argv)
 {
-
-    float data[] = {
-         1.0f, -1.0f, 0.0f,
-        -1.0f, -1.0f, 0.0f,
-         0.0f,  1.0f, 0.0f,
-    };
-
     SandboxApp app;
-    Logger::set_level(LogLevel::trace);
-    InputSystem::register_action(actions::quit, KeyboardKey::ESCAPE);
-
-    Ref<OpenGLGraphicsDevice> device = create_reference<OpenGLGraphicsDevice>();
-    auto shader = device->create_shader("GL_test.glsl", source);
-
-    auto vbo = device->create_vertex_buffer(sizeof(data), data);
-    auto vao = device->create_vertex_array();
-    vbo->push_layout_element("a_position", RendererDataType::VEC3);
-    vao->add_vertex_buffer(vbo);
-
+    app.initialize();
     app.run();
     return 0;
 }

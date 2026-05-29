@@ -13,6 +13,7 @@ namespace magnetar
 
         void run();
         void close();
+        void initialize();
 
         Window *get_window();
 
@@ -23,8 +24,8 @@ namespace magnetar
 
     private:
         bool m_is_running;
+        bool m_is_initialized;
         Ref<Window> m_window;
-        void initialize();
         void shutdown();
     };
 }

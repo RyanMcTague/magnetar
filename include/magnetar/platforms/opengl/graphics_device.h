@@ -18,6 +18,7 @@ namespace magnetar
         Ref<IndexBuffer> create_index_buffer(size_t count, uint32_t *data = nullptr) override;
 
         void clear() const override;
+        void draw_arrays(Ref<VertexArray> vao, int count, int offset = 0) const override;
 
         const std::string& name() const override { return m_name; }
 

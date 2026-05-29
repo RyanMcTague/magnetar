@@ -48,3 +48,10 @@ void magnetar::OpenGLGraphicsDevice::clear() const
 {
     glClear(GL_COLOR_BUFFER_BIT);
 }
+
+void magnetar::OpenGLGraphicsDevice::draw_arrays(Ref<VertexArray> vao, int count, int offset) const
+{
+    vao->bind();
+    glDrawArrays(GL_TRIANGLES, offset, count);
+    vao->unbind();
+}
