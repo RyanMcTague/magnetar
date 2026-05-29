@@ -2,6 +2,23 @@
 #include <iostream>
 using namespace magnetar;
 
+const char* source = R"""(
+#stage vertex
+layout (location = 0) in vec3 a_position;
+void main()
+{
+    gl_Position = vec4(a_position, 1.0);
+}
+
+#stage fragment
+out vec4 FragColor;
+void main()
+{
+    FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+}
+)""";
+
+
 namespace actions
 {
     static constexpr int quit = 0;
@@ -22,22 +39,6 @@ void SandboxApp::on_update(float delta_time)
     if (InputSystem::action_pressed(actions::quit))
         close();
 }
-
-const char* source = R"""(
-#stage vertex
-layout (location = 0) in vec3 a_position;
-void main()
-{
-    gl_Position = vec4(a_position, 1.0);
-}
-
-#stage fragment
-out vec4 FragColor;
-void main()
-{
-    FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-}
-)""";
 
 int main(int argc, char **argv)
 {
