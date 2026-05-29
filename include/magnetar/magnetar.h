@@ -28,6 +28,7 @@
 #include "magnetar/renderer/buffer_layout.h"
 #include "magnetar/renderer/index_buffer.h"
 #include "magnetar/renderer/shader_library.h"
+#include "magnetar/renderer/vertex_array.h"
 #include "magnetar/renderer/shader.h"
 #include "magnetar/renderer/vertex_buffer.h"
 
