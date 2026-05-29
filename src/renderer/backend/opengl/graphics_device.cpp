@@ -39,9 +39,9 @@ magnetar::Ref<magnetar::VertexBuffer> magnetar::GLGraphicsDevice::create_vertex_
     return std::static_pointer_cast<VertexBuffer>(vbo);
 }
 
-magnetar::Ref<magnetar::IndexBuffer> magnetar::GLGraphicsDevice::create_index_buffer(size_t count, uint32_t *data)
+magnetar::Ref<magnetar::IndexBuffer> magnetar::GLGraphicsDevice::create_index_buffer(size_t count, const void *data)
 {
-    auto ibo = create_reference<GLIndexBuffer>(count, data);
+    auto ibo = create_reference<GLIndexBuffer>(count, (const uint32_t*)data);
     return std::static_pointer_cast<IndexBuffer>(ibo);
 }
 
@@ -54,5 +54,12 @@ void magnetar::GLGraphicsDevice::draw_arrays(Ref<VertexArray> vao, int count, in
 {
     vao->bind();
     glDrawArrays(GL_TRIANGLES, offset, count);
+    vao->unbind();
+}
+
+void magnetar::GLGraphicsDevice::draw_indexed(Ref<VertexArray> vao, Ref<IndexBuffer> ibo) const
+{
+    vao->bind();
+    glDrawElements(GL_TRIANGLES, ibo->count(), GL_UNSIGNED_INT, nullptr);
     vao->unbind();
 }

@@ -61,5 +61,6 @@ void magnetar::GLVertexArray::add_vertex_buffer(Ref<VertexBuffer> vertex_buffer)
         }
     }
     unbind();
+    vertex_buffer->unbind();
     VertexArray::add_vertex_buffer(vertex_buffer);
 }

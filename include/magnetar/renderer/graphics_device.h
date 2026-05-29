@@ -25,10 +25,11 @@ namespace magnetar
 
         virtual Ref<VertexArray> create_vertex_array() = 0;
         virtual Ref<VertexBuffer> create_vertex_buffer(size_t size, const void *data) = 0;
-        virtual Ref<IndexBuffer> create_index_buffer(size_t count, uint32_t *data) = 0;
+        virtual Ref<IndexBuffer> create_index_buffer(size_t count, const void *data) = 0;
 
         virtual void clear() const = 0;
         virtual void draw_arrays(Ref<VertexArray> vao, int count, int offset) const = 0;
+        virtual void draw_indexed(Ref<VertexArray> vao, Ref<IndexBuffer> ibo) const = 0;
 
         virtual const std::string &name() const = 0;
 

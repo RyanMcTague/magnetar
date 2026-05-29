@@ -79,6 +79,7 @@ target_sources(magnetar
             include/magnetar/renderer/index_buffer.h
             include/magnetar/renderer/shader_library.h
             include/magnetar/renderer/shader.h
+            include/magnetar/renderer/mesh.h
             include/magnetar/renderer/vertex_array.h
             include/magnetar/renderer/vertex_buffer.h
 
@@ -122,7 +123,8 @@ target_sources(magnetar
         src/renderer/shader.cpp
         src/renderer/shader_library.cpp
         src/renderer/buffer_layout.cpp
-
+        src/renderer/mesh.cpp
+        
         src/renderer/backend/opengl/glad.cpp
         src/renderer/backend/opengl/helpers.cpp
         src/renderer/backend/opengl/shader_compiler.cpp

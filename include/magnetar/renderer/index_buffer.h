@@ -15,8 +15,8 @@ namespace magnetar
         virtual void bind() const = 0;
         virtual void unbind() const = 0;
 
-        virtual void update(uint32_t *data, size_t offset, size_t count) = 0;
-        virtual void copy(uint32_t *destination, size_t offset, size_t count) const = 0;
+        virtual void update(const void *data, size_t offset, size_t count) = 0;
+        virtual void copy(const void *destination, size_t offset, size_t count) const = 0;
 
         virtual size_t size() const = 0;
         virtual size_t count() const = 0;

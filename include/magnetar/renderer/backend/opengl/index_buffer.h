@@ -8,14 +8,14 @@ namespace magnetar
     class GLIndexBuffer : public IndexBuffer
     {
     public:
-        GLIndexBuffer(size_t count, uint32_t *data);
+        GLIndexBuffer(size_t count, const void *data);
         ~GLIndexBuffer();
         
         void bind() const override;
         void unbind() const override;
 
-        void update(uint32_t *data, size_t offset, size_t count) override;
-        void copy(uint32_t *destination, size_t offset, size_t count) const override;
+        void update(const void *data, size_t offset, size_t count) override;
+        void copy(const void *destination, size_t offset, size_t count) const override;
         
         size_t size() const override { return m_count * sizeof(uint32_t); }
         size_t count() const override { return m_count; }

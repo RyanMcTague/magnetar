@@ -4,7 +4,7 @@
 
 namespace magnetar
 {
-    class MAGNETAR_API GLGraphicsDevice: public GraphicsDevice
+    class MAGNETAR_API GLGraphicsDevice : public GraphicsDevice
     {
     public:
         GLGraphicsDevice();
@@ -15,12 +15,13 @@ namespace magnetar
 
         Ref<VertexArray> create_vertex_array() override;
         Ref<VertexBuffer> create_vertex_buffer(size_t size, const void *data = nullptr) override;
-        Ref<IndexBuffer> create_index_buffer(size_t count, uint32_t *data = nullptr) override;
+        Ref<IndexBuffer> create_index_buffer(size_t count, const void *data = nullptr) override;
 
         void clear() const override;
         void draw_arrays(Ref<VertexArray> vao, int count, int offset = 0) const override;
+        void draw_indexed(Ref<VertexArray> vao, Ref<IndexBuffer> ibo) const override;
 
-        const std::string& name() const override { return m_name; }
+        const std::string &name() const override { return m_name; }
 
     private:
         std::string m_name = "OpenGL";
