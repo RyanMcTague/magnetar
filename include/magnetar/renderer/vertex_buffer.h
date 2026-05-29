@@ -12,8 +12,6 @@ namespace magnetar
         VertexBuffer(const VertexBuffer &) = delete;
         VertexBuffer &operator=(const VertexBuffer &) = delete;
 
-        static Ref<VertexBuffer> create(size_t size, const void *data = nullptr);
-
         virtual void bind() const = 0;
         virtual void unbind() const = 0;
 
@@ -27,7 +25,10 @@ namespace magnetar
 
         const BufferLayout& layout() const { return m_layout; }
 
-        void push_layout_element(const std::string& name, RendererDataType type, bool normalized = false);
+        void push_layout_element(const std::string& name, RendererDataType type, bool normalized = false)
+        {
+            m_layout.push(name, type, normalized);
+        }
 
     private:
         BufferLayout m_layout;

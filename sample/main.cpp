@@ -1,4 +1,5 @@
 #include <magnetar/magnetar.h>
+#include <magnetar/platforms/opengl/graphics_device.h>
 #include <iostream>
 using namespace magnetar;
 
@@ -42,11 +43,25 @@ void SandboxApp::on_update(float delta_time)
 
 int main(int argc, char **argv)
 {
+
+    float data[] = {
+         1.0f, -1.0f, 0.0f,
+        -1.0f, -1.0f, 0.0f,
+         0.0f,  1.0f, 0.0f,
+    };
+
     SandboxApp app;
     Logger::set_level(LogLevel::trace);
     InputSystem::register_action(actions::quit, KeyboardKey::ESCAPE);
-    ShaderLibrary lib;
-    auto shader = lib.create("GL_test.glsl", source);
+
+    Ref<OpenGLGraphicsDevice> device = create_reference<OpenGLGraphicsDevice>();
+    auto shader = device->create_shader("GL_test.glsl", source);
+
+    auto vbo = device->create_vertex_buffer(sizeof(data), data);
+    auto vao = device->create_vertex_array();
+    vbo->push_layout_element("a_position", RendererDataType::VEC3);
+    vao->add_vertex_buffer(vbo);
+
     app.run();
     return 0;
 }

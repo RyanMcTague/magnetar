@@ -23,8 +23,6 @@ magnetar::GlfwWindow::GlfwWindow(const WindowProps &props)
     InputSystem::add_device(create_unique_reference<GlfwKeyboardDevice>(m_handle));
     InputSystem::add_device(create_unique_reference<GlfwMouseDevice>(m_handle));
     LOG_INFO(logger::tags::application, "created window '{}'", props.title);
-    LOG_WARN(logger::tags::renderer, "need to replace 'gladLoadGLLoader' {}:{}", "src/platforms/glfw/glfw_window.cpp", __LINE__ + 1);
-    gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 }
 magnetar::GlfwWindow::~GlfwWindow()
 {

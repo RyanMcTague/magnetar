@@ -12,8 +12,6 @@ namespace magnetar
         IndexBuffer(const IndexBuffer &) = delete;
         IndexBuffer &operator=(const IndexBuffer &) = delete;
 
-        static Ref<IndexBuffer> create(size_t count, uint32_t *data = nullptr);
-
         virtual void bind() const = 0;
         virtual void unbind() const = 0;
 

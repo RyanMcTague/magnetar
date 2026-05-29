@@ -16,8 +16,6 @@ namespace magnetar
         VertexArray(const VertexArray &) = delete;
         VertexArray &operator=(const VertexArray &) = delete;
 
-        static Ref<VertexArray> create();
-
         virtual void bind() const = 0;
         virtual void unbind() const = 0;
 
