@@ -4,8 +4,6 @@
 #include "magnetar/platforms/glfw/glfw_mouse_device.h"
 #include "magnetar/events/event_system.h"
 #include "magnetar/input/input_system.h"
-
-#include "magnetar/platforms/opengl/glad.h"
 magnetar::GlfwWindow::GlfwWindow(const WindowProps &props)
     : m_width(props.width), m_height(props.height), m_title(props.title), m_handle(nullptr)
 {

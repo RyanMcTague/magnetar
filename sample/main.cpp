@@ -1,5 +1,5 @@
 #include <magnetar/magnetar.h>
-#include <magnetar/platforms/opengl/graphics_device.h>
+#include <magnetar/renderer/backend/opengl/graphics_device.h>
 #include <iostream>
 using namespace magnetar;
 
@@ -39,7 +39,7 @@ protected:
     void on_update(float delta_time) override;
 
 private:
-    Ref<OpenGLGraphicsDevice> m_device;
+    Ref<GLGraphicsDevice> m_device;
     Ref<Shader> m_shader;
     Ref<VertexArray> m_vao;
     Ref<VertexBuffer> m_vbo;
@@ -50,7 +50,7 @@ void SandboxApp::on_initialize()
     Logger::set_level(LogLevel::trace);
     InputSystem::register_action(actions::quit, KeyboardKey::ESCAPE);
 
-    m_device = create_reference<OpenGLGraphicsDevice>();
+    m_device = create_reference<GLGraphicsDevice>();
     m_shader = m_device->create_shader("GL_test.glsl", source);
 
     m_vbo = m_device->create_vertex_buffer(sizeof(data), data);

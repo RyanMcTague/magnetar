@@ -1,15 +1,15 @@
 #pragma once
 #include "magnetar/core/base.h"
 #include "magnetar/renderer/vertex_buffer.h"
-#include "magnetar/platforms/opengl/glad.h"
+#include "magnetar/renderer/backend/opengl/glad.h"
 
 namespace magnetar
 {
-    class OpenGLVertexBuffer : public VertexBuffer
+    class GLVertexBuffer : public VertexBuffer
     {
     public:
-        OpenGLVertexBuffer(size_t size, const void *data);
-        ~OpenGLVertexBuffer();
+        GLVertexBuffer(size_t size, const void *data);
+        ~GLVertexBuffer();
         
         void bind() const override;
         void unbind() const override;

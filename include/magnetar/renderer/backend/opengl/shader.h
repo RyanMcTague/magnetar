@@ -4,11 +4,11 @@
 #include "magnetar/core/base.h"
 #include "magnetar/renderer/enums.h"
 #include "magnetar/renderer/shader.h"
-#include "magnetar/platforms/opengl/glad.h"
+#include "magnetar/renderer/backend/opengl/glad.h"
 
 namespace magnetar
 {
-    class MAGNETAR_API OpenGLShader : public Shader
+    class MAGNETAR_API GLShader : public Shader
     {
     public:
         struct Variable
@@ -21,10 +21,10 @@ namespace magnetar
         };
 
     public:
-        OpenGLShader(const std::string& name, GLuint handle);
-        ~OpenGLShader();
+        GLShader(const std::string& name, GLuint handle);
+        ~GLShader();
 
-        static Ref<OpenGLShader> factory(const std::string& name, const std::string& source);
+        static Ref<GLShader> factory(const std::string& name, const std::string& source);
 
         void bind() const override;
         void unbind() const override;

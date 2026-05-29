@@ -22,7 +22,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "magnetar/platforms/opengl/glad.h"
+#include "magnetar/renderer/backend/opengl/glad.h"
 
 static void* get_proc(const char *namez);
 

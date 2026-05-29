@@ -1,18 +1,18 @@
 #pragma once
 #include "magnetar/core/base.h"
-#include "magnetar/platforms/opengl/glad.h"
+#include "magnetar/renderer/backend/opengl/glad.h"
 #include "magnetar/renderer/enums.h"
 
 #define MT_GL_CHECK(x)                                                    \
     do                                                                    \
     {                                                                     \
         x;                                                                \
-        magnetar::OpenGLHelpers::gl_check_error_(#x, __FILE__, __LINE__); \
+        magnetar::GLHelpers::gl_check_error_(#x, __FILE__, __LINE__); \
     } while (false)
 
 namespace magnetar
 {
-    class OpenGLHelpers
+    class GLHelpers
     {
     public:
         static RendererDataType convert_renderer_type(GLenum gl_type);
@@ -20,6 +20,6 @@ namespace magnetar
         static GLenum gl_check_error_(const char *func, const char *file, int line);
 
     private:
-        OpenGLHelpers() = default;
+        GLHelpers() = default;
     };
 }

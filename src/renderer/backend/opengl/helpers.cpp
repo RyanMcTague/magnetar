@@ -1,6 +1,6 @@
-#include "magnetar/platforms/opengl/helpers.h"
+#include "magnetar/renderer/backend/opengl/helpers.h"
 
-magnetar::RendererDataType magnetar::OpenGLHelpers::convert_renderer_type(GLenum gl_type)
+magnetar::RendererDataType magnetar::GLHelpers::convert_renderer_type(GLenum gl_type)
 {
     RendererDataType type;
     switch (gl_type)
@@ -55,7 +55,7 @@ magnetar::RendererDataType magnetar::OpenGLHelpers::convert_renderer_type(GLenum
     return type;
 }
 
-GLenum magnetar::OpenGLHelpers::gl_check_error_(const char *func, const char *file, int line)
+GLenum magnetar::GLHelpers::gl_check_error_(const char *func, const char *file, int line)
 {
     GLenum errorCode = GL_NO_ERROR;
     while ((errorCode = glGetError()) != GL_NO_ERROR)

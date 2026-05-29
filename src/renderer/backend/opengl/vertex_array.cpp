@@ -1,31 +1,31 @@
-#include "magnetar/platforms/opengl/vertex_array.h"
+#include "magnetar/renderer/backend/opengl/vertex_array.h"
 #include "magnetar/renderer/vertex_buffer.h"
 #include "magnetar/utils/enum_utils.h"
-#include "magnetar/platforms/opengl/helpers.h"
+#include "magnetar/renderer/backend/opengl/helpers.h"
 
-magnetar::OpenGLVertexArray::OpenGLVertexArray()
+magnetar::GLVertexArray::GLVertexArray()
     : m_handle(0)
 {
     glGenVertexArrays(1, &m_handle);
 }
 
-magnetar::OpenGLVertexArray::~OpenGLVertexArray()
+magnetar::GLVertexArray::~GLVertexArray()
 {
     if (m_handle)
         glDeleteVertexArrays(1, &m_handle);
 }
 
-void magnetar::OpenGLVertexArray::bind() const
+void magnetar::GLVertexArray::bind() const
 {
     glBindVertexArray(m_handle);
 }
 
-void magnetar::OpenGLVertexArray::unbind() const
+void magnetar::GLVertexArray::unbind() const
 {
     glBindVertexArray(0);
 }
 
-void magnetar::OpenGLVertexArray::add_vertex_buffer(Ref<VertexBuffer> vertex_buffer)
+void magnetar::GLVertexArray::add_vertex_buffer(Ref<VertexBuffer> vertex_buffer)
 {
     bind();
     vertex_buffer->bind();

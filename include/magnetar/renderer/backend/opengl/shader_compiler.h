@@ -4,12 +4,12 @@
 #include <magic_enum/magic_enum.hpp>
 #include "magnetar/core/base.h"
 #include "magnetar/renderer/enums.h"
-#include "magnetar/platforms/opengl/glad.h"
+#include "magnetar/renderer/backend/opengl/glad.h"
 #include "magnetar/utils/string_utils.h"
 
 namespace magnetar
 {
-    class MAGNETAR_API OpenGLShaderCompiler
+    class MAGNETAR_API GLShaderCompiler
     {
     public:
         struct Error
@@ -32,8 +32,8 @@ namespace magnetar
         };
 
     public:
-        OpenGLShaderCompiler(const std::string &text);
-        ~OpenGLShaderCompiler();
+        GLShaderCompiler(const std::string &text);
+        ~GLShaderCompiler();
         bool compile();
         bool link();
 

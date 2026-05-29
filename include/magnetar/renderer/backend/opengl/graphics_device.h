@@ -4,10 +4,10 @@
 
 namespace magnetar
 {
-    class MAGNETAR_API OpenGLGraphicsDevice: public GraphicsDevice
+    class MAGNETAR_API GLGraphicsDevice: public GraphicsDevice
     {
     public:
-        OpenGLGraphicsDevice();
+        GLGraphicsDevice();
 
         Ref<Shader> create_shader(const std::string &name, const std::string &source) override;
         Ref<Shader> get_shader(const std::string &name) override;

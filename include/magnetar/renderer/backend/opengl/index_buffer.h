@@ -1,15 +1,15 @@
 #pragma once
 #include "magnetar/core/base.h"
 #include "magnetar/renderer/index_buffer.h"
-#include "magnetar/platforms/opengl/glad.h"
+#include "magnetar/renderer/backend/opengl/glad.h"
 
 namespace magnetar
 {
-    class OpenGLIndexBuffer : public IndexBuffer
+    class GLIndexBuffer : public IndexBuffer
     {
     public:
-        OpenGLIndexBuffer(size_t count, uint32_t *data);
-        ~OpenGLIndexBuffer();
+        GLIndexBuffer(size_t count, uint32_t *data);
+        ~GLIndexBuffer();
         
         void bind() const override;
         void unbind() const override;

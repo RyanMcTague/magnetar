@@ -1,7 +1,7 @@
-#include "magnetar/platforms/opengl/index_buffer.h"
-#include "magnetar/platforms/opengl/helpers.h"
+#include "magnetar/renderer/backend/opengl/index_buffer.h"
+#include "magnetar/renderer/backend/opengl/helpers.h"
 
-magnetar::OpenGLIndexBuffer::OpenGLIndexBuffer(size_t count, uint32_t *data)
+magnetar::GLIndexBuffer::GLIndexBuffer(size_t count, uint32_t *data)
     : m_handle(0), m_count(count)
 {
     glGenBuffers(1, &m_handle);
@@ -13,23 +13,23 @@ magnetar::OpenGLIndexBuffer::OpenGLIndexBuffer(size_t count, uint32_t *data)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-magnetar::OpenGLIndexBuffer::~OpenGLIndexBuffer()
+magnetar::GLIndexBuffer::~GLIndexBuffer()
 {
     if (m_handle)
         glDeleteBuffers(1, &m_handle);
 }
 
-void magnetar::OpenGLIndexBuffer::bind() const
+void magnetar::GLIndexBuffer::bind() const
 {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_handle);
 }
 
-void magnetar::OpenGLIndexBuffer::unbind() const
+void magnetar::GLIndexBuffer::unbind() const
 {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void magnetar::OpenGLIndexBuffer::update(uint32_t *data, size_t offset, size_t count)
+void magnetar::GLIndexBuffer::update(uint32_t *data, size_t offset, size_t count)
 {
     if (offset + count > m_count)
     {
@@ -42,7 +42,7 @@ void magnetar::OpenGLIndexBuffer::update(uint32_t *data, size_t offset, size_t c
     unbind();
 }
 
-void magnetar::OpenGLIndexBuffer::copy(uint32_t *destination, size_t offset, size_t count) const
+void magnetar::GLIndexBuffer::copy(uint32_t *destination, size_t offset, size_t count) const
 {
     if (offset + count > m_count)
     {

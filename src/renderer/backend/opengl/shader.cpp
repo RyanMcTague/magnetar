@@ -1,9 +1,9 @@
 #include <glm/gtc/type_ptr.hpp>
-#include "magnetar/platforms/opengl/shader.h"
+#include "magnetar/renderer/backend/opengl/shader.h"
 #include "magnetar/utils/enum_utils.h"
-#include "magnetar/platforms/opengl/helpers.h"
-#include "magnetar/platforms/opengl/shader_compiler.h"
-magnetar::OpenGLShader::OpenGLShader(const std::string &name, GLuint handle)
+#include "magnetar/renderer/backend/opengl/helpers.h"
+#include "magnetar/renderer/backend/opengl/shader_compiler.h"
+magnetar::GLShader::GLShader(const std::string &name, GLuint handle)
     : m_handle(handle), m_name(name)
 {
     GLint attribute_count, uniform_count;
@@ -23,7 +23,7 @@ magnetar::OpenGLShader::OpenGLShader(const std::string &name, GLuint handle)
         var.location = glGetAttribLocation(m_handle, name);
         var.name = name;
         var.size = size;
-        var.type = OpenGLHelpers::convert_renderer_type(type);
+        var.type = GLHelpers::convert_renderer_type(type);
         m_attributes.emplace(var.name, var);
     }
 
@@ -41,14 +41,14 @@ magnetar::OpenGLShader::OpenGLShader(const std::string &name, GLuint handle)
         var.location = glGetUniformLocation(m_handle, name);
         var.name = name;
         var.size = size;
-        var.type = OpenGLHelpers::convert_renderer_type(type);
+        var.type = GLHelpers::convert_renderer_type(type);
         m_uniforms.emplace(var.name, var);
     }
 }
 
-magnetar::Ref<magnetar::OpenGLShader> magnetar::OpenGLShader::factory(const std::string &name, const std::string &source)
+magnetar::Ref<magnetar::GLShader> magnetar::GLShader::factory(const std::string &name, const std::string &source)
 {
-    OpenGLShaderCompiler compiler(source);
+    GLShaderCompiler compiler(source);
     compiler.compile();
     compiler.link();
 
@@ -58,30 +58,30 @@ magnetar::Ref<magnetar::OpenGLShader> magnetar::OpenGLShader::factory(const std:
             LOG_ERROR(logger::tags::renderer, "{}: {}", name, error.to_string());
         return nullptr;
     }
-    return create_reference<OpenGLShader>(name, compiler.program());
+    return create_reference<GLShader>(name, compiler.program());
 }
 
-magnetar::OpenGLShader::~OpenGLShader()
+magnetar::GLShader::~GLShader()
 {
     if (m_handle)
         glDeleteProgram(m_handle);
 }
 
-void magnetar::OpenGLShader::bind() const
+void magnetar::GLShader::bind() const
 {
     glUseProgram(m_handle);
 }
 
-void magnetar::OpenGLShader::unbind() const
+void magnetar::GLShader::unbind() const
 {
     glUseProgram(0);
 }
-bool magnetar::OpenGLShader::exists() const
+bool magnetar::GLShader::exists() const
 {
     return m_handle != 0;
 }
 
-void magnetar::OpenGLShader::set_int(const std::string &name, int value) const
+void magnetar::GLShader::set_int(const std::string &name, int value) const
 {
     GLint location = uniform_location(name, RendererDataType::INT);
     if (location < 0)
@@ -89,7 +89,7 @@ void magnetar::OpenGLShader::set_int(const std::string &name, int value) const
     glUniform1i(location, value);
 }
 
-void magnetar::OpenGLShader::set_float(const std::string &name, float value) const
+void magnetar::GLShader::set_float(const std::string &name, float value) const
 {
     GLint location = uniform_location(name, RendererDataType::FLOAT);
     if (location < 0)
@@ -97,14 +97,14 @@ void magnetar::OpenGLShader::set_float(const std::string &name, float value) con
     glUniform1f(location, value);
 }
 
-void magnetar::OpenGLShader::set_vec2(const std::string &name, const glm::vec2 &value) const
+void magnetar::GLShader::set_vec2(const std::string &name, const glm::vec2 &value) const
 {
     GLint location = uniform_location(name, RendererDataType::VEC2);
     if (location < 0)
         return;
     glUniform2f(location, value.x, value.y);
 }
-void magnetar::OpenGLShader::set_vec3(const std::string &name, const glm::vec3 &value) const
+void magnetar::GLShader::set_vec3(const std::string &name, const glm::vec3 &value) const
 {
     GLint location = uniform_location(name, RendererDataType::VEC3);
     if (location < 0)
@@ -112,7 +112,7 @@ void magnetar::OpenGLShader::set_vec3(const std::string &name, const glm::vec3 &
     glUniform3f(location, value.x, value.y, value.z);
 }
 
-void magnetar::OpenGLShader::set_vec4(const std::string &name, const glm::vec4 &value) const
+void magnetar::GLShader::set_vec4(const std::string &name, const glm::vec4 &value) const
 {
     GLint location = uniform_location(name, RendererDataType::VEC4);
     if (location < 0)
@@ -120,7 +120,7 @@ void magnetar::OpenGLShader::set_vec4(const std::string &name, const glm::vec4 &
     glUniform4f(location, value.x, value.y, value.z, value.w);
 }
 
-void magnetar::OpenGLShader::set_mat2(const std::string &name, const glm::mat2 &value) const
+void magnetar::GLShader::set_mat2(const std::string &name, const glm::mat2 &value) const
 {
     GLint location = uniform_location(name, RendererDataType::MAT2);
     if (location < 0)
@@ -128,7 +128,7 @@ void magnetar::OpenGLShader::set_mat2(const std::string &name, const glm::mat2 &
     glUniformMatrix2fv(location, 1, GL_FALSE, glm::value_ptr(value));
 }
 
-void magnetar::OpenGLShader::set_mat3(const std::string &name, const glm::mat3 &value) const
+void magnetar::GLShader::set_mat3(const std::string &name, const glm::mat3 &value) const
 {
     GLint location = uniform_location(name, RendererDataType::MAT3);
     if (location < 0)
@@ -136,7 +136,7 @@ void magnetar::OpenGLShader::set_mat3(const std::string &name, const glm::mat3 &
     glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(value));
 }
 
-void magnetar::OpenGLShader::set_mat4(const std::string &name, const glm::mat4 &value) const
+void magnetar::GLShader::set_mat4(const std::string &name, const glm::mat4 &value) const
 {
     GLint location = uniform_location(name, RendererDataType::MAT4);
     if (location < 0)
@@ -144,7 +144,7 @@ void magnetar::OpenGLShader::set_mat4(const std::string &name, const glm::mat4 &
     glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value));
 }
 
-void magnetar::OpenGLShader::set_mat2x3(const std::string &name, const glm::mat2x3 &value) const
+void magnetar::GLShader::set_mat2x3(const std::string &name, const glm::mat2x3 &value) const
 {
     GLint location = uniform_location(name, RendererDataType::MAT2X3);
     if (location < 0)
@@ -152,7 +152,7 @@ void magnetar::OpenGLShader::set_mat2x3(const std::string &name, const glm::mat2
     glUniformMatrix2x3fv(location, 1, GL_FALSE, glm::value_ptr(value));
 }
 
-void magnetar::OpenGLShader::set_mat2x4(const std::string &name, const glm::mat2x4 &value) const
+void magnetar::GLShader::set_mat2x4(const std::string &name, const glm::mat2x4 &value) const
 {
     GLint location = uniform_location(name, RendererDataType::MAT2X4);
     if (location < 0)
@@ -160,7 +160,7 @@ void magnetar::OpenGLShader::set_mat2x4(const std::string &name, const glm::mat2
     glUniformMatrix2x4fv(location, 1, GL_FALSE, glm::value_ptr(value));
 }
 
-void magnetar::OpenGLShader::set_mat3x2(const std::string &name, const glm::mat3x2 &value) const
+void magnetar::GLShader::set_mat3x2(const std::string &name, const glm::mat3x2 &value) const
 {
     GLint location = uniform_location(name, RendererDataType::MAT3X2);
     if (location < 0)
@@ -168,7 +168,7 @@ void magnetar::OpenGLShader::set_mat3x2(const std::string &name, const glm::mat3
     glUniformMatrix3x2fv(location, 1, GL_FALSE, glm::value_ptr(value));
 }
 
-void magnetar::OpenGLShader::set_mat3x4(const std::string &name, const glm::mat3x4 &value) const
+void magnetar::GLShader::set_mat3x4(const std::string &name, const glm::mat3x4 &value) const
 {
     GLint location = uniform_location(name, RendererDataType::MAT3X4);
     if (location < 0)
@@ -176,7 +176,7 @@ void magnetar::OpenGLShader::set_mat3x4(const std::string &name, const glm::mat3
     glUniformMatrix3x4fv(location, 1, GL_FALSE, glm::value_ptr(value));
 }
 
-void magnetar::OpenGLShader::set_mat4x2(const std::string &name, const glm::mat4x2 &value) const
+void magnetar::GLShader::set_mat4x2(const std::string &name, const glm::mat4x2 &value) const
 {
     GLint location = uniform_location(name, RendererDataType::MAT4X2);
     if (location < 0)
@@ -184,7 +184,7 @@ void magnetar::OpenGLShader::set_mat4x2(const std::string &name, const glm::mat4
     glUniformMatrix4x2fv(location, 1, GL_FALSE, glm::value_ptr(value));
 }
 
-void magnetar::OpenGLShader::set_mat4x3(const std::string &name, const glm::mat4x3 &value) const
+void magnetar::GLShader::set_mat4x3(const std::string &name, const glm::mat4x3 &value) const
 {
     GLint location = uniform_location(name, RendererDataType::MAT4X3);
     if (location < 0)
@@ -192,7 +192,7 @@ void magnetar::OpenGLShader::set_mat4x3(const std::string &name, const glm::mat4
     glUniformMatrix4x3fv(location, 1, GL_FALSE, glm::value_ptr(value));
 }
 
-GLint magnetar::OpenGLShader::uniform_location(const std::string &name, RendererDataType target_type) const
+GLint magnetar::GLShader::uniform_location(const std::string &name, RendererDataType target_type) const
 {
     auto it = m_uniforms.find(name);
     if (it == m_uniforms.end())

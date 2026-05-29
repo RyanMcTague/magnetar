@@ -1,6 +1,6 @@
-#include "magnetar/platforms/opengl/vertex_buffer.h"
-#include "magnetar/platforms/opengl/helpers.h"
-magnetar::OpenGLVertexBuffer::OpenGLVertexBuffer(size_t size, const void *data)
+#include "magnetar/renderer/backend/opengl/vertex_buffer.h"
+#include "magnetar/renderer/backend/opengl/helpers.h"
+magnetar::GLVertexBuffer::GLVertexBuffer(size_t size, const void *data)
     : m_handle(0), m_size(size)
 {
     glGenBuffers(1, &m_handle);
@@ -12,23 +12,23 @@ magnetar::OpenGLVertexBuffer::OpenGLVertexBuffer(size_t size, const void *data)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-magnetar::OpenGLVertexBuffer::~OpenGLVertexBuffer()
+magnetar::GLVertexBuffer::~GLVertexBuffer()
 {
     if (m_handle)
         glDeleteBuffers(1, &m_handle);
 }
 
-void magnetar::OpenGLVertexBuffer::bind() const
+void magnetar::GLVertexBuffer::bind() const
 {
     glBindBuffer(GL_ARRAY_BUFFER, m_handle);
 }
 
-void magnetar::OpenGLVertexBuffer::unbind() const
+void magnetar::GLVertexBuffer::unbind() const
 {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void magnetar::OpenGLVertexBuffer::update(const void *data, size_t offset, size_t size)
+void magnetar::GLVertexBuffer::update(const void *data, size_t offset, size_t size)
 {
     if (offset + size > m_size)
     {
@@ -41,7 +41,7 @@ void magnetar::OpenGLVertexBuffer::update(const void *data, size_t offset, size_
     unbind();
 }
 
-void magnetar::OpenGLVertexBuffer::copy(const void *destination, size_t offset, size_t size) const
+void magnetar::GLVertexBuffer::copy(const void *destination, size_t offset, size_t size) const
 {
     if (offset + size > m_size)
     {

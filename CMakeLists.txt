@@ -73,16 +73,6 @@ target_sources(magnetar
             include/magnetar/platforms/glfw/glfw_mouse_device.h
             include/magnetar/platforms/glfw/glfw_window.h
 
-            include/magnetar/platforms/opengl/glad.h
-            include/magnetar/platforms/opengl/helpers.h
-            include/magnetar/platforms/opengl/index_buffer.h
-            include/magnetar/platforms/opengl/khrplatform.h
-            include/magnetar/platforms/opengl/shader_compiler.h
-            include/magnetar/platforms/opengl/shader.h
-            include/magnetar/platforms/opengl/vertex_buffer.h
-            include/magnetar/platforms/opengl/vertex_array.h
-            include/magnetar/platforms/opengl/graphics_device.h
-
             include/magnetar/renderer/buffer_layout.h
             include/magnetar/renderer/enums.h
             include/magnetar/renderer/graphics_device.h
@@ -91,6 +81,16 @@ target_sources(magnetar
             include/magnetar/renderer/shader.h
             include/magnetar/renderer/vertex_array.h
             include/magnetar/renderer/vertex_buffer.h
+
+            include/magnetar/renderer/backend/opengl/glad.h
+            include/magnetar/renderer/backend/opengl/helpers.h
+            include/magnetar/renderer/backend/opengl/index_buffer.h
+            include/magnetar/renderer/backend/opengl/khrplatform.h
+            include/magnetar/renderer/backend/opengl/shader_compiler.h
+            include/magnetar/renderer/backend/opengl/shader.h
+            include/magnetar/renderer/backend/opengl/vertex_buffer.h
+            include/magnetar/renderer/backend/opengl/vertex_array.h
+            include/magnetar/renderer/backend/opengl/graphics_device.h
 
             include/magnetar/utils/enum_utils.h
             include/magnetar/utils/string_utils.h
@@ -119,18 +119,18 @@ target_sources(magnetar
         src/platforms/glfw/glfw_keyboard_device.cpp
         src/platforms/glfw/glfw_mouse_device.cpp
 
-        src/platforms/opengl/glad.cpp
-        src/platforms/opengl/helpers.cpp
-        src/platforms/opengl/shader_compiler.cpp
-        src/platforms/opengl/shader.cpp
-        src/platforms/opengl/index_buffer.cpp
-        src/platforms/opengl/vertex_buffer.cpp
-        src/platforms/opengl/vertex_array.cpp
-        src/platforms/opengl/graphics_device.cpp
-
         src/renderer/shader.cpp
         src/renderer/shader_library.cpp
         src/renderer/buffer_layout.cpp
+
+        src/renderer/backend/opengl/glad.cpp
+        src/renderer/backend/opengl/helpers.cpp
+        src/renderer/backend/opengl/shader_compiler.cpp
+        src/renderer/backend/opengl/shader.cpp
+        src/renderer/backend/opengl/index_buffer.cpp
+        src/renderer/backend/opengl/vertex_buffer.cpp
+        src/renderer/backend/opengl/vertex_array.cpp
+        src/renderer/backend/opengl/graphics_device.cpp
         
         src/utils/string_utils.cpp
 )
