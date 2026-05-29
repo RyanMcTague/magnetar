@@ -53,6 +53,6 @@ void magnetar::OpenGLGraphicsDevice::clear() const
 void magnetar::OpenGLGraphicsDevice::draw_arrays(Ref<VertexArray> vao, int count, int offset) const
 {
     vao->bind();
-    MT_GL_CHECK(glDrawArrays(GL_TRIANGLES, offset, count));
+    glDrawArrays(GL_TRIANGLES, offset, count);
     vao->unbind();
 }
