@@ -1,5 +1,5 @@
 #include "magnetar/platforms/opengl/vertex_buffer.h"
-
+#include "magnetar/platforms/opengl/helpers.h"
 magnetar::OpenGLVertexBuffer::OpenGLVertexBuffer(size_t size, const void *data)
     : m_handle(0), m_size(size)
 {

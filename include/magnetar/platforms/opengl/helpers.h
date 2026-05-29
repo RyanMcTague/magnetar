@@ -3,11 +3,11 @@
 #include "magnetar/platforms/opengl/glad.h"
 #include "magnetar/renderer/enums.h"
 
-#define MT_GL_CHECK(x)                                       \
-    do                                                       \
-    {                                                        \
-        x;                                                   \
-        quasar::gl::gl_check_error_(#x, __FILE__, __LINE__); \
+#define MT_GL_CHECK(x)                                                    \
+    do                                                                    \
+    {                                                                     \
+        x;                                                                \
+        magnetar::OpenGLHelpers::gl_check_error_(#x, __FILE__, __LINE__); \
     } while (false)
 
 namespace magnetar

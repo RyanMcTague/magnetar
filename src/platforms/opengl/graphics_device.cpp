@@ -4,6 +4,7 @@
 #include "magnetar/platforms/opengl/vertex_array.h"
 #include "magnetar/platforms/opengl/vertex_buffer.h"
 #include "magnetar/platforms/opengl/index_buffer.h"
+#include "magnetar/platforms/opengl/helpers.h"
 
 magnetar::OpenGLGraphicsDevice::OpenGLGraphicsDevice()
 {
@@ -52,6 +53,6 @@ void magnetar::OpenGLGraphicsDevice::clear() const
 void magnetar::OpenGLGraphicsDevice::draw_arrays(Ref<VertexArray> vao, int count, int offset) const
 {
     vao->bind();
-    glDrawArrays(GL_TRIANGLES, offset, count);
+    MT_GL_CHECK(glDrawArrays(GL_TRIANGLES, offset, count));
     vao->unbind();
 }

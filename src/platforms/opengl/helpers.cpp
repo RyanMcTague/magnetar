@@ -85,8 +85,7 @@ GLenum magnetar::OpenGLHelpers::gl_check_error_(const char *func, const char *fi
             error = "INVALID_FRAMEBUFFER_OPERATION";
             break;
         }
-        std::string msg = fmt::format("\n - source: OpenGL\n - function: {0}\n - code: {1}\n - file: {2}:{3}", func, error, file, line);
-        MT_ASSERT(errorCode != GL_NO_ERROR, msg);
+        MT_ASSERT(errorCode != GL_NO_ERROR, "\n - source: OpenGL\n - function: {0}\n - code: {1}\n - file: {2}:{3}", func, error, file, line);
     }
     return errorCode;
 }

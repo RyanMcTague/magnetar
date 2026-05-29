@@ -1,4 +1,5 @@
 #include "magnetar/platforms/opengl/index_buffer.h"
+#include "magnetar/platforms/opengl/helpers.h"
 
 magnetar::OpenGLIndexBuffer::OpenGLIndexBuffer(size_t count, uint32_t *data)
     : m_handle(0), m_count(count)

@@ -1,6 +1,8 @@
 #include "magnetar/platforms/opengl/vertex_array.h"
 #include "magnetar/renderer/vertex_buffer.h"
 #include "magnetar/utils/enum_utils.h"
+#include "magnetar/platforms/opengl/helpers.h"
+
 magnetar::OpenGLVertexArray::OpenGLVertexArray()
     : m_handle(0)
 {
@@ -58,7 +60,6 @@ void magnetar::OpenGLVertexArray::add_vertex_buffer(Ref<VertexBuffer> vertex_buf
             break;
         }
     }
-    vertex_buffer->unbind();
     unbind();
     VertexArray::add_vertex_buffer(vertex_buffer);
 }
