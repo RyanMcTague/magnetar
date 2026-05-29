@@ -7,9 +7,7 @@
 #include "magnetar/renderer/vertex_buffer.h"
 
 namespace magnetar
-{
-    class GraphicsDevice;
-    
+{    
     class MAGNETAR_API Mesh
     {
     public:
@@ -21,7 +19,7 @@ namespace magnetar
             glm::vec4 color;
         };
 
-        Mesh(GraphicsDevice* device, const std::vector<Vertex> &vertices, const std::vector<uint32_t> &indices);
+        Mesh(const std::vector<Vertex> &vertices, const std::vector<uint32_t> &indices);
 
         Ref<VertexArray> vertex_array() const { return m_vao; }
         Ref<IndexBuffer> index_buffer() const { return m_ibo; }

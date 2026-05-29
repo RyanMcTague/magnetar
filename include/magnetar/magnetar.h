@@ -25,7 +25,9 @@
 #include "magnetar/input/mouse_device.h"
 
 #include "magnetar/renderer/enums.h"
+#include "magnetar/renderer/buffer_mask.h"
 #include "magnetar/renderer/graphics_device.h"
+#include "magnetar/renderer/renderer.h"
 #include "magnetar/renderer/buffer_layout.h"
 #include "magnetar/renderer/index_buffer.h"
 #include "magnetar/renderer/material.h"

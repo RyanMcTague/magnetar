@@ -6,6 +6,7 @@
 #include "magnetar/renderer/shader.h"
 #include "magnetar/renderer/shader_library.h"
 #include "magnetar/renderer/texture.h"
+#include "magnetar/renderer/buffer_mask.h"
 
 namespace magnetar
 {
@@ -25,7 +26,7 @@ namespace magnetar
         virtual Ref<IndexBuffer> create_index_buffer(size_t count, const void *data) = 0;
         virtual Ref<Texture2D> create_texture2D(const TextureSpecification& spec) = 0;
 
-        virtual void clear() const = 0;
+        virtual void clear(const BufferMask& mask) const = 0;
         virtual void draw_arrays(Ref<VertexArray> vao, int count, int offset) const = 0;
         virtual void draw_indexed(Ref<VertexArray> vao, Ref<IndexBuffer> ibo) const = 0;
 

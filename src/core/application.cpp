@@ -4,6 +4,7 @@
 #include "magnetar/input/input_system.h"
 #include "magnetar/events/event_system.h"
 #include "magnetar/filesystem/native_file_system.h"
+#include "magnetar/renderer/renderer.h"
 
 magnetar::Application::Application()
     : m_is_running(true), m_is_initialized(false), m_window(nullptr)
@@ -53,15 +54,20 @@ void magnetar::Application::initialize()
     if (m_is_initialized)
         return;
     m_is_initialized = true;
+
     LOG_INFO(logger::tags::application, "initialzing application");
+    
     FileSystem::register_filesystem<NativeFileSystem>();
     m_window = Window::create({"Untitled", 800, 600});
+    Renderer::initialize();
+
     on_initialize();
 }
 
 void magnetar::Application::shutdown()
 {
     on_shutdown();
+    Renderer::shutdown();
     LOG_INFO(logger::tags::application, "destroying application");
 }
 

@@ -17,6 +17,8 @@ namespace magnetar
         void set_texture(const std::string& name, Ref<Texture> texture);
         void set_float(const std::string& name, float value);
 
+        Ref<Shader> shader() const { return m_shader; }
+
     private:
         Ref<Shader> m_shader;
         std::unordered_map<std::string, Ref<Texture>> m_textures;

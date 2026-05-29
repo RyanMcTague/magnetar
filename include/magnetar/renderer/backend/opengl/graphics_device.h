@@ -1,6 +1,7 @@
 #pragma once
 #include "magnetar/core/base.h"
 #include "magnetar/renderer/graphics_device.h"
+#include "magnetar/renderer/buffer_mask.h"
 
 namespace magnetar
 {
@@ -16,7 +17,7 @@ namespace magnetar
         Ref<IndexBuffer> create_index_buffer(size_t count, const void *data = nullptr) override;
         Ref<Texture2D> create_texture2D(const TextureSpecification &spec) override;
 
-        void clear() const override;
+        void clear(const BufferMask& mask) const override;
         void draw_arrays(Ref<VertexArray> vao, int count, int offset = 0) const override;
         void draw_indexed(Ref<VertexArray> vao, Ref<IndexBuffer> ibo) const override;
 

@@ -46,9 +46,14 @@ magnetar::Ref<magnetar::Texture2D> magnetar::GLGraphicsDevice::create_texture2D(
     return std::static_pointer_cast<Texture2D>(texture);
 }
 
-void magnetar::GLGraphicsDevice::clear() const
+void magnetar::GLGraphicsDevice::clear(const BufferMask& mask) const
 {
-    glClear(GL_COLOR_BUFFER_BIT);
+    GLbitfield bitfield = 0;
+    if(mask.test(BufferMask::COLOR_BUFFER))
+        bitfield |= GL_COLOR_BUFFER_BIT;
+    if(mask.test(BufferMask::DEPTH_BUFFER))
+        bitfield |= GL_COLOR_BUFFER_BIT;
+    glClear(bitfield);
 }
 
 void magnetar::GLGraphicsDevice::draw_arrays(Ref<VertexArray> vao, int count, int offset) const
