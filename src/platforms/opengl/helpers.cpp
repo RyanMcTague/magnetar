@@ -54,3 +54,39 @@ magnetar::RendererDataType magnetar::OpenGLHelpers::convert_renderer_type(GLenum
 
     return type;
 }
+
+GLenum magnetar::OpenGLHelpers::gl_check_error_(const char *func, const char *file, int line)
+{
+    GLenum errorCode = GL_NO_ERROR;
+    while ((errorCode = glGetError()) != GL_NO_ERROR)
+    {
+        std::string error;
+        switch (errorCode)
+        {
+        case GL_INVALID_ENUM:
+            error = "INVALID_ENUM";
+            break;
+        case GL_INVALID_VALUE:
+            error = "INVALID_VALUE";
+            break;
+        case GL_INVALID_OPERATION:
+            error = "INVALID_OPERATION";
+            break;
+        case GL_STACK_OVERFLOW:
+            error = "STACK_OVERFLOW";
+            break;
+        case GL_STACK_UNDERFLOW:
+            error = "STACK_UNDERFLOW";
+            break;
+        case GL_OUT_OF_MEMORY:
+            error = "OUT_OF_MEMORY";
+            break;
+        case GL_INVALID_FRAMEBUFFER_OPERATION:
+            error = "INVALID_FRAMEBUFFER_OPERATION";
+            break;
+        }
+        std::string msg = fmt::format("\n - source: OpenGL\n - function: {0}\n - code: {1}\n - file: {2}:{3}", func, error, file, line);
+        MT_ASSERT(errorCode != GL_NO_ERROR, msg);
+    }
+    return errorCode;
+}
