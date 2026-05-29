@@ -4,6 +4,7 @@
 #include "magnetar/renderer/backend/opengl/helpers.h"
 #include "magnetar/renderer/backend/opengl/vertex_array.h"
 #include "magnetar/renderer/backend/opengl/vertex_buffer.h"
+#include "magnetar/renderer/backend/opengl/shader.h"
 #include "magnetar/renderer/backend/opengl/index_buffer.h"
 #include "magnetar/renderer/backend/opengl/texture.h"
 
@@ -15,17 +16,11 @@ magnetar::GLGraphicsDevice::GLGraphicsDevice()
 
 magnetar::Ref<magnetar::Shader> magnetar::GLGraphicsDevice::create_shader(const std::string &name, const std::string &source)
 {
-    return shader_library()->create(name, source);
-}
+    auto shader = GLShader::factory(name, source);
+    if (!shader)
+        return nullptr;
 
-magnetar::Ref<magnetar::Shader> magnetar::GLGraphicsDevice::get_shader(const std::string &name)
-{
-    return shader_library()->get(name);
-}
-
-void magnetar::GLGraphicsDevice::remove_shader(const std::string &name)
-{
-    shader_library()->remove(name);
+    return std::static_pointer_cast<Shader>(shader);
 }
 
 magnetar::Ref<magnetar::VertexArray> magnetar::GLGraphicsDevice::create_vertex_array()
