@@ -1,10 +1,11 @@
 #include <GLFW/glfw3.h>
 #include "magnetar/renderer/backend/opengl/graphics_device.h"
 #include "magnetar/renderer/backend/opengl/glad.h"
+#include "magnetar/renderer/backend/opengl/helpers.h"
 #include "magnetar/renderer/backend/opengl/vertex_array.h"
 #include "magnetar/renderer/backend/opengl/vertex_buffer.h"
 #include "magnetar/renderer/backend/opengl/index_buffer.h"
-#include "magnetar/renderer/backend/opengl/helpers.h"
+#include "magnetar/renderer/backend/opengl/texture.h"
 
 magnetar::GLGraphicsDevice::GLGraphicsDevice()
 {
@@ -41,8 +42,13 @@ magnetar::Ref<magnetar::VertexBuffer> magnetar::GLGraphicsDevice::create_vertex_
 
 magnetar::Ref<magnetar::IndexBuffer> magnetar::GLGraphicsDevice::create_index_buffer(size_t count, const void *data)
 {
-    auto ibo = create_reference<GLIndexBuffer>(count, (const uint32_t*)data);
+    auto ibo = create_reference<GLIndexBuffer>(count, (const uint32_t *)data);
     return std::static_pointer_cast<IndexBuffer>(ibo);
+}
+magnetar::Ref<magnetar::Texture2D> magnetar::GLGraphicsDevice::create_texture2D(const TextureSpecification &spec)
+{
+    auto texture = create_reference<GLTexture2D>(spec);
+    return std::static_pointer_cast<Texture2D>(texture);
 }
 
 void magnetar::GLGraphicsDevice::clear() const

@@ -15,10 +15,11 @@ namespace magnetar
     class GLHelpers
     {
     public:
-        static RendererDataType convert_renderer_type(GLenum gl_type);
-
         static GLenum gl_check_error_(const char *func, const char *file, int line);
-
+        static RendererDataType convert_renderer_type(GLenum gl_type);
+        static GLenum texture_format_type(TextureFormat format);
+        static GLenum texture_filter_type(TextureFilter filter);
+        static GLenum texture_wrap_type(TextureWrap wrap);
     private:
         GLHelpers() = default;
     };

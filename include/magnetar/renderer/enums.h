@@ -20,6 +20,27 @@ namespace magnetar
         LINK
     };
 
+    enum class MAGNETAR_API TextureFormat
+    {
+        NONE = 0,
+        RGB8,
+        RGBA8,
+        RGBA16F,
+        DEPTH24_STENCIL8
+    };
+
+    enum class MAGNETAR_API TextureFilter
+    {
+        NEAREST = 0,
+        LINEAR
+    };
+
+    enum class MAGNETAR_API TextureWrap
+    {
+        REPEAT = 0,
+        CLAMP_TO_EDGE
+    };
+
     enum class MAGNETAR_API RendererDataType
     {
         INT = 0,
