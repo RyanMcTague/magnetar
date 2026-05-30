@@ -10,6 +10,7 @@ magnetar::GLVertexBuffer::GLVertexBuffer(size_t size, const void *data)
     else
         glBufferData(GL_ARRAY_BUFFER, m_size, nullptr, GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+    LOG_TRACE(logger::tags::renderer, "created OpenGL vertex buffer {}", m_handle);
 }
 
 magnetar::GLVertexBuffer::~GLVertexBuffer()

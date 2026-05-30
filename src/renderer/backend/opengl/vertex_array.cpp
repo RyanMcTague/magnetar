@@ -7,6 +7,7 @@ magnetar::GLVertexArray::GLVertexArray()
     : m_handle(0)
 {
     glGenVertexArrays(1, &m_handle);
+    LOG_TRACE(logger::tags::renderer, "created OpenGL vertex array {}", m_handle);
 }
 
 magnetar::GLVertexArray::~GLVertexArray()

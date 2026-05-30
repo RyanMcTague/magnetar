@@ -44,6 +44,7 @@ magnetar::GLShader::GLShader(const std::string &name, GLuint handle)
         var.type = GLHelpers::convert_renderer_type(type);
         m_uniforms.emplace(var.name, var);
     }
+    LOG_TRACE(logger::tags::renderer, "created OpenGL shader {}", m_handle);
 }
 
 magnetar::Ref<magnetar::GLShader> magnetar::GLShader::factory(const std::string &name, const std::string &source)

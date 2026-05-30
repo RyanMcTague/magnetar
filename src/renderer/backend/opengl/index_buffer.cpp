@@ -11,6 +11,7 @@ magnetar::GLIndexBuffer::GLIndexBuffer(size_t count, const void *data)
     else
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_count * sizeof(uint32_t), nullptr, GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    LOG_TRACE(logger::tags::renderer, "created OpenGL index buffer {}", m_handle);
 }
 
 magnetar::GLIndexBuffer::~GLIndexBuffer()
