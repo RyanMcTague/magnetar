@@ -64,6 +64,11 @@ void magnetar::Renderer::set_viewport(int x, int y, int width, int height)
     s_device->set_viewport(x, y, width, height);
 }
 
+void magnetar::Renderer::set_clear_color(const glm::vec4& color)
+{
+    s_device->set_clear_color(color);
+}
+
 void magnetar::Renderer::submit(const Ref<Mesh> &mesh, const Ref<Material> &material, const glm::mat4 &transform)
 {
     s_render_commands.emplace_back(mesh, material, transform);

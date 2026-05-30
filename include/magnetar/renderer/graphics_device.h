@@ -30,6 +30,7 @@ namespace magnetar
         virtual void draw_arrays(Ref<VertexArray> vao, int count, int offset) const = 0;
         virtual void draw_indexed(Ref<VertexArray> vao, Ref<IndexBuffer> ibo) const = 0;
         virtual void set_viewport(int x, int y, int width, int height) const = 0;
+        virtual void set_clear_color(const glm::vec4& color) const = 0;
 
         virtual const std::string &name() const = 0;
     };

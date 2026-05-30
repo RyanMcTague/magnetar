@@ -80,7 +80,7 @@ void SandboxApp::on_initialize()
     m_shader = Renderer::create_shader("GL_test.glsl", source);
 
     m_mask.set(BufferMask::COLOR_BUFFER);
-
+    Renderer::set_clear_color(glm::vec4(0.15f, 0.15f, 0.15f, 1.0f));
     m_model = glm::mat4(1.0f);
     m_model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
     m_mesh = create_reference<Mesh>(vertex_data, indx);

@@ -27,6 +27,7 @@ namespace magnetar
         static void draw_arrays(Ref<VertexArray> vao, int count, int offset = 0);
         static void draw_indexed(Ref<VertexArray> vao, Ref<IndexBuffer> ibo);
         static void set_viewport(int x, int y, int width, int height);
+        static void set_clear_color(const glm::vec4& color);
 
         // static void begin_scene(Ref<Camera> camera);
         static void submit(const Ref<Mesh>& mesh, const Ref<Material>& material, const glm::mat4& transform);

@@ -76,3 +76,8 @@ void magnetar::GLGraphicsDevice::set_viewport(int x, int y, int width, int heigh
 {
     glViewport(x, y, width, height);
 }
+
+void magnetar::GLGraphicsDevice::set_clear_color(const glm::vec4& color) const
+{
+    glClearColor(color.x, color.y, color.z, color.w);
+}
