@@ -16,6 +16,9 @@ void magnetar::Material::bind() const
 
     for (auto &[name, value] : m_floats)
         m_shader->set_float(name, value);
+
+    for (auto &[name, value] : m_colors)
+        m_shader->set_vec4(name, value);
 }
 
 void magnetar::Material::unbind() const
@@ -31,4 +34,9 @@ void magnetar::Material::set_texture(const std::string &name, Ref<Texture> textu
 void magnetar::Material::set_float(const std::string &name, float value)
 {
     m_floats.emplace(name, value);
+}
+
+void magnetar::Material::set_color(const std::string& name, const glm::vec4& value)
+{
+    m_colors.emplace(name, value);
 }

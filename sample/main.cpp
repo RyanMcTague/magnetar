@@ -11,12 +11,13 @@ layout (location = 2) in vec2 a_normal;
 layout (location = 3) in vec4 a_color;
 
 uniform mat4 u_model;
+uniform vec4 u_mesh_color;
 
 out vec4 o_color;
 
 void main()
 {
-    o_color = a_color;
+    o_color = u_mesh_color;
     gl_Position = u_model * vec4(a_position, 1.0);
 }
 
@@ -66,8 +67,8 @@ protected:
     void on_update(float delta_time) override;
 
 private:
-    Ref<Shader> m_shader;
     Ref<Mesh> m_mesh;
+    Ref<Material> m_material;
     BufferMask m_mask;
     glm::mat4 m_model;
 };
@@ -77,13 +78,15 @@ void SandboxApp::on_initialize()
     Logger::set_level(LogLevel::trace);
     InputSystem::register_action(actions::quit, KeyboardKey::ESCAPE);
 
-    m_shader = Renderer::create_shader("GL_test.glsl", source);
-
     m_mask.set(BufferMask::COLOR_BUFFER);
-    Renderer::set_clear_color(glm::vec4(0.15f, 0.15f, 0.15f, 1.0f));
+
+    auto shader = Renderer::create_shader("GL_test.glsl", source);
+    m_mesh = create_reference<Mesh>(vertex_data, indx);
+    m_material = create_reference<Material>(shader);
+    m_material->set_color("u_mesh_color", glm::vec4(1.0f, 0.0f, 1.0f, 1.0f));
+
     m_model = glm::mat4(1.0f);
     m_model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-    m_mesh = create_reference<Mesh>(vertex_data, indx);
 }
 
 void SandboxApp::on_update(float delta_time)
@@ -92,9 +95,8 @@ void SandboxApp::on_update(float delta_time)
         close();
 
     Renderer::clear(m_mask);
-    m_shader->bind();
-    m_shader->set_mat4("u_model", m_model);
-    m_mesh->draw();
+    Renderer::submit(m_mesh, m_material, m_model);
+    Renderer::end_scene();
 }
 
 int main(int argc, char **argv)
