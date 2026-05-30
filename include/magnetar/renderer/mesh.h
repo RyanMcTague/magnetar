@@ -14,9 +14,6 @@ namespace magnetar
         struct Vertex
         {
             glm::vec3 position;
-            glm::vec3 normal;
-            glm::vec2 texcoord;
-            glm::vec4 color;
         };
 
         Mesh(const std::vector<Vertex> &vertices, const std::vector<uint32_t> &indices);

@@ -29,9 +29,7 @@ namespace magnetar
         static void set_viewport(int x, int y, int width, int height);
 
         // static void begin_scene(Ref<Camera> camera);
-
         static void submit(const Ref<Mesh>& mesh, const Ref<Material>& material, const glm::mat4& transform);
-
         static void end_scene();
 
     private:

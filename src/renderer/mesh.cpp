@@ -10,10 +10,6 @@ magnetar::Mesh::Mesh(const std::vector<Vertex> &vertices, const std::vector<uint
     m_index_count = indices.size();
 
     m_vbo->push_layout_element("a_position", RendererDataType::VEC3);
-    m_vbo->push_layout_element("a_normal", RendererDataType::VEC3);
-    m_vbo->push_layout_element("a_texcoord", RendererDataType::VEC2);
-    m_vbo->push_layout_element("a_color", RendererDataType::VEC4);
-
     m_vao->add_vertex_buffer(m_vbo);
     m_vao->set_index_buffer(m_ibo);
 }
