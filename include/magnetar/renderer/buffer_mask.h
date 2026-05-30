@@ -1,6 +1,5 @@
 #pragma once
 #include "magnetar/core/base.h"
-
 namespace magnetar
 {
     class MAGNETAR_API BufferMask
@@ -15,10 +14,9 @@ namespace magnetar
         BufferMask()
             : m_value(0) {}
 
-        BufferMask& set(uint32_t buffer)
+        void set(uint32_t buffer)
         {
             m_value |= (buffer);
-            return *this;
         }
 
         bool test(uint32_t buffer) const

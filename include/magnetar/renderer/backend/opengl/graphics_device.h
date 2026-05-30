@@ -20,6 +20,7 @@ namespace magnetar
         void clear(const BufferMask& mask) const override;
         void draw_arrays(Ref<VertexArray> vao, int count, int offset = 0) const override;
         void draw_indexed(Ref<VertexArray> vao, Ref<IndexBuffer> ibo) const override;
+        void set_viewport(int x, int y, int width, int height) const override;
 
         const std::string &name() const override { return m_name; }
 

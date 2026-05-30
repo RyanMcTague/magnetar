@@ -81,6 +81,7 @@ target_sources(magnetar
             include/magnetar/renderer/shader.h
             include/magnetar/renderer/texture.h
             include/magnetar/renderer/mesh.h
+            include/magnetar/renderer/render_command.h
             include/magnetar/renderer/buffer_mask.h
             include/magnetar/renderer/renderer.h
             include/magnetar/renderer/material.h

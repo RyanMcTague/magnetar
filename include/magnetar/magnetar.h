@@ -32,6 +32,7 @@
 #include "magnetar/renderer/index_buffer.h"
 #include "magnetar/renderer/material.h"
 #include "magnetar/renderer/mesh.h"
+#include "magnetar/renderer/render_command.h"
 #include "magnetar/renderer/shader_library.h"
 #include "magnetar/renderer/vertex_array.h"
 #include "magnetar/renderer/shader.h"

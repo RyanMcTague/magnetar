@@ -17,3 +17,8 @@ magnetar::Mesh::Mesh(const std::vector<Vertex> &vertices, const std::vector<uint
     m_vao->add_vertex_buffer(m_vbo);
     m_vao->set_index_buffer(m_ibo);
 }
+
+void magnetar::Mesh::draw() const
+{
+    Renderer::draw_indexed(m_vao, m_ibo);
+}

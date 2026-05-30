@@ -24,6 +24,7 @@ namespace magnetar
         Ref<VertexArray> vertex_array() const { return m_vao; }
         Ref<IndexBuffer> index_buffer() const { return m_ibo; }
 
+        void draw() const;
     private:
         Ref<VertexArray> m_vao;
         Ref<VertexBuffer> m_vbo;

@@ -2,11 +2,12 @@
 #include "magnetar/renderer/backend/opengl/graphics_device.h"
 
 magnetar::UniqueRef<magnetar::GraphicsDevice> magnetar::Renderer::s_device = nullptr;
+std::vector<magnetar::RenderCommand> magnetar::Renderer::s_render_commands;
 
 void magnetar::Renderer::initialize()
 {
     static bool first = true;
-    if(!first)
+    if (!first)
         return;
     first = false;
     s_device = create_unique_reference<GLGraphicsDevice>();
@@ -14,6 +15,7 @@ void magnetar::Renderer::initialize()
 
 void magnetar::Renderer::shutdown()
 {
+    s_render_commands.clear();
     s_device = nullptr;
 }
 
@@ -55,4 +57,25 @@ void magnetar::Renderer::draw_arrays(Ref<VertexArray> vao, int count, int offset
 void magnetar::Renderer::draw_indexed(Ref<VertexArray> vao, Ref<IndexBuffer> ibo)
 {
     s_device->draw_indexed(vao, ibo);
+}
+
+void magnetar::Renderer::set_viewport(int x, int y, int width, int height)
+{
+    s_device->set_viewport(x, y, width, height);
+}
+
+void magnetar::Renderer::submit(const Ref<Mesh> &mesh, const Ref<Material> &material, const glm::mat4 &transform)
+{
+    s_render_commands.emplace_back(mesh, material, transform);
+}
+
+void magnetar::Renderer::end_scene()
+{
+    for (const auto &command : s_render_commands)
+    {
+        command.material->bind();
+        command.material->shader()->set_mat4("u_model", command.transform);
+        command.mesh->draw();
+    }
+    s_render_commands.clear();
 }

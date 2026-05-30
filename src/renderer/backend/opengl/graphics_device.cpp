@@ -71,3 +71,8 @@ void magnetar::GLGraphicsDevice::draw_indexed(Ref<VertexArray> vao, Ref<IndexBuf
     ibo->unbind();
     vao->unbind();
 }
+
+void magnetar::GLGraphicsDevice::set_viewport(int x, int y, int width, int height) const
+{
+    glViewport(x, y, width, height);
+}

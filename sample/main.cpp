@@ -68,7 +68,8 @@ void SandboxApp::on_initialize()
     m_mask.set(BufferMask::COLOR_BUFFER);
 
     m_mvp = glm::mat4(1.0f);
-    m_mvp = glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    m_mvp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+    m_mvp = glm::rotate(m_mvp, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 }
 
 void SandboxApp::on_update(float delta_time)
