@@ -102,6 +102,8 @@ target_sources(magnetar
 
             include/magnetar/utils/enum_utils.h
             include/magnetar/utils/string_utils.h
+
+            include/magnetar/vendor/stb_image.h
             
             include/magnetar/magnetar.h
              
