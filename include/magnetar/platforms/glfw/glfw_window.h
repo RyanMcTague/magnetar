@@ -16,6 +16,7 @@ namespace magnetar
         int width() const override;
         int height() const override;
         const std::string& title() const override;
+        float aspect_ratio() const override;
 
         void poll_events() override;
         void swap_buffers() const override;
@@ -25,6 +26,7 @@ namespace magnetar
     private:
         int m_width;
         int m_height;
+        float m_aspect_ratio;
         std::string m_title;
         GLFWwindow* m_handle;
         

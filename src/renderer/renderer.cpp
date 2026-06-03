@@ -3,6 +3,7 @@
 
 magnetar::UniqueRef<magnetar::GraphicsDevice> magnetar::Renderer::s_device = nullptr;
 std::vector<magnetar::RenderCommand> magnetar::Renderer::s_render_commands;
+glm::mat4 magnetar::Renderer::s_view_projection = glm::mat4(1.0f);
 
 void magnetar::Renderer::initialize()
 {
@@ -69,6 +70,11 @@ void magnetar::Renderer::set_clear_color(const glm::vec4& color)
     s_device->set_clear_color(color);
 }
 
+void magnetar::Renderer::begin_scene(Ref<Camera> camera)
+{
+    s_view_projection = camera->matrix();
+}
+
 void magnetar::Renderer::submit(const Ref<Mesh> &mesh, const Ref<Material> &material, const glm::mat4 &transform)
 {
     s_render_commands.emplace_back(mesh, material, transform);
@@ -80,7 +86,9 @@ void magnetar::Renderer::end_scene()
     {
         command.material->bind();
         command.material->shader()->set_mat4("u_model", command.transform);
+        command.material->shader()->set_mat4("u_view_projection", s_view_projection);
         command.mesh->draw();
     }
     s_render_commands.clear();
+    s_view_projection = glm::mat4(1.0f);
 }

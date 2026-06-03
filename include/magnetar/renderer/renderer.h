@@ -8,6 +8,7 @@
 #include "magnetar/renderer/texture.h"
 #include "magnetar/renderer/graphics_device.h"
 #include "magnetar/renderer/render_command.h"
+#include "magnetar/renderer/camera.h"
 
 namespace magnetar
 {
@@ -29,7 +30,7 @@ namespace magnetar
         static void set_viewport(int x, int y, int width, int height);
         static void set_clear_color(const glm::vec4& color);
 
-        // static void begin_scene(Ref<Camera> camera);
+        static void begin_scene(Ref<Camera> camera);
         static void submit(const Ref<Mesh>& mesh, const Ref<Material>& material, const glm::mat4& transform);
         static void end_scene();
 
@@ -37,5 +38,6 @@ namespace magnetar
         Renderer() = default;
         static UniqueRef<GraphicsDevice> s_device;
         static std::vector<RenderCommand> s_render_commands;
+        static glm::mat4 s_view_projection;
     };
 }

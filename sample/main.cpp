@@ -1,3 +1,4 @@
+
 #include <magnetar/magnetar.h>
 
 using namespace magnetar;
@@ -11,6 +12,7 @@ layout (location = 2) in vec2 a_normal;
 layout (location = 3) in vec4 a_color;
 
 uniform mat4 u_model;
+uniform mat4 u_view_projection;
 uniform vec4 u_mesh_color;
 
 out vec4 o_color;
@@ -18,7 +20,7 @@ out vec4 o_color;
 void main()
 {
     o_color = u_mesh_color;
-    gl_Position = u_model * vec4(a_position, 1.0);
+    gl_Position = u_view_projection * u_model * vec4(a_position, 1.0);
 }
 
 #stage fragment
@@ -34,26 +36,32 @@ void main()
 
 std::vector<Mesh::Vertex> vertex_data = {
     {
-        glm::vec3(1.0f, -1.0f, 0.0f),
+        glm::vec3(0.5f, -0.5f, 0.0f),
         glm::vec2(0.0f, 0.0f),
         glm::vec3(0.0f, 0.0f, -1.0f),
         glm::vec4(0.0f, 1.0f, 1.0f, 1.0f),
     },
     {
-        glm::vec3(-1.0f, -1.0f, 0.0f),
+        glm::vec3(-0.5f, -0.5f, 0.0f),
         glm::vec2(0.0f, 0.0f),
         glm::vec3(0.0f, 0.0f, -1.0f),
         glm::vec4(0.0f, 1.0f, 1.0f, 1.0f),
     },
     {
-        glm::vec3(0.0f, 1.0f, 0.0f),
+        glm::vec3(0.5f, 0.5f, 0.0f),
+        glm::vec2(0.0f, 0.0f),
+        glm::vec3(0.0f, 0.0f, -1.0f),
+        glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+    },
+    {
+        glm::vec3(-0.5f, 0.5f, 0.0f),
         glm::vec2(0.0f, 0.0f),
         glm::vec3(0.0f, 0.0f, -1.0f),
         glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
     },
 };
 
-std::vector<uint32_t> indx = {0, 1, 2};
+std::vector<uint32_t> indx = {0, 1, 2, 2, 1, 3};
 
 namespace actions
 {
@@ -69,6 +77,7 @@ protected:
 private:
     Ref<Mesh> m_mesh;
     Ref<Material> m_material;
+    Ref<Camera> m_camera;
     BufferMask m_mask;
     glm::mat4 m_model;
 };
@@ -87,6 +96,11 @@ void SandboxApp::on_initialize()
 
     m_model = glm::mat4(1.0f);
     m_model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+
+    auto aspect = get_window()->aspect_ratio();
+    float y = 10.0f;
+    float x = y * aspect;
+    m_camera = create_reference<Camera2D>(-x, x, y, -y, -1.0, 1.0);
 }
 
 void SandboxApp::on_update(float delta_time)
@@ -95,6 +109,7 @@ void SandboxApp::on_update(float delta_time)
         close();
 
     Renderer::clear(m_mask);
+    Renderer::begin_scene(m_camera);
     Renderer::submit(m_mesh, m_material, m_model);
     Renderer::end_scene();
 }

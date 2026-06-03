@@ -84,6 +84,7 @@ target_sources(magnetar
             include/magnetar/renderer/render_command.h
             include/magnetar/renderer/buffer_mask.h
             include/magnetar/renderer/renderer.h
+            include/magnetar/renderer/camera.h
             include/magnetar/renderer/material.h
             include/magnetar/renderer/vertex_array.h
             include/magnetar/renderer/vertex_buffer.h
@@ -135,6 +136,7 @@ target_sources(magnetar
         
         src/renderer/backend/opengl/glad.cpp
         src/renderer/backend/opengl/helpers.cpp
+        src/renderer/camera.cpp
         src/renderer/backend/opengl/shader_compiler.cpp
         src/renderer/backend/opengl/shader.cpp
         src/renderer/backend/opengl/index_buffer.cpp

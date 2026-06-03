@@ -7,6 +7,9 @@
 magnetar::GlfwWindow::GlfwWindow(const WindowProps &props)
     : m_width(props.width), m_height(props.height), m_title(props.title), m_handle(nullptr)
 {
+
+    m_aspect_ratio = (float)props.width / (float)props.height;
+
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -40,6 +43,10 @@ int magnetar::GlfwWindow::height() const
 const std::string &magnetar::GlfwWindow::title() const
 {
     return m_title;
+}
+float magnetar::GlfwWindow::aspect_ratio() const
+{
+    return m_aspect_ratio;
 }
 void magnetar::GlfwWindow::poll_events()
 {

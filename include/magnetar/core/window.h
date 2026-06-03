@@ -21,6 +21,7 @@ namespace magnetar
         virtual int width() const = 0;
         virtual int height() const = 0;
         virtual const std::string& title() const = 0;
+        virtual float aspect_ratio() const = 0;
 
         virtual void poll_events() = 0;
         virtual void swap_buffers() const = 0;
