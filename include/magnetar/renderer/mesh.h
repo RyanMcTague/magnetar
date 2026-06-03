@@ -7,8 +7,18 @@
 #include "magnetar/renderer/vertex_buffer.h"
 
 namespace magnetar
-{    
-    class MAGNETAR_API Mesh
+{
+    class MAGNETAR_API IMesh
+    {
+    public:
+        virtual ~IMesh() = default;
+        virtual Ref<VertexArray> vertex_array() const  = 0;
+        virtual Ref<IndexBuffer> index_buffer() const  = 0;
+
+        virtual void draw() const = 0;
+    };
+
+    class MAGNETAR_API Mesh: public IMesh
     {
     public:
         struct Vertex
@@ -21,10 +31,11 @@ namespace magnetar
 
         Mesh(const std::vector<Vertex> &vertices, const std::vector<uint32_t> &indices);
 
-        Ref<VertexArray> vertex_array() const { return m_vao; }
-        Ref<IndexBuffer> index_buffer() const { return m_ibo; }
+        Ref<VertexArray> vertex_array() const override { return m_vao; }
+        Ref<IndexBuffer> index_buffer() const override { return m_ibo; }
 
-        void draw() const;
+        void draw() const override;
+
     private:
         Ref<VertexArray> m_vao;
         Ref<VertexBuffer> m_vbo;

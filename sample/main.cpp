@@ -34,10 +34,11 @@ void main()
 }
 )""";
 
+
 std::vector<Mesh::Vertex> vertex_data = {
     {
         glm::vec3(0.5f, -0.5f, 0.0f),
-        glm::vec2(0.0f, 0.0f),
+        glm::vec2(1.0f, 0.0f),
         glm::vec3(0.0f, 0.0f, -1.0f),
         glm::vec4(0.0f, 1.0f, 1.0f, 1.0f),
     },
@@ -49,13 +50,13 @@ std::vector<Mesh::Vertex> vertex_data = {
     },
     {
         glm::vec3(0.5f, 0.5f, 0.0f),
-        glm::vec2(0.0f, 0.0f),
+        glm::vec2(1.0f, 1.0f),
         glm::vec3(0.0f, 0.0f, -1.0f),
         glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
     },
     {
         glm::vec3(-0.5f, 0.5f, 0.0f),
-        glm::vec2(0.0f, 0.0f),
+        glm::vec2(0.0f, 1.0f),
         glm::vec3(0.0f, 0.0f, -1.0f),
         glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
     },
@@ -98,7 +99,7 @@ void SandboxApp::on_initialize()
     m_model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
     auto aspect = get_window()->aspect_ratio();
-    float y = 10.0f;
+    float y = 2.0f;
     float x = y * aspect;
     m_camera = create_reference<Camera2D>(-x, x, y, -y, -1.0, 1.0);
 }

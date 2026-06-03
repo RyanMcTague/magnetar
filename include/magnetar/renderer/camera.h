@@ -29,7 +29,7 @@ namespace magnetar
         void set_x_plane(float left, float right);
         void set_z_plane(float near, float far);
 
-        void set_position(const glm::vec2 &amount);
+        void move(const glm::vec2 &amount);
 
     private:
         glm::mat4 m_matrix;

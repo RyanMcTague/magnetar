@@ -31,7 +31,7 @@ void magnetar::Camera2D::set_z_plane(float near, float far)
     calculate();
 }
 
-void magnetar::Camera2D::set_position(const glm::vec2 &amount)
+void magnetar::Camera2D::move(const glm::vec2 &amount)
 {
     m_left += amount.x;
     m_right += amount.x;
