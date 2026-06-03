@@ -69,6 +69,10 @@ magnetar::Timestamp magnetar::MemoryFile::last_changed_at() const
 {
     return m_fs->last_changed_at(m_path);
 }
+const std::string &magnetar::MemoryFile::uri() const
+{
+    return m_path;
+}
 
 magnetar::UniqueRef<magnetar::File> magnetar::MemoryFileSystem::open(const std::string &path, FileMode mode)
 {
@@ -100,10 +104,10 @@ bool magnetar::MemoryFileSystem::create_directory(const std::string &path)
 bool magnetar::MemoryFileSystem::remove(const std::string &path)
 {
     auto node = resolve(path);
-    if(!node || !node->parent)
+    if (!node || !node->parent)
         return false;
 
-    return static_cast<memfs::DirectoryNode*>(node->parent)->remove(node);
+    return static_cast<memfs::DirectoryNode *>(node->parent)->remove(node);
 }
 bool magnetar::MemoryFileSystem::is_file(const std::string &path) const
 {
@@ -177,11 +181,11 @@ size_t magnetar::MemoryFileSystem::file_size(const std::string &path) const
     return static_cast<memfs::FileNode *>(node)->size;
 }
 
-magnetar::Timestamp magnetar::MemoryFileSystem::last_changed_at(const std::string& path) const
+magnetar::Timestamp magnetar::MemoryFileSystem::last_changed_at(const std::string &path) const
 {
     auto node = resolve(path);
     MT_ASSERT(node->type() == memfs::NodeType::FILE, "{} is not a file", path);
-    return static_cast<memfs::FileNode*>(node)->last_changed_at;
+    return static_cast<memfs::FileNode *>(node)->last_changed_at;
 }
 
 size_t magnetar::MemoryFileSystem::write(const std::string &path, const void *buffer, size_t offset, size_t size, FileMode mode)

@@ -3,38 +3,6 @@
 
 using namespace magnetar;
 
-const char *source = R"""(
-#stage vertex
-
-layout (location = 0) in vec3 a_position;
-layout (location = 1) in vec2 a_texcoord;
-layout (location = 2) in vec2 a_normal;
-layout (location = 3) in vec4 a_color;
-
-uniform mat4 u_model;
-uniform mat4 u_view_projection;
-uniform vec4 u_mesh_color;
-
-out vec4 o_color;
-
-void main()
-{
-    o_color = u_mesh_color;
-    gl_Position = u_view_projection * u_model * vec4(a_position, 1.0);
-}
-
-#stage fragment
-
-in vec4 o_color;
-out vec4 FragColor;
-
-void main()
-{
-    FragColor = o_color;
-}
-)""";
-
-
 std::vector<Mesh::Vertex> vertex_data = {
     {
         glm::vec3(0.5f, -0.5f, 0.0f),
@@ -88,9 +56,12 @@ void SandboxApp::on_initialize()
     Logger::set_level(LogLevel::trace);
     InputSystem::register_action(actions::quit, KeyboardKey::ESCAPE);
 
+    auto file = FileSystem::get<NativeFileSystem>()->open("./sample/GL_sample.glsl", FileMode::READ);
+    auto source = file->to_string();
+
     m_mask.set(BufferMask::COLOR_BUFFER);
 
-    auto shader = Renderer::create_shader("GL_test.glsl", source);
+    auto shader = Renderer::create_shader(file->uri(), source);
     m_mesh = create_reference<Mesh>(vertex_data, indx);
     m_material = create_reference<Material>(shader);
     m_material->set_color("u_mesh_color", glm::vec4(1.0f, 0.0f, 1.0f, 1.0f));

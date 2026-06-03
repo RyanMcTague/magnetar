@@ -18,13 +18,14 @@ namespace magnetar
         class MAGNETAR_API Node
         {
         public:
-            Node(const std::string &name, NodeType type, Node* parent = nullptr) : parent(parent), m_name{name}, m_type{type} {}
+            Node(const std::string &name, NodeType type, Node *parent = nullptr) : parent(parent), m_name{name}, m_type{type} {}
 
             virtual ~Node() = default;
 
             const std::string &name() const { return m_name; }
             NodeType type() const { return m_type; }
-            Node* parent;
+            Node *parent;
+
         private:
             std::string m_name;
             NodeType m_type;
@@ -66,10 +67,10 @@ namespace magnetar
                 return it->second.get();
             }
 
-            bool remove(Node* node)
+            bool remove(Node *node)
             {
                 auto it = m_children.find(node->name());
-                if(it == m_children.end())
+                if (it == m_children.end())
                     return false;
                 m_children.erase(it);
                 return true;
@@ -102,6 +103,7 @@ namespace magnetar
         size_t size() const override;
         bool eof() const override;
         Timestamp last_changed_at() const override;
+        const std::string &uri() const override;
 
     private:
         FileMode m_mode;
@@ -119,7 +121,7 @@ namespace magnetar
 
         UniqueRef<File> open(const std::string &path, FileMode mode) override;
 
-        const std::string& name() const override { return m_name; }
+        const std::string &name() const override { return m_name; }
 
         bool exists(const std::string &path) const override;
         bool create_directory(const std::string &path) override;
@@ -130,10 +132,10 @@ namespace magnetar
         size_t read(const std::string &path, void *buffer, size_t offset, size_t size);
         size_t write(const std::string &path, const void *buffer, size_t offset, size_t size, FileMode mode);
         size_t file_size(const std::string &path) const override;
-        Timestamp last_changed_at(const std::string& path) const override;
+        Timestamp last_changed_at(const std::string &path) const override;
 
-        bool set_file(const std::string& path, void* buffer, size_t size);
-        bool set_file(const std::string& path, const std::string& text);
+        bool set_file(const std::string &path, void *buffer, size_t size);
+        bool set_file(const std::string &path, const std::string &text);
 
         void print() const { print_node(m_root.get(), 0); }
 

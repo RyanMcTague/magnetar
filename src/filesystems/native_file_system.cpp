@@ -62,6 +62,10 @@ magnetar::Timestamp magnetar::DiskFile::last_changed_at() const
 {
     return std::filesystem::last_write_time(m_path);
 }
+const std::string &magnetar::DiskFile::uri() const
+{
+    return m_path;
+}
 const char *magnetar::DiskFile::file_mode_ios() const
 {
     switch (m_mode)
@@ -126,5 +130,5 @@ const std::string &magnetar::NativeFileSystem::name() const
 
 magnetar::Timestamp magnetar::NativeFileSystem::last_changed_at(const std::string &path) const
 {
-   return std::filesystem::last_write_time(path);
+    return std::filesystem::last_write_time(path);
 }

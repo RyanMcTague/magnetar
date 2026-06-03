@@ -21,6 +21,8 @@ namespace magnetar
         size_t size() const override;
         bool eof() const override;
         virtual Timestamp last_changed_at() const override;
+        const std::string& uri() const override;
+        
     private:
         FILE *m_handle;
         std::string m_path;
