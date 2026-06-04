@@ -75,7 +75,7 @@ void magnetar::Renderer::begin_scene(Ref<Camera> camera)
     s_view_projection = camera->matrix();
 }
 
-void magnetar::Renderer::submit(const Ref<Mesh> &mesh, const Ref<Material> &material, const glm::mat4 &transform)
+void magnetar::Renderer::submit(const Ref<IMesh> &mesh, const Ref<Material> &material, const glm::mat4 &transform)
 {
     s_render_commands.emplace_back(mesh, material, transform);
 }

@@ -31,7 +31,7 @@ namespace magnetar
         static void set_clear_color(const glm::vec4& color);
 
         static void begin_scene(Ref<Camera> camera);
-        static void submit(const Ref<Mesh>& mesh, const Ref<Material>& material, const glm::mat4& transform);
+        static void submit(const Ref<IMesh>& mesh, const Ref<Material>& material, const glm::mat4& transform);
         static void end_scene();
 
     private:
