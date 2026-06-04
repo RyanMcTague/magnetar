@@ -66,7 +66,8 @@ void SandboxApp::on_initialize()
     float x = y * aspect;
     m_camera = create_reference<Camera2D>(-x, x, y, -y, -1.0, 1.0);
 
-    auto file = FileSystem::get<NativeFileSystem>()->open("./sample/assets/shaders/GL_sample.glsl", FileMode::READ);
+    auto fs = FileSystem::get<NativeFileSystem>();
+    auto file = fs->open("./sample/assets/shaders/GL_sample.glsl", FileMode::READ);
     auto source = file->to_string();
     auto shader = Renderer::create_shader(file->uri(), source);
 
@@ -83,6 +84,9 @@ void SandboxApp::on_initialize()
     m_mesh = create_reference<Mesh>(vertex_data, indx);
     m_material = create_reference<Material>(shader);
     m_material->set_texture("u_texture", m_texture);
+
+    file = fs->open("./sample/assets/metadata.yml", FileMode::READ);
+    AssetManager::initialize(file->to_string());
 }
 
 void SandboxApp::on_update(float delta_time)

@@ -3,7 +3,7 @@
 
 namespace magnetar
 {
-    enum class ImportStatus
+    enum class MAGNETAR_API ImportStatus
     {
         SUCCESS = 0,
         WARNING,

@@ -13,8 +13,6 @@ namespace magnetar
         Shader(const Shader &) = delete;
         Shader &operator=(const Shader &) = delete;
 
-        static Ref<Shader> create(const std::string& name, const std::string& source);
-
         virtual void bind() const = 0;
         virtual void unbind() const = 0;
         virtual bool exists() const = 0;
