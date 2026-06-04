@@ -1,12 +1,31 @@
 #pragma once
+#include "magnetar/core/base.h"
 
 namespace magnetar
 {
-    class Application
+    class Window;
+
+    class MAGNETAR_API Application
     {
     public:
         Application();
+        virtual ~Application();
 
-        int run(int argc, char** argv);
+        void run();
+        void close();
+        void initialize();
+
+        Window *get_window();
+
+    protected:
+        virtual void on_initialize();
+        virtual void on_shutdown();
+        virtual void on_update(float delta_time);
+
+    private:
+        bool m_is_running;
+        bool m_is_initialized;
+        Ref<Window> m_window;
+        void shutdown();
     };
 }

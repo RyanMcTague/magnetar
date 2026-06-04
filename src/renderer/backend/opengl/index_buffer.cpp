@@ -1,0 +1,57 @@
+#include "magnetar/renderer/backend/opengl/index_buffer.h"
+#include "magnetar/renderer/backend/opengl/helpers.h"
+
+magnetar::GLIndexBuffer::GLIndexBuffer(size_t count, const void *data)
+    : m_handle(0), m_count(count)
+{
+    glGenBuffers(1, &m_handle);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_handle);
+    if (data)
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_count * sizeof(uint32_t), data, GL_STATIC_DRAW);
+    else
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_count * sizeof(uint32_t), nullptr, GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    LOG_TRACE(logger::tags::renderer, "created OpenGL index buffer {}", m_handle);
+}
+
+magnetar::GLIndexBuffer::~GLIndexBuffer()
+{
+    if (m_handle)
+        glDeleteBuffers(1, &m_handle);
+}
+
+void magnetar::GLIndexBuffer::bind() const
+{
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_handle);
+}
+
+void magnetar::GLIndexBuffer::unbind() const
+{
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+void magnetar::GLIndexBuffer::update(const void *data, size_t offset, size_t count)
+{
+    if (offset + count > m_count)
+    {
+        size_t overflow = (offset + count) - m_count;
+        LOG_ERROR(logger::tags::renderer, "cannot update index buffer, data overflow of {} indices", overflow);
+        return;
+    }
+    bind();
+    glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, count * sizeof(uint32_t), data);
+    unbind();
+}
+
+void magnetar::GLIndexBuffer::copy(const void *destination, size_t offset, size_t count) const
+{
+    if (offset + count > m_count)
+    {
+        size_t overflow = (offset + count) - m_count;
+        LOG_ERROR(logger::tags::renderer, "cannot copy index buffer, data overflow of {} indices", overflow);
+        return;
+    }
+    bind();
+    glGetBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, m_count * sizeof(uint32_t), &destination);
+    unbind();
+}
