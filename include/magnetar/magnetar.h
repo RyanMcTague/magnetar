@@ -15,6 +15,10 @@
 #include "magnetar/filesystem/memory_file_system.h"
 #include "magnetar/filesystem/native_file_system.h"
 
+#include "magnetar/importer/enums.h"
+#include "magnetar/importer/asset_importer.h"
+#include "magnetar/importer/texture_importer.h"
+
 #include "magnetar/input/enums.h"
 #include "magnetar/input/input_action.h"
 #include "magnetar/input/input_code.h"

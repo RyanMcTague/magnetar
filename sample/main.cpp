@@ -1,7 +1,5 @@
 
 #include <magnetar/magnetar.h>
-#define STB_IMAGE_IMPLEMENTATION
-#include <magnetar/vendor/stb_image.h>
 using namespace magnetar;
 
 std::vector<Mesh::Vertex> vertex_data = {
@@ -68,26 +66,20 @@ void SandboxApp::on_initialize()
     float x = y * aspect;
     m_camera = create_reference<Camera2D>(-x, x, y, -y, -1.0, 1.0);
 
-    auto file = FileSystem::get<NativeFileSystem>()->open("./sample/assets/images/wall.jpg", FileMode::READ);
-    auto data = file->read_all();
-    int width, height, channels;
-    uint8_t *buffer = stbi_load_from_memory(&data[0], data.size(), &width, &height, &channels, 3);
-    if (!buffer)
-    {
-        LOG_ERROR(logger::tags::application, "Could not load {}: {}", file->uri(), stbi_failure_reason());
-    }
-
-    TextureSpecification spec;
-    spec.width = width;
-    spec.height = height;
-    spec.format = TextureFormat::RGB8;
-    spec.generate_mipmaps = true;
-    m_texture = Renderer::create_texture2D(spec, buffer);
-    stbi_image_free(buffer);
-
-    file = FileSystem::get<NativeFileSystem>()->open("./sample/assets/shaders/GL_sample.glsl", FileMode::READ);
+    auto file = FileSystem::get<NativeFileSystem>()->open("./sample/assets/shaders/GL_sample.glsl", FileMode::READ);
     auto source = file->to_string();
     auto shader = Renderer::create_shader(file->uri(), source);
+
+    TextureImporter texture_importer;
+    auto result = texture_importer.import("./sample/assets/images/wall.jpg");
+
+    TextureSpecification spec;
+    spec.width = result.data.width;
+    spec.height = result.data.height;
+    spec.format = result.data.format;
+    spec.generate_mipmaps = true;
+    m_texture = Renderer::create_texture2D(spec, result.data.buffer.get());
+
     m_mesh = create_reference<Mesh>(vertex_data, indx);
     m_material = create_reference<Material>(shader);
     m_material->set_texture("u_texture", m_texture);

@@ -23,6 +23,7 @@ find_package(spdlog REQUIRED CONFIG)
 find_package(glfw3 REQUIRED CONFIG)
 find_package(magic_enum REQUIRED CONFIG)
 find_package(glm REQUIRED CONFIG)
+find_package(yaml-cpp REQUIRED CONFIG)
 
 ########################################################
 # Library
@@ -59,6 +60,10 @@ target_sources(magnetar
             include/magnetar/filesystem/memory_file_system.h
             include/magnetar/filesystem/native_file_system.h
             include/magnetar/filesystem/file_system.h
+
+            include/magnetar/importer/asset_importer.h
+            include/magnetar/importer/enums.h
+            include/magnetar/importer/texture_importer.h
 
             include/magnetar/input/input_device.h
             include/magnetar/input/input_action.h
@@ -119,6 +124,8 @@ target_sources(magnetar
         src/filesystems/file_system.cpp
         src/filesystems/native_file_system.cpp
         src/filesystems/memory_file_system.cpp
+
+        src/importer/texture_importer.cpp
 
         src/input/input_system.cpp
         src/input/keyboard_device.cpp
@@ -193,6 +200,7 @@ target_link_libraries(magnetar
         glfw
         magic_enum::magic_enum
         glm::glm
+        yaml-cpp::yaml-cpp
 )
 
 ########################################################
