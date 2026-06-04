@@ -68,7 +68,7 @@ void SandboxApp::on_initialize()
     float x = y * aspect;
     m_camera = create_reference<Camera2D>(-x, x, y, -y, -1.0, 1.0);
 
-    auto file = FileSystem::get<NativeFileSystem>()->open("./sample/wall.jpg", FileMode::READ);
+    auto file = FileSystem::get<NativeFileSystem>()->open("./sample/assets/images/wall.jpg", FileMode::READ);
     auto data = file->read_all();
     int width, height, channels;
     uint8_t *buffer = stbi_load_from_memory(&data[0], data.size(), &width, &height, &channels, 3);
@@ -85,7 +85,7 @@ void SandboxApp::on_initialize()
     m_texture = Renderer::create_texture2D(spec, buffer);
     stbi_image_free(buffer);
 
-    file = FileSystem::get<NativeFileSystem>()->open("./sample/GL_sample.glsl", FileMode::READ);
+    file = FileSystem::get<NativeFileSystem>()->open("./sample/assets/shaders/GL_sample.glsl", FileMode::READ);
     auto source = file->to_string();
     auto shader = Renderer::create_shader(file->uri(), source);
     m_mesh = create_reference<Mesh>(vertex_data, indx);
