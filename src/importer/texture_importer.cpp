@@ -3,6 +3,7 @@
 #include "magnetar/vendor/stb_image.h"
 #include "magnetar/filesystem/file_system.h"
 #include "magnetar/filesystem/native_file_system.h"
+#include "magnetar/utils/string_utils.h"
 
 magnetar::ImportResult<magnetar::TextureImportData> magnetar::TextureImporter::import(const std::string &path)
 {
