@@ -22,7 +22,7 @@ namespace magnetar
         static Ref<VertexArray> create_vertex_array();
         static Ref<VertexBuffer> create_vertex_buffer(size_t size, const void *data = nullptr);
         static Ref<IndexBuffer> create_index_buffer(size_t count, const void *data = nullptr);
-        static Ref<Texture2D> create_texture2D(const TextureSpecification &spec);
+        static Ref<Texture2D> create_texture2D(const TextureSpecification &spec, const void* data = nullptr);
 
         static void clear(const BufferMask &mask);
         static void draw_arrays(Ref<VertexArray> vao, int count, int offset = 0);

@@ -40,9 +40,9 @@ magnetar::Ref<magnetar::IndexBuffer> magnetar::Renderer::create_index_buffer(siz
     return s_device->create_index_buffer(count, data);
 }
 
-magnetar::Ref<magnetar::Texture2D> magnetar::Renderer::create_texture2D(const TextureSpecification &spec)
+magnetar::Ref<magnetar::Texture2D> magnetar::Renderer::create_texture2D(const TextureSpecification &spec, const void *data)
 {
-    return s_device->create_texture2D(spec);
+    return s_device->create_texture2D(spec, data);
 }
 
 void magnetar::Renderer::clear(const BufferMask &mask)
@@ -65,7 +65,7 @@ void magnetar::Renderer::set_viewport(int x, int y, int width, int height)
     s_device->set_viewport(x, y, width, height);
 }
 
-void magnetar::Renderer::set_clear_color(const glm::vec4& color)
+void magnetar::Renderer::set_clear_color(const glm::vec4 &color)
 {
     s_device->set_clear_color(color);
 }

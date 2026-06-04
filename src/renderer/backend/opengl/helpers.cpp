@@ -83,6 +83,9 @@ magnetar::RendererDataType magnetar::GLHelpers::convert_renderer_type(GLenum gl_
     case GL_FLOAT_MAT4x3:
         type = RendererDataType::MAT4X3;
         break;
+    case GL_SAMPLER_2D:
+        type = RendererDataType::INT;
+        break;
     default:
         MT_ASSERT(false, "Invalid shader data type");
         break;
@@ -99,10 +102,10 @@ GLenum magnetar::GLHelpers::texture_format_type(TextureFormat format)
     switch (format)
     {
     case TextureFormat::RGB8:
-        f = GL_RGB8;
+        f = GL_RGB;
         break;
     case TextureFormat::RGBA8:
-        f = GL_RGBA8;
+        f = GL_RGBA;
         break;
     case TextureFormat::RGBA16F:
         f = GL_RGBA16F;

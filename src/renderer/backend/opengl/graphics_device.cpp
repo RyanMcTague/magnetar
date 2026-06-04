@@ -40,18 +40,18 @@ magnetar::Ref<magnetar::IndexBuffer> magnetar::GLGraphicsDevice::create_index_bu
     auto ibo = create_reference<GLIndexBuffer>(size, (const uint32_t *)data);
     return std::static_pointer_cast<IndexBuffer>(ibo);
 }
-magnetar::Ref<magnetar::Texture2D> magnetar::GLGraphicsDevice::create_texture2D(const TextureSpecification &spec)
+magnetar::Ref<magnetar::Texture2D> magnetar::GLGraphicsDevice::create_texture2D(const TextureSpecification &spec, const void *data)
 {
-    auto texture = create_reference<GLTexture2D>(spec);
+    auto texture = create_reference<GLTexture2D>(spec, data);
     return std::static_pointer_cast<Texture2D>(texture);
 }
 
-void magnetar::GLGraphicsDevice::clear(const BufferMask& mask) const
+void magnetar::GLGraphicsDevice::clear(const BufferMask &mask) const
 {
     GLbitfield bitfield = 0;
-    if(mask.test(BufferMask::COLOR_BUFFER))
+    if (mask.test(BufferMask::COLOR_BUFFER))
         bitfield |= GL_COLOR_BUFFER_BIT;
-    if(mask.test(BufferMask::DEPTH_BUFFER))
+    if (mask.test(BufferMask::DEPTH_BUFFER))
         bitfield |= GL_COLOR_BUFFER_BIT;
     glClear(bitfield);
 }
@@ -77,7 +77,7 @@ void magnetar::GLGraphicsDevice::set_viewport(int x, int y, int width, int heigh
     glViewport(x, y, width, height);
 }
 
-void magnetar::GLGraphicsDevice::set_clear_color(const glm::vec4& color) const
+void magnetar::GLGraphicsDevice::set_clear_color(const glm::vec4 &color) const
 {
     glClearColor(color.x, color.y, color.z, color.w);
 }

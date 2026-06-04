@@ -57,6 +57,7 @@ namespace magnetar
         MAT3X4,
         MAT4X2,
         MAT4X3,
+        TEXTURE2D
     };
 
     MAGNETAR_API inline size_t renderer_data_type_size(RendererDataType type)

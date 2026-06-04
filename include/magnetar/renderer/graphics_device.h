@@ -24,7 +24,7 @@ namespace magnetar
         virtual Ref<VertexArray> create_vertex_array() = 0;
         virtual Ref<VertexBuffer> create_vertex_buffer(size_t size, const void *data) = 0;
         virtual Ref<IndexBuffer> create_index_buffer(size_t size, const void *data) = 0;
-        virtual Ref<Texture2D> create_texture2D(const TextureSpecification &spec) = 0;
+        virtual Ref<Texture2D> create_texture2D(const TextureSpecification &spec, const void* data) = 0;
 
         virtual void clear(const BufferMask &mask) const = 0;
         virtual void draw_arrays(Ref<VertexArray> vao, int count, int offset) const = 0;

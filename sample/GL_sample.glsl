@@ -7,22 +7,22 @@ layout (location = 3) in vec4 a_color;
 
 uniform mat4 u_model;
 uniform mat4 u_view_projection;
-uniform vec4 u_mesh_color;
 
-out vec4 o_color;
+out vec2 o_texcoord;
 
 void main()
 {
-    o_color = u_mesh_color;
+    o_texcoord = a_texcoord;
     gl_Position = u_view_projection * u_model * vec4(a_position, 1.0);
 }
 
 #stage fragment
 
-in vec4 o_color;
+in vec2 o_texcoord;
 out vec4 FragColor;
+uniform sampler2D u_texture;
 
 void main()
 {
-    FragColor = o_color;
+    FragColor = texture(u_texture, o_texcoord);
 }
