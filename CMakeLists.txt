@@ -23,6 +23,8 @@ find_package(spdlog REQUIRED CONFIG)
 find_package(glfw3 REQUIRED CONFIG)
 find_package(magic_enum REQUIRED CONFIG)
 find_package(glm REQUIRED CONFIG)
+find_package(yaml-cpp REQUIRED CONFIG)
+
 
 ########################################################
 # Library
@@ -195,6 +197,7 @@ target_link_libraries(magnetar
         glfw
         magic_enum::magic_enum
         glm::glm
+        yaml-cpp::yaml-cpp
 )
 
 ########################################################
