@@ -102,6 +102,7 @@ target_sources(magnetar
 
             include/magnetar/utils/enum_utils.h
             include/magnetar/utils/string_utils.h
+            include/magnetar/utils/image_utils.h
 
             include/magnetar/vendor/stb_image.h
             
@@ -148,6 +149,7 @@ target_sources(magnetar
         src/renderer/backend/opengl/graphics_device.cpp
         
         src/utils/string_utils.cpp
+        src/utils/image_utils.cpp
 )
 
 ########################################################

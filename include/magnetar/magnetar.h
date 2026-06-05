@@ -41,5 +41,5 @@
 #include "magnetar/renderer/vertex_buffer.h"
 
 #include "magnetar/utils/string_utils.h"
-
-#include <glm/gtc/matrix_transform.hpp>
+#include "magnetar/utils/enum_utils.h"
+#include "magnetar/utils/image_utils.h"

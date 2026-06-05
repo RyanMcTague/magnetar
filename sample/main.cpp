@@ -1,7 +1,6 @@
 
 #include <magnetar/magnetar.h>
-#define STB_IMAGE_IMPLEMENTATION
-#include <magnetar/vendor/stb_image.h>
+#include <glm/gtc/matrix_transform.hpp>
 using namespace magnetar;
 
 std::vector<Mesh::Vertex> vertex_data = {
@@ -70,20 +69,18 @@ void SandboxApp::on_initialize()
 
     auto file = FileSystem::get<NativeFileSystem>()->open("./sample/wall.jpg", FileMode::READ);
     auto data = file->read_all();
-    int width, height, channels;
-    uint8_t *buffer = stbi_load_from_memory(&data[0], data.size(), &width, &height, &channels, 3);
-    if (!buffer)
+    auto result = image_utils::load(&data[0], data.size(), 3);
+    if (!result.success)
     {
-        LOG_ERROR(logger::tags::application, "Could not load {}: {}", file->uri(), stbi_failure_reason());
+        LOG_ERROR(logger::tags::application, "Could not load {}: {}", file->uri(), result.error);
     }
 
     TextureSpecification spec;
-    spec.width = width;
-    spec.height = height;
+    spec.width = result.width;
+    spec.height = result.height;
     spec.format = TextureFormat::RGB8;
     spec.generate_mipmaps = true;
-    m_texture = Renderer::create_texture2D(spec, buffer);
-    stbi_image_free(buffer);
+    m_texture = Renderer::create_texture2D(spec, result.buffer.get());
 
     file = FileSystem::get<NativeFileSystem>()->open("./sample/GL_sample.glsl", FileMode::READ);
     auto source = file->to_string();
