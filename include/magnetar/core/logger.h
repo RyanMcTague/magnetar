@@ -13,6 +13,7 @@ namespace magnetar
         static constexpr const char *events = "events";
         static constexpr const char *input = "input";
         static constexpr const char *renderer = "renderer";
+        static constexpr const char *assets = "assets";
     }
 
     class Logger

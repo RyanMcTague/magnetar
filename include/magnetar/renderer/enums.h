@@ -23,6 +23,8 @@ namespace magnetar
     enum class MAGNETAR_API TextureFormat
     {
         NONE = 0,
+        R8,
+        RA8,
         RGB8,
         RGBA8,
         RGBA16F,

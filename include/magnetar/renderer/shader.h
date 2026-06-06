@@ -1,10 +1,10 @@
 #pragma once
 #include <glm/glm.hpp>
 #include "magnetar/core/base.h"
-
+#include "magnetar/assets/asset.h"
 namespace magnetar
 {
-    class MAGNETAR_API Shader
+    class MAGNETAR_API Shader: public Asset
     {
     public:
         Shader() = default;

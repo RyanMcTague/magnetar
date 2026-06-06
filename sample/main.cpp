@@ -1,6 +1,7 @@
 
 #include <magnetar/magnetar.h>
 #include <glm/gtc/matrix_transform.hpp>
+
 using namespace magnetar;
 
 std::vector<Mesh::Vertex> vertex_data = {
@@ -46,7 +47,6 @@ protected:
 private:
     Ref<Mesh> m_mesh;
     Ref<Material> m_material;
-    Ref<Texture> m_texture;
     Ref<Camera> m_camera;
     BufferMask m_mask;
     glm::mat4 m_model;
@@ -63,31 +63,19 @@ void SandboxApp::on_initialize()
     m_model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
     auto aspect = get_window()->aspect_ratio();
-    float y = 2.0f;
+    float y = 1.0f;
     float x = y * aspect;
     m_camera = create_reference<Camera2D>(-x, x, y, -y, -1.0, 1.0);
 
-    auto file = FileSystem::get<NativeFileSystem>()->open("./sample/wall.jpg", FileMode::READ);
-    auto data = file->read_all();
-    auto result = image_utils::load(&data[0], data.size(), 3);
-    if (!result.success)
-    {
-        LOG_ERROR(logger::tags::application, "Could not load {}: {}", file->uri(), result.error);
-    }
+    auto texture_handle = AssetManager::load<Texture2D>("./sample/wall.jpg");
+    auto shader_handle = AssetManager::load<Shader>("./sample/GL_Sample.glsl");
 
-    TextureSpecification spec;
-    spec.width = result.width;
-    spec.height = result.height;
-    spec.format = TextureFormat::RGB8;
-    spec.generate_mipmaps = true;
-    m_texture = Renderer::create_texture2D(spec, result.buffer.get());
+    auto shader = AssetManager::get<Shader>(shader_handle);
+    auto texture = AssetManager::get<Texture2D>(texture_handle);
 
-    file = FileSystem::get<NativeFileSystem>()->open("./sample/GL_sample.glsl", FileMode::READ);
-    auto source = file->to_string();
-    auto shader = Renderer::create_shader(file->uri(), source);
     m_mesh = create_reference<Mesh>(vertex_data, indx);
     m_material = create_reference<Material>(shader);
-    m_material->set_texture("u_texture", m_texture);
+    m_material->set_texture("u_texture", texture);
 }
 
 void SandboxApp::on_update(float delta_time)
@@ -95,6 +83,9 @@ void SandboxApp::on_update(float delta_time)
     if (InputSystem::action_pressed(actions::quit))
         close();
 
+    m_model = glm::mat4(1.0f);
+    m_model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+    m_model = glm::rotate(m_model, glm::radians(0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
     Renderer::clear(m_mask);
     Renderer::begin_scene(m_camera);
     Renderer::submit(m_mesh, m_material, m_model);

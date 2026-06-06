@@ -11,6 +11,7 @@ namespace magnetar
         logger::tags::events,
         logger::tags::input,
         logger::tags::renderer,
+        logger::tags::assets,
     };
 }
 void magnetar::Logger::initialize(LogLevel level)

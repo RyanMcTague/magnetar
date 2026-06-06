@@ -1,7 +1,7 @@
 #pragma once
 #include "magnetar/core/base.h"
 #include "magnetar/renderer/enums.h"
-
+#include "magnetar/assets/asset.h"
 namespace magnetar
 {
     struct MAGNETAR_API TextureSpecification
@@ -15,7 +15,7 @@ namespace magnetar
         bool generate_mipmaps = true;
     };
 
-    class MAGNETAR_API Texture
+    class MAGNETAR_API Texture: public Asset
     {
     public:
         Texture() = default;

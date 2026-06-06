@@ -45,6 +45,9 @@ target_sources(magnetar
         FILE_SET HEADERS
         BASE_DIRS include
         FILES
+            include/magnetar/assets/asset.h
+            include/magnetar/assets/asset_manager.h
+
             include/magnetar/containers/tree.h
 
             include/magnetar/core/time.h
@@ -111,6 +114,8 @@ target_sources(magnetar
             include/magnetar/magnetar.h
              
     PRIVATE
+        src/assets/asset_manager.cpp
+
         src/core/application.cpp
         src/core/logger.cpp
         src/core/window.cpp
