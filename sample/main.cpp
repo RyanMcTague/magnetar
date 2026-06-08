@@ -12,7 +12,11 @@ const char *raw_asset_config = R"""(
 - guid: 1001
   type: texture2D
   path: ./sample/wall.jpg
-  generate_mipmaps: true
+
+- guid: 1002
+  type: material
+  path: ./sample/wall.material
+
 )""";
 
 namespace R
@@ -25,6 +29,11 @@ namespace R
     namespace textures
     {
         AssetHandle wall = 1001;
+    }
+
+    namespace materials
+    {
+        AssetHandle wall = 1002;
     }
 }
 
@@ -94,13 +103,8 @@ void SandboxApp::on_initialize()
 
     AssetManager::load<Texture2D>("./sample/wall.jpg");
     AssetManager::load<Shader>("./sample/GL_Sample.glsl");
-
-    auto shader = AssetManager::get<Shader>(R::shaders::GL_sample);
-    auto texture = AssetManager::get<Texture2D>(R::textures::wall);
-
+    AssetManager::load<Material>("./sample/wall.material");
     m_mesh = create_reference<Mesh>(vertex_data, indx);
-    m_material = create_reference<Material>(shader);
-    m_material->set_texture("u_texture", texture);
 }
 
 void SandboxApp::on_update(float delta_time)
@@ -113,7 +117,7 @@ void SandboxApp::on_update(float delta_time)
     m_model = glm::rotate(m_model, glm::radians(0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
     Renderer::clear(m_mask);
     Renderer::begin_scene(m_camera);
-    Renderer::submit(m_mesh, m_material, m_model);
+    Renderer::submit(m_mesh, AssetManager::get<Material>(R::materials::wall), m_model);
     Renderer::end_scene();
 }
 

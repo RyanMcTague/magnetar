@@ -3,10 +3,11 @@
 #include "magnetar/core/base.h"
 #include "magnetar/renderer/shader.h"
 #include "magnetar/renderer/texture.h"
+#include "magnetar/assets/asset.h"
 
 namespace magnetar
 {
-    class MAGNETAR_API Material
+    class MAGNETAR_API Material: public Asset
     {
     public:
         Material(Ref<Shader> shader);
