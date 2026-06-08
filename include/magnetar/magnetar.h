@@ -1,5 +1,6 @@
 #pragma once
 
+#include "magnetar/assets/asset.h"
 #include "magnetar/assets/asset_manager.h"
 
 #include "magnetar/containers/tree.h"

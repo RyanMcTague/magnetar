@@ -3,16 +3,29 @@
 #include <functional>
 #include "magnetar/core/base.h"
 #include "magnetar/assets/asset.h"
+#include "magnetar/assets/asset_handle.h"
+#include "magnetar/assets/resouce_loader.h"
 
 namespace magnetar
 {
-    using AssetHandle = uint32_t;
+    class MAGNETAR_API AssetRegistry
+    {
+    public:
+        AssetRegistry(const char *raw_config);
+
+        const YAML::Node &get(AssetHandle handle) const;
+
+        AssetHandle get_handle_for_path(const std::string &path) const;
+
+    private:
+        std::unordered_map<std::string, AssetHandle> m_handles;
+        std::unordered_map<AssetHandle, YAML::Node> m_metadata;
+    };
 
     class MAGNETAR_API AssetManager
     {
     public:
-        using Loader = std::function<Ref<Asset>(const std::string &path)>;
-        static void initialize();
+        static void initialize(const char *raw_config);
         static void shutdown();
 
         template <typename T>
@@ -21,36 +34,43 @@ namespace magnetar
         template <typename T>
         static Ref<T> get(AssetHandle handle);
 
+        template <typename T>
+        static void register_loader();
+
     private:
         AssetManager() = default;
-        static std::unordered_map<std::string, AssetHandle> s_handles;
+        static Ref<AssetRegistry> s_registry;
         static std::unordered_map<AssetHandle, Ref<Asset>> s_loaded_assets;
-        static std::unordered_map<std::type_index, Loader> s_loaders;
+        static std::unordered_map<std::string, Ref<ResourceLoader>> s_loaders;
 
-        template <typename T>
-        static void register_loader(Loader loader);
+        static Ref<ResourceLoader> get_loader_from_type_index(const std::type_index& idx) ;
     };
+}
+
+template <typename T>
+void magnetar::AssetManager::register_loader()
+{
+    Ref<ResourceLoader> loader = std::static_pointer_cast<ResourceLoader>(create_reference<T>());
+    s_loaders.emplace(loader->resource_name(), loader);
 }
 
 template <typename T>
 magnetar::AssetHandle magnetar::AssetManager::load(const std::string &path)
 {
-    auto handle_it = s_handles.find(path);
-    MT_ASSERT(handle_it != s_handles.end(), "handle not found for {}", path);
-
-    auto handle = handle_it->second;
+    auto handle = s_registry->get_handle_for_path(path);
     auto asset_it = s_loaded_assets.find(handle);
-    if (asset_it != s_loaded_assets.end())
+    if(asset_it != s_loaded_assets.end())
+    {
+        LOG_TRACE(logger::tags::assets, "asset {:} already loaded", path);
         return handle;
+    }
 
-    auto loader_it = s_loaders.find(typeid(T));
-    MT_ASSERT(loader_it != s_loaders.end(), "loader not found for asset");
-    auto loader = loader_it->second;
-    auto asset = loader(path);
+    auto loader = get_loader_from_type_index(typeid(T));
 
-    LOG_INFO(logger::tags::assets, "loaded asset {}", path);
+    auto asset = loader->load(s_registry->get(handle));
+    s_loaded_assets.emplace(handle, asset);
+    LOG_INFO(logger::tags::assets, "imported asset {}", path);
 
-    s_loaded_assets.emplace(handle, std::move(asset));
     return handle;
 }
 
@@ -58,12 +78,11 @@ template <typename T>
 magnetar::Ref<T> magnetar::AssetManager::get(AssetHandle handle)
 {
     auto it = s_loaded_assets.find(handle);
-    MT_ASSERT(it != s_loaded_assets.end(), "asset {:x} is not loaded into asset manager", handle);
-    return std::static_pointer_cast<T>(it->second);
-}
+    if (it == s_loaded_assets.end())
+    {
+        LOG_WARN(logger::tags::assets, "asset {:x} is not loaded", handle);
+        return nullptr;
+    }
 
-template <typename T>
-void magnetar::AssetManager::register_loader(Loader loader)
-{
-    s_loaders.emplace(typeid(T), loader);
+    return std::static_pointer_cast<T>(it->second);
 }

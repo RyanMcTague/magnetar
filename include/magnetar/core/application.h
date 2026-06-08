@@ -21,6 +21,7 @@ namespace magnetar
         virtual void on_initialize();
         virtual void on_shutdown();
         virtual void on_update(float delta_time);
+        virtual const char* asset_config() = 0;
 
     private:
         bool m_is_running;

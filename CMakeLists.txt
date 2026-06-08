@@ -47,6 +47,10 @@ target_sources(magnetar
         FILES
             include/magnetar/assets/asset.h
             include/magnetar/assets/asset_manager.h
+            include/magnetar/assets/resouce_loader.h
+            include/magnetar/assets/asset_handle.h
+            include/magnetar/assets/loaders/texture_loader.h
+            include/magnetar/assets/loaders/shader_loader.h
 
             include/magnetar/containers/tree.h
 
@@ -115,6 +119,8 @@ target_sources(magnetar
              
     PRIVATE
         src/assets/asset_manager.cpp
+        src/assets/loaders/texture_loader.cpp
+        src/assets/loaders/shader_loader.cpp
 
         src/core/application.cpp
         src/core/logger.cpp

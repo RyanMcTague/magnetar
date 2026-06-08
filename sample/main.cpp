@@ -4,6 +4,30 @@
 
 using namespace magnetar;
 
+const char *raw_asset_config = R"""(
+- guid: 1000
+  type: shader
+  path: ./sample/GL_Sample.glsl
+
+- guid: 1001
+  type: texture2D
+  path: ./sample/wall.jpg
+  generate_mipmaps: true
+)""";
+
+namespace R
+{
+    namespace shaders
+    {
+        AssetHandle GL_sample = 1000;
+    }
+
+    namespace textures
+    {
+        AssetHandle wall = 1001;
+    }
+}
+
 std::vector<Mesh::Vertex> vertex_data = {
     {
         glm::vec3(0.5f, -0.5f, 0.0f),
@@ -43,6 +67,7 @@ class SandboxApp final : public Application
 protected:
     void on_initialize() override;
     void on_update(float delta_time) override;
+    const char *asset_config() override { return raw_asset_config; }
 
 private:
     Ref<Mesh> m_mesh;
@@ -67,11 +92,11 @@ void SandboxApp::on_initialize()
     float x = y * aspect;
     m_camera = create_reference<Camera2D>(-x, x, y, -y, -1.0, 1.0);
 
-    auto texture_handle = AssetManager::load<Texture2D>("./sample/wall.jpg");
-    auto shader_handle = AssetManager::load<Shader>("./sample/GL_Sample.glsl");
+    AssetManager::load<Texture2D>("./sample/wall.jpg");
+    AssetManager::load<Shader>("./sample/GL_Sample.glsl");
 
-    auto shader = AssetManager::get<Shader>(shader_handle);
-    auto texture = AssetManager::get<Texture2D>(texture_handle);
+    auto shader = AssetManager::get<Shader>(R::shaders::GL_sample);
+    auto texture = AssetManager::get<Texture2D>(R::textures::wall);
 
     m_mesh = create_reference<Mesh>(vertex_data, indx);
     m_material = create_reference<Material>(shader);

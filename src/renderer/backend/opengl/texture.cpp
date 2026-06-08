@@ -27,7 +27,7 @@ magnetar::GLTexture2D::GLTexture2D(const TextureSpecification &spec, const void 
     if (m_spec.generate_mipmaps && data)
         glGenerateMipmap(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, 0);
-    LOG_TRACE(logger::tags::renderer, "created OpenGL texture2D array {}", m_handle);
+    LOG_TRACE(logger::tags::renderer, "created OpenGL texture2D {}", m_handle);
 }
 
 magnetar::GLTexture2D::~GLTexture2D()

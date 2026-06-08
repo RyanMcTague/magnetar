@@ -13,5 +13,5 @@ namespace magnetar::image_utils
         Ref<uint8_t> buffer = nullptr;
     }; 
 
-    MAGNETAR_API LoadResult load(uint8_t* data, int size, int requested_channels);
+    MAGNETAR_API LoadResult load(uint8_t* data, int size, int requested_channels = 0);
 }

@@ -3,49 +3,69 @@
 #include "magnetar/utils/image_utils.h"
 #include "magnetar/filesystem/native_file_system.h"
 
-std::unordered_map<std::string, magnetar::AssetHandle> magnetar::AssetManager::s_handles;
+
+magnetar::Ref<magnetar::AssetRegistry> magnetar::AssetManager::s_registry;
 std::unordered_map<magnetar::AssetHandle, magnetar::Ref<magnetar::Asset>> magnetar::AssetManager::s_loaded_assets;
-std::unordered_map<std::type_index, magnetar::AssetManager::Loader> magnetar::AssetManager::s_loaders;
 
-void magnetar::AssetManager::initialize()
+std::unordered_map<std::string, magnetar::Ref<magnetar::ResourceLoader>> magnetar::AssetManager::s_loaders;
+
+
+magnetar::AssetRegistry::AssetRegistry(const char *raw_config)
 {
+    auto config = YAML::Load(raw_config);
+    MT_ASSERT(config.IsSequence(), "asset metadata is not an yaml array");
 
-    s_handles = {
-        {"./sample/GL_Sample.glsl", 1000},
-        {"./sample/wall.jpg", 1001},
-    };
-
-    auto fs = FileSystem::get<NativeFileSystem>();
-
-    Loader texture2D_loader = [fs](const std::string &path)
+    for (const auto &node : config)
     {
-        auto file_data = fs->open(path, FileMode::READ)->read_all();
-        auto result = image_utils::load(&file_data[0], file_data.size(), 3);
-        MT_ASSERT(result.success, "{}", result.error);
+        auto guid = node["guid"].as<AssetHandle>();
+        auto type = node["type"].as<std::string>();
+        auto path = node["path"].as<std::string>();
+        m_handles.emplace(path, guid);
+        m_metadata.emplace(guid, node);
+        LOG_TRACE(logger::tags::assets, "imported metadata for asset {}#{:x} {}", type, guid, path);
+    }
+}
 
-        TextureSpecification spec;
-        spec.width = result.width;
-        spec.height = result.height;
-        spec.format = TextureFormat::RGB8;
-        spec.generate_mipmaps = true;
-        auto texture = Renderer::create_texture2D(spec, result.buffer.get());
-        return texture;
-    };
+const YAML::Node& magnetar::AssetRegistry::get(AssetHandle handle) const
+{
+    auto it = m_metadata.find(handle);
+    MT_ASSERT(it != m_metadata.end(), "cannot find metadata for asset {:x}", handle);
+    return it->second;
+}
 
-    Loader shader_loader = [fs](const std::string &path)
-    {
-        auto file = fs->open(path, FileMode::READ);
-        auto source = file->to_string();
-        auto shader = Renderer::create_shader(file->uri(), source);
-        return shader;
-    };
+magnetar::AssetHandle magnetar::AssetRegistry::get_handle_for_path(const std::string& path) const
+{
+    auto it = m_handles.find(path);
+    MT_ASSERT(it != m_handles.end(), "handle fot asset {} does not exist", path);
+    return it->second;
+}
 
-    register_loader<Texture2D>(texture2D_loader);
-    register_loader<Shader>(shader_loader);
+void magnetar::AssetManager::initialize(const char *raw_config)
+{
+    s_registry = create_reference<AssetRegistry>(raw_config);
 }
 
 void magnetar::AssetManager::shutdown()
 {
     s_loaded_assets.clear();
-    s_handles.clear();
+    s_registry = nullptr;
+}
+
+
+magnetar::Ref<magnetar::ResourceLoader> magnetar::AssetManager::get_loader_from_type_index(const std::type_index& idx)
+{
+    Ref<ResourceLoader> loader = nullptr;
+
+    for(auto& pair: s_loaders)
+    {
+        if(pair.second->type_index() == idx)
+        {
+            loader = pair.second;
+            break;
+        }
+    }
+
+    MT_ASSERT(loader != nullptr, "expected loader for type {} to exist", idx.name());
+
+    return loader;
 }

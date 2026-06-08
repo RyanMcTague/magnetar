@@ -7,6 +7,9 @@
 #include "magnetar/renderer/renderer.h"
 #include "magnetar/assets/asset_manager.h"
 
+#include "magnetar/assets/loaders/texture_loader.h"
+#include "magnetar/assets/loaders/shader_loader.h"
+
 magnetar::Application::Application()
     : m_is_running(true), m_is_initialized(false), m_window(nullptr)
 {
@@ -59,9 +62,13 @@ void magnetar::Application::initialize()
     LOG_INFO(logger::tags::application, "initialzing application");
 
     FileSystem::register_filesystem<NativeFileSystem>();
+    AssetManager::register_loader<Texture2DLoader>();
+    AssetManager::register_loader<ShaderLoader>();
+
+
     m_window = Window::create({"Untitled", 1200, 800});
     Renderer::initialize();
-    AssetManager::initialize();
+    AssetManager::initialize(asset_config());
 
     on_initialize();
 }
