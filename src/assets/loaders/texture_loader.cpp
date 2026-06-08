@@ -26,6 +26,8 @@ magnetar::Ref<magnetar::Asset> magnetar::Texture2DLoader::load(const YAML::Node 
     auto result = image_utils::load(&file_data[0], file_data.size());
     MT_ASSERT(result.success, "could not parse image {}: {}", path, result.error);
 
+    spec.width = result.width;
+    spec.height = result.height;
     switch (result.channels)
     {
     case 3:
