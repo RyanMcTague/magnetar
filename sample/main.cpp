@@ -20,7 +20,6 @@ const char *raw_asset_config = R"""(
 - guid: 1003
   type: mesh
   path: ./sample/assets/models/square.obj
-
 )""";
 
 namespace R
@@ -51,6 +50,12 @@ namespace actions
     static constexpr int quit = 0;
 }
 
+struct MyComponent
+{
+    MT_DECLARE_CLASS_NAME(MyComponent)
+    int x = 1;
+};
+
 class SandboxApp final : public Application
 {
 protected:
@@ -66,7 +71,7 @@ private:
 
 void SandboxApp::on_initialize()
 {
-    Logger::set_level(LogLevel::trace);
+    // Logger::set_level(LogLevel::trace);
     InputSystem::register_action(actions::quit, KeyboardKey::ESCAPE);
 
     AssetManager::load<Texture2D>("./sample/assets/images/wall.jpg");
@@ -83,6 +88,10 @@ void SandboxApp::on_initialize()
     float y = 1.0f;
     float x = y * aspect;
     m_camera = create_reference<Camera2D>(-x, x, y, -y, -1.0, 1.0);
+
+    Scene scene;
+
+    auto e = scene.create_entity();
 }
 
 void SandboxApp::on_update(float delta_time)
@@ -96,9 +105,10 @@ void SandboxApp::on_update(float delta_time)
     Renderer::clear(m_mask);
     Renderer::begin_scene(m_camera);
     Renderer::submit(
-        AssetManager::get<Mesh>(R::meshes::square), 
-        AssetManager::get<Material>(R::materials::wall), 
-        m_model);
+        AssetManager::get<Mesh>(R::meshes::square),
+        AssetManager::get<Material>(R::materials::wall),
+        m_model
+    );
     Renderer::end_scene();
 }
 
