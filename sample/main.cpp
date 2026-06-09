@@ -7,19 +7,19 @@ using namespace magnetar;
 const char *raw_asset_config = R"""(
 - guid: 1000
   type: shader
-  path: ./sample/GL_Sample.glsl
+  path: ./sample/assets/shaders/GL_Sample.glsl
 
 - guid: 1001
   type: texture2D
-  path: ./sample/wall.jpg
+  path: ./sample/assets/images/wall.jpg
 
 - guid: 1002
   type: material
-  path: ./sample/wall.material
+  path: ./sample/assets/materials/wall.material
 
 - guid: 1003
   type: mesh
-  path: ./sample/square.obj
+  path: ./sample/assets/models/square.obj
 
 )""";
 
@@ -69,10 +69,10 @@ void SandboxApp::on_initialize()
     Logger::set_level(LogLevel::trace);
     InputSystem::register_action(actions::quit, KeyboardKey::ESCAPE);
 
-    AssetManager::load<Texture2D>("./sample/wall.jpg");
-    AssetManager::load<Shader>("./sample/GL_Sample.glsl");
-    AssetManager::load<Material>("./sample/wall.material");
-    AssetManager::load<Mesh>("./sample/square.obj");
+    AssetManager::load<Texture2D>("./sample/assets/images/wall.jpg");
+    AssetManager::load<Shader>("./sample/assets/shaders/GL_Sample.glsl");
+    AssetManager::load<Material>("./sample/assets/materials/wall.material");
+    AssetManager::load<Mesh>("./sample/assets/models/square.obj");
 
     m_mask.set(BufferMask::COLOR_BUFFER);
 
