@@ -25,6 +25,7 @@ find_package(magic_enum REQUIRED CONFIG)
 find_package(glm REQUIRED CONFIG)
 find_package(yaml-cpp REQUIRED CONFIG)
 find_package(assimp REQUIRED CONFIG)
+find_package(EnTT REQUIRED CONFIG)
 
 ########################################################
 # Library
@@ -214,6 +215,7 @@ target_link_libraries(magnetar
         glm::glm
         yaml-cpp::yaml-cpp
         assimp::assimp
+        EnTT::EnTT
 )
 
 ########################################################
