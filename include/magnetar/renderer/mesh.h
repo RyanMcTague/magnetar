@@ -2,13 +2,14 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include "magnetar/core/base.h"
+#include "magnetar/assets/asset.h"
 #include "magnetar/renderer/index_buffer.h"
 #include "magnetar/renderer/vertex_array.h"
 #include "magnetar/renderer/vertex_buffer.h"
 
 namespace magnetar
 {
-    class MAGNETAR_API IMesh
+    class MAGNETAR_API IMesh: public Asset
     {
     public:
         virtual ~IMesh() = default;

@@ -26,8 +26,6 @@ find_package(glm REQUIRED CONFIG)
 find_package(yaml-cpp REQUIRED CONFIG)
 find_package(assimp REQUIRED CONFIG)
 
-
-
 ########################################################
 # Library
 ########################################################
@@ -54,6 +52,7 @@ target_sources(magnetar
             include/magnetar/assets/loaders/texture_loader.h
             include/magnetar/assets/loaders/shader_loader.h
             include/magnetar/assets/loaders/material_loader.h
+            include/magnetar/assets/loaders/mesh_loader.h
 
             include/magnetar/containers/tree.h
 
@@ -125,6 +124,7 @@ target_sources(magnetar
         src/assets/loaders/texture_loader.cpp
         src/assets/loaders/shader_loader.cpp
         src/assets/loaders/material_loader.cpp
+        src/assets/loaders/mesh_loader.cpp
 
         src/core/application.cpp
         src/core/logger.cpp

@@ -3,9 +3,7 @@
 #include "magnetar/filesystem/native_file_system.h"
 magnetar::Ref<magnetar::Asset> magnetar::MaterialLoader::load(const YAML::Node &node) const
 {
-
     auto path = node["path"].as<std::string>();
-
     auto file = FileSystem::get<NativeFileSystem>()->open(path, FileMode::READ);
     auto raw = file->to_string();
     

@@ -17,6 +17,10 @@ const char *raw_asset_config = R"""(
   type: material
   path: ./sample/wall.material
 
+- guid: 1003
+  type: mesh
+  path: ./sample/square.obj
+
 )""";
 
 namespace R
@@ -35,36 +39,12 @@ namespace R
     {
         AssetHandle wall = 1002;
     }
+
+    namespace meshes
+    {
+        AssetHandle square = 1003;
+    }
 }
-
-std::vector<Mesh::Vertex> vertex_data = {
-    {
-        glm::vec3(0.5f, -0.5f, 0.0f),
-        glm::vec2(1.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, -1.0f),
-        glm::vec4(0.0f, 1.0f, 1.0f, 1.0f),
-    },
-    {
-        glm::vec3(-0.5f, -0.5f, 0.0f),
-        glm::vec2(0.0f, 0.0f),
-        glm::vec3(0.0f, 0.0f, -1.0f),
-        glm::vec4(0.0f, 1.0f, 1.0f, 1.0f),
-    },
-    {
-        glm::vec3(0.5f, 0.5f, 0.0f),
-        glm::vec2(1.0f, 1.0f),
-        glm::vec3(0.0f, 0.0f, -1.0f),
-        glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
-    },
-    {
-        glm::vec3(-0.5f, 0.5f, 0.0f),
-        glm::vec2(0.0f, 1.0f),
-        glm::vec3(0.0f, 0.0f, -1.0f),
-        glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
-    },
-};
-
-std::vector<uint32_t> indx = {0, 1, 2, 2, 1, 3};
 
 namespace actions
 {
@@ -79,8 +59,6 @@ protected:
     const char *asset_config() override { return raw_asset_config; }
 
 private:
-    Ref<Mesh> m_mesh;
-    Ref<Material> m_material;
     Ref<Camera> m_camera;
     BufferMask m_mask;
     glm::mat4 m_model;
@@ -91,6 +69,11 @@ void SandboxApp::on_initialize()
     Logger::set_level(LogLevel::trace);
     InputSystem::register_action(actions::quit, KeyboardKey::ESCAPE);
 
+    AssetManager::load<Texture2D>("./sample/wall.jpg");
+    AssetManager::load<Shader>("./sample/GL_Sample.glsl");
+    AssetManager::load<Material>("./sample/wall.material");
+    AssetManager::load<Mesh>("./sample/square.obj");
+
     m_mask.set(BufferMask::COLOR_BUFFER);
 
     m_model = glm::mat4(1.0f);
@@ -100,11 +83,6 @@ void SandboxApp::on_initialize()
     float y = 1.0f;
     float x = y * aspect;
     m_camera = create_reference<Camera2D>(-x, x, y, -y, -1.0, 1.0);
-
-    AssetManager::load<Texture2D>("./sample/wall.jpg");
-    AssetManager::load<Shader>("./sample/GL_Sample.glsl");
-    AssetManager::load<Material>("./sample/wall.material");
-    m_mesh = create_reference<Mesh>(vertex_data, indx);
 }
 
 void SandboxApp::on_update(float delta_time)
@@ -114,10 +92,13 @@ void SandboxApp::on_update(float delta_time)
 
     m_model = glm::mat4(1.0f);
     m_model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-    m_model = glm::rotate(m_model, glm::radians(0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    m_model = glm::rotate(m_model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
     Renderer::clear(m_mask);
     Renderer::begin_scene(m_camera);
-    Renderer::submit(m_mesh, AssetManager::get<Material>(R::materials::wall), m_model);
+    Renderer::submit(
+        AssetManager::get<Mesh>(R::meshes::square), 
+        AssetManager::get<Material>(R::materials::wall), 
+        m_model);
     Renderer::end_scene();
 }
 
