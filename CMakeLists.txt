@@ -112,7 +112,6 @@ target_sources(magnetar
             include/magnetar/renderer/backend/opengl/graphics_device.h
 
             include/magnetar/scene/scene.h
-            include/magnetar/scene/entity.h
 
             include/magnetar/utils/enum_utils.h
             include/magnetar/utils/string_utils.h
@@ -168,7 +167,6 @@ target_sources(magnetar
         src/renderer/backend/opengl/texture.cpp
         src/renderer/backend/opengl/graphics_device.cpp
 
-        src/scene/entity.cpp
         src/scene/scene.cpp
         
         src/utils/string_utils.cpp

@@ -89,9 +89,6 @@ void SandboxApp::on_initialize()
     float x = y * aspect;
     m_camera = create_reference<Camera2D>(-x, x, y, -y, -1.0, 1.0);
 
-    Scene scene;
-
-    auto e = scene.create_entity();
 }
 
 void SandboxApp::on_update(float delta_time)
