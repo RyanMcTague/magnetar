@@ -3,12 +3,15 @@
 #include "magnetar/utils/image_utils.h"
 #include "magnetar/filesystem/native_file_system.h"
 
+#include "magnetar/assets/loaders/texture_loader.h"
+#include "magnetar/assets/loaders/shader_loader.h"
+#include "magnetar/assets/loaders/material_loader.h"
+#include "magnetar/assets/loaders/mesh_loader.h"
 
 magnetar::Ref<magnetar::AssetRegistry> magnetar::AssetManager::s_registry;
 std::unordered_map<magnetar::AssetHandle, magnetar::Ref<magnetar::Asset>> magnetar::AssetManager::s_loaded_assets;
 
 std::unordered_map<std::string, magnetar::Ref<magnetar::ResourceLoader>> magnetar::AssetManager::s_loaders;
-
 
 magnetar::AssetRegistry::AssetRegistry(const char *raw_config)
 {
@@ -26,14 +29,14 @@ magnetar::AssetRegistry::AssetRegistry(const char *raw_config)
     }
 }
 
-const YAML::Node& magnetar::AssetRegistry::get(AssetHandle handle) const
+const YAML::Node &magnetar::AssetRegistry::get(AssetHandle handle) const
 {
     auto it = m_metadata.find(handle);
     MT_ASSERT(it != m_metadata.end(), "cannot find metadata for asset {:x}", handle);
     return it->second;
 }
 
-magnetar::AssetHandle magnetar::AssetRegistry::get_handle_for_path(const std::string& path) const
+magnetar::AssetHandle magnetar::AssetRegistry::get_handle_for_path(const std::string &path) const
 {
     auto it = m_handles.find(path);
     MT_ASSERT(it != m_handles.end(), "handle fot asset {} does not exist", path);
@@ -43,6 +46,10 @@ magnetar::AssetHandle magnetar::AssetRegistry::get_handle_for_path(const std::st
 void magnetar::AssetManager::initialize(const char *raw_config)
 {
     s_registry = create_reference<AssetRegistry>(raw_config);
+    register_loader<Texture2DLoader>();
+    register_loader<ShaderLoader>();
+    register_loader<MaterialLoader>();
+    register_loader<MeshLoader>();
 }
 
 void magnetar::AssetManager::shutdown()
@@ -51,14 +58,13 @@ void magnetar::AssetManager::shutdown()
     s_registry = nullptr;
 }
 
-
-magnetar::Ref<magnetar::ResourceLoader> magnetar::AssetManager::get_loader_from_type_index(const std::type_index& idx)
+magnetar::Ref<magnetar::ResourceLoader> magnetar::AssetManager::get_loader_from_type_index(const std::type_index &idx)
 {
     Ref<ResourceLoader> loader = nullptr;
 
-    for(auto& pair: s_loaders)
+    for (auto &pair : s_loaders)
     {
-        if(pair.second->type_index() == idx)
+        if (pair.second->type_index() == idx)
         {
             loader = pair.second;
             break;

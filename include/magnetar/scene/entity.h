@@ -27,6 +27,14 @@ namespace magnetar
         template<typename T>
         void remove_component() const;
 
+        entt::entity handle() const { return m_handle; }
+
+        void destroy()
+        {
+            m_scene->destroy_entity(*this);
+            m_handle = entt::null;
+        }
+
     private:
         entt::entity m_handle;
         Scene *m_scene;

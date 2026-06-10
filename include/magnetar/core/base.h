@@ -90,7 +90,7 @@ namespace magnetar
         return #name;                                \
     }                                                \
                                                      \
-    virtual const char *class_name() const           \
+    const char *class_name() const                   \
     {                                                \
         return #name;                                \
     }
