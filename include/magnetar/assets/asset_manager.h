@@ -5,9 +5,19 @@
 #include "magnetar/assets/asset.h"
 #include "magnetar/assets/asset_handle.h"
 #include "magnetar/assets/resouce_loader.h"
+#include "magnetar/events/event_system.h"
 
 namespace magnetar
 {
+
+    struct MAGNETAR_API AssetLoadedEvent
+    {
+        MT_DECLARE_CLASS_NAME(AssetLoadedEvent)
+        std::string path;
+        std::string type;
+        AssetHandle guid;
+    };
+
     class MAGNETAR_API AssetRegistry
     {
     public:
@@ -70,7 +80,7 @@ magnetar::AssetHandle magnetar::AssetManager::load(const std::string &path)
     auto asset = loader->load(s_registry->get(handle));
     s_loaded_assets.emplace(handle, asset);
     LOG_INFO(logger::tags::assets, "imported asset {}", path);
-
+    EventSystem::emit(AssetLoadedEvent { path, loader->resource_name(), handle });
     return handle;
 }
 
