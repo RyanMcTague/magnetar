@@ -1,0 +1,10 @@
+textures:
+  - guid: 0x4c8e2f9a
+    path: images/wall.jpg
+    generate_mipmaps: true
+    format: rgb
+    width: 512
+    height: 512
+shaders:
+  - guid: 0x5e1a6f0b
+    path: shaders/GL_sample.glsl

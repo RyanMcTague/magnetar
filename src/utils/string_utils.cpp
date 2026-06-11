@@ -3,11 +3,14 @@
 #include <algorithm>
 #include "magnetar/utils/string_utils.h"
 
-static size_t find_nth_newline(const std::string& str, int n) {
+static size_t find_nth_newline(const std::string &str, int n)
+{
     size_t pos = -1;
-    for (int i = 0; i < n; ++i) {
+    for (int i = 0; i < n; ++i)
+    {
         pos = str.find('\n', pos + 1);
-        if (pos == std::string::npos) break;
+        if (pos == std::string::npos)
+            break;
     }
     return pos;
 }
@@ -62,12 +65,21 @@ std::string magnetar::string_utils::trim(const std::string &str)
     return str.substr(start, range);
 }
 
-std::string magnetar::string_utils::line(const std::string& str, int line)
+std::string magnetar::string_utils::line(const std::string &str, int line)
 {
     auto index = find_nth_newline(str, line);
     auto index2 = find_nth_newline(str, line + 2);
-    if(index2 == std::string::npos)
+    if (index2 == std::string::npos)
         return str.substr(index);
 
     return trim(str.substr(index, index2 - index - 1));
+}
+
+std::string magnetar::string_utils::substitute(const std::string &str, const std::string &from, const std::string &to)
+{
+    std::string new_str = str;
+    size_t pos = new_str.find(from);
+    if (pos != std::string::npos)
+        new_str.replace(pos, from.length(), to);
+    return new_str;
 }

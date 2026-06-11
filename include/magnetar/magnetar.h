@@ -1,4 +1,12 @@
 #pragma once
+
+#include "magnetar/asset/asset_manager.h"
+#include "magnetar/asset/asset_metadata.h"
+#include "magnetar/asset/asset_handle.h"
+#include "magnetar/asset/asset_registry.h"
+#include "magnetar/asset/asset.h"
+#include "magnetar/asset/enums.h"
+
 #include "magnetar/containers/tree.h"
 
 #include "magnetar/core/base.h"
@@ -14,6 +22,10 @@
 #include "magnetar/filesystem/file_system.h"
 #include "magnetar/filesystem/memory_file_system.h"
 #include "magnetar/filesystem/native_file_system.h"
+
+#include "magnetar/importer/enums.h"
+#include "magnetar/importer/asset_importer.h"
+#include "magnetar/importer/texture_importer.h"
 
 #include "magnetar/input/enums.h"
 #include "magnetar/input/input_action.h"
@@ -34,7 +46,6 @@
 #include "magnetar/renderer/mesh.h"
 #include "magnetar/renderer/camera.h"
 #include "magnetar/renderer/render_command.h"
-#include "magnetar/renderer/shader_library.h"
 #include "magnetar/renderer/vertex_array.h"
 #include "magnetar/renderer/shader.h"
 #include "magnetar/renderer/texture.h"

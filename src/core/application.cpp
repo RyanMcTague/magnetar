@@ -5,6 +5,7 @@
 #include "magnetar/events/event_system.h"
 #include "magnetar/filesystem/native_file_system.h"
 #include "magnetar/renderer/renderer.h"
+#include "magnetar/asset/asset_manager.h"
 
 magnetar::Application::Application()
     : m_is_running(true), m_is_initialized(false), m_window(nullptr)
@@ -60,13 +61,13 @@ void magnetar::Application::initialize()
     FileSystem::register_filesystem<NativeFileSystem>();
     m_window = Window::create({"Untitled", 800, 600});
     Renderer::initialize();
-
     on_initialize();
 }
 
 void magnetar::Application::shutdown()
 {
     on_shutdown();
+    AssetManager::shutdown();
     Renderer::shutdown();
     LOG_INFO(logger::tags::application, "destroying application");
 }

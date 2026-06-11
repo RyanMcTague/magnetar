@@ -23,6 +23,7 @@ find_package(spdlog REQUIRED CONFIG)
 find_package(glfw3 REQUIRED CONFIG)
 find_package(magic_enum REQUIRED CONFIG)
 find_package(glm REQUIRED CONFIG)
+find_package(yaml-cpp REQUIRED CONFIG)
 
 ########################################################
 # Library
@@ -43,6 +44,13 @@ target_sources(magnetar
         FILE_SET HEADERS
         BASE_DIRS include
         FILES
+            include/magnetar/asset/asset.h
+            include/magnetar/asset/asset_manager.h
+            include/magnetar/asset/asset_handle.h
+            include/magnetar/asset/asset_metadata.h
+            include/magnetar/asset/asset_registry.h
+            include/magnetar/asset/enums.h
+
             include/magnetar/containers/tree.h
 
             include/magnetar/core/time.h
@@ -59,6 +67,10 @@ target_sources(magnetar
             include/magnetar/filesystem/memory_file_system.h
             include/magnetar/filesystem/native_file_system.h
             include/magnetar/filesystem/file_system.h
+
+            include/magnetar/importer/asset_importer.h
+            include/magnetar/importer/enums.h
+            include/magnetar/importer/texture_importer.h
 
             include/magnetar/input/input_device.h
             include/magnetar/input/input_action.h
@@ -77,7 +89,6 @@ target_sources(magnetar
             include/magnetar/renderer/enums.h
             include/magnetar/renderer/graphics_device.h
             include/magnetar/renderer/index_buffer.h
-            include/magnetar/renderer/shader_library.h
             include/magnetar/renderer/shader.h
             include/magnetar/renderer/texture.h
             include/magnetar/renderer/mesh.h
@@ -108,6 +119,9 @@ target_sources(magnetar
             include/magnetar/magnetar.h
              
     PRIVATE
+        src/asset/asset_manager.cpp
+        src/asset/asset_registry.cpp
+        
         src/core/application.cpp
         src/core/logger.cpp
         src/core/window.cpp
@@ -120,6 +134,8 @@ target_sources(magnetar
         src/filesystems/native_file_system.cpp
         src/filesystems/memory_file_system.cpp
 
+        src/importer/texture_importer.cpp
+
         src/input/input_system.cpp
         src/input/keyboard_device.cpp
         src/input/mouse_device.cpp
@@ -129,8 +145,6 @@ target_sources(magnetar
         src/platforms/glfw/glfw_keyboard_device.cpp
         src/platforms/glfw/glfw_mouse_device.cpp
 
-        src/renderer/shader.cpp
-        src/renderer/shader_library.cpp
         src/renderer/buffer_layout.cpp
         src/renderer/mesh.cpp
         src/renderer/renderer.cpp
@@ -193,6 +207,7 @@ target_link_libraries(magnetar
         glfw
         magic_enum::magic_enum
         glm::glm
+        yaml-cpp::yaml-cpp
 )
 
 ########################################################
