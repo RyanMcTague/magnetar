@@ -27,14 +27,10 @@ void magnetar::Application::run()
         float delta_time = (float)((double)elapsed / 1000.0);
         timer.reset();
 
+        update(delta_time);
+        render();
+
         m_window->poll_events();
-        InputSystem::update();
-
-        on_update(delta_time);
-
-        m_window->swap_buffers();
-        EventSystem::process();
-
         if (m_window->should_close())
             m_is_running = false;
     }
@@ -55,6 +51,7 @@ void magnetar::Application::initialize()
     if (m_is_initialized)
         return;
     m_is_initialized = true;
+    m_mask.set(BufferMask::COLOR_BUFFER);
 
     LOG_INFO(logger::tags::application, "initialzing application");
 
@@ -63,17 +60,40 @@ void magnetar::Application::initialize()
     m_window = Window::create({"Untitled", 1200, 800});
     Renderer::initialize();
     AssetManager::initialize(asset_config());
-
     on_initialize();
+}
+
+void magnetar::Application::update(float delta_time)
+{
+    EventSystem::process();
+    InputSystem::update();
+
+    on_update(delta_time);
+
+    for (auto layer : m_layer_stack)
+        layer->on_update(delta_time);
+}
+
+void magnetar::Application::render()
+{
+    Renderer::clear(m_mask);
+    on_render();
+    for (auto layer : m_layer_stack)
+        layer->on_render();
+    m_window->swap_buffers();
 }
 
 void magnetar::Application::shutdown()
 {
+    LOG_INFO(logger::tags::application, "destroying application");
     on_shutdown();
+
+    for (auto layer : m_layer_stack)
+        layer->on_detach();
+    m_layer_stack.clear();
     
     AssetManager::shutdown();
     Renderer::shutdown();
-    LOG_INFO(logger::tags::application, "destroying application");
 }
 
 void magnetar::Application::on_initialize()
@@ -85,5 +105,9 @@ void magnetar::Application::on_shutdown()
 }
 
 void magnetar::Application::on_update(float)
+{
+}
+
+void magnetar::Application::on_render()
 {
 }

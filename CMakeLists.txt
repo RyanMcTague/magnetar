@@ -62,6 +62,9 @@ target_sources(magnetar
             include/magnetar/core/logger.h
             include/magnetar/core/base.h
             include/magnetar/core/uuid.h
+            include/magnetar/core/layer.h
+            include/magnetar/core/layer_stack.h
+            include/magnetar/core/game_layer.h
 
             include/magnetar/events/event_handle.h
             include/magnetar/events/event_system.h
@@ -132,7 +135,9 @@ target_sources(magnetar
         src/core/logger.cpp
         src/core/window.cpp
         src/core/time.cpp
+        src/core/layer_stack.cpp
         src/core/uuid.cpp
+        src/core/game_layer.cpp
 
         src/events/event_system.cpp
 

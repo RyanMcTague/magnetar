@@ -50,22 +50,16 @@ namespace actions
     static constexpr int quit = 0;
 }
 
-struct MyComponent
-{
-    MT_DECLARE_CLASS_NAME(MyComponent)
-    int x = 1;
-};
-
 class SandboxApp final : public Application
 {
 protected:
     void on_initialize() override;
     void on_update(float delta_time) override;
+    void on_render() override;
     const char *asset_config() override { return raw_asset_config; }
 
 private:
     Ref<Camera> m_camera;
-    BufferMask m_mask;
     glm::mat4 m_model;
 };
 
@@ -79,8 +73,6 @@ void SandboxApp::on_initialize()
     AssetManager::load<Material>("./sample/assets/materials/wall.material");
     AssetManager::load<Mesh>("./sample/assets/models/square.obj");
 
-    m_mask.set(BufferMask::COLOR_BUFFER);
-
     m_model = glm::mat4(1.0f);
     m_model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
@@ -89,23 +81,24 @@ void SandboxApp::on_initialize()
     float x = y * aspect;
     m_camera = create_reference<Camera2D>(-x, x, y, -y, -1.0, 1.0);
 
+    m_model = glm::mat4(1.0f);
+    m_model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+    m_model = glm::rotate(m_model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 }
 
 void SandboxApp::on_update(float delta_time)
 {
     if (InputSystem::action_pressed(actions::quit))
         close();
+}
 
-    m_model = glm::mat4(1.0f);
-    m_model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-    m_model = glm::rotate(m_model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-    Renderer::clear(m_mask);
+void SandboxApp::on_render()
+{
     Renderer::begin_scene(m_camera);
     Renderer::submit(
         AssetManager::get<Mesh>(R::meshes::square),
         AssetManager::get<Material>(R::materials::wall),
-        m_model
-    );
+        m_model);
     Renderer::end_scene();
 }
 
