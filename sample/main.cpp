@@ -53,6 +53,7 @@ namespace R
 namespace actions
 {
     static constexpr int quit = 0;
+    static constexpr int kill_entity = 1;
 }
 
 class SandboxApp final : public Application
@@ -60,7 +61,6 @@ class SandboxApp final : public Application
 protected:
     void on_initialize() override;
     void on_update(float delta_time) override;
-    void on_render() override;
     const char *asset_config() override { return raw_asset_config; }
 
 private:
@@ -72,8 +72,8 @@ private:
 
 void SandboxApp::on_initialize()
 {
-    // Logger::set_level(LogLevel::trace);
     InputSystem::register_action(actions::quit, KeyboardKey::ESCAPE);
+    InputSystem::register_action(actions::kill_entity, KeyboardKey::Q);
 
     AssetManager::load<Texture2D>("./sample/assets/images/wall.jpg");
     AssetManager::load<Shader>("./sample/assets/shaders/GL_Sample.glsl");
@@ -97,22 +97,23 @@ void SandboxApp::on_initialize()
     m_scene->set_camera(m_camera);
     m_layer = push_layer<GameLayer>();
     m_layer->set_scene(m_scene);
+
+    auto entity = m_scene->registry().create_entity();
+    entity->add_component<MeshRendererComponent>(R::meshes::square, R::materials::wall);
+    entity->get_component<TransformComponent>()->rotation = glm::vec3(glm::radians(90.0f), 0.0f, 0.0f);
 }
 
 void SandboxApp::on_update(float delta_time)
 {
     if (InputSystem::action_pressed(actions::quit))
         close();
-}
 
-void SandboxApp::on_render()
-{
-    Renderer::begin_scene(m_camera);
-    Renderer::submit(
-        AssetManager::get<Mesh>(R::meshes::square),
-        AssetManager::get<Material>(R::materials::wall),
-        m_model);
-    Renderer::end_scene();
+    if(InputSystem::action_pressed(actions::kill_entity))
+    {
+        auto entity = m_scene->registry().get_entity_by_handle(0);
+        if(entity)
+            entity->mark_destroyed();
+    }
 }
 
 int main(int argc, char **argv)
