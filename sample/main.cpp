@@ -61,6 +61,8 @@ protected:
 private:
     Ref<Camera> m_camera;
     glm::mat4 m_model;
+    Ref<GameLayer> m_layer;
+    Ref<Scene> m_scene;
 };
 
 void SandboxApp::on_initialize()
@@ -84,6 +86,12 @@ void SandboxApp::on_initialize()
     m_model = glm::mat4(1.0f);
     m_model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
     m_model = glm::rotate(m_model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+
+    m_scene = create_reference<Scene>();
+    m_scene->set_camera(m_camera);
+    m_layer = push_layer<GameLayer>();
+    m_layer->set_scene(m_scene);
 }
 
 void SandboxApp::on_update(float delta_time)

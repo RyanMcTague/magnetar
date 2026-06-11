@@ -11,5 +11,10 @@ namespace magnetar
         void on_detach();
         void on_update(float delta_time);
         void on_render();
+
+        void set_scene(Ref<Scene> scene);
+
+    private:
+        Ref<Scene> m_scene;
     };
 }

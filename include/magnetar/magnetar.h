@@ -10,6 +10,7 @@
 #include "magnetar/core/time.h"
 #include "magnetar/core/uuid.h"
 #include "magnetar/core/window.h"
+#include "magnetar/core/game_layer.h"
 
 #include "magnetar/events/event_callback.h"
 #include "magnetar/events/event_handle.h"

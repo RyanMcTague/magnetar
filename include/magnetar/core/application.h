@@ -50,6 +50,6 @@ namespace magnetar
         Ref<Layer> layer = std::static_pointer_cast<Layer>(ref);
         layer->on_attach();
         m_layer_stack.push_layer(layer);
-        return layer;
+        return ref;
     }
 }
