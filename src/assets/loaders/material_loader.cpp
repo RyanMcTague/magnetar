@@ -6,20 +6,34 @@ magnetar::Ref<magnetar::Asset> magnetar::MaterialLoader::load(const YAML::Node &
     auto path = node["path"].as<std::string>();
     auto file = FileSystem::get<NativeFileSystem>()->open(path, FileMode::READ);
     auto raw = file->to_string();
-    
+
     auto config = YAML::Load(raw);
 
     auto shader_handle = config["shader"].as<AssetHandle>();
 
     auto shader = AssetManager::get<Shader>(shader_handle);
+    MT_ASSERT(shader, "shader {} not found in material {}", shader_handle, path);
 
     auto material = create_reference<Material>(shader);
 
-    for(const auto& pair: config["textures"])
+    if (config["textures"])
     {
-        auto texture_name = pair.first.as<std::string>();
-        auto texture_handle = pair.second.as<AssetHandle>();
-        material->set_texture("u_" + texture_name, AssetManager::get<Texture2D>(texture_handle));
+        for (const auto &pair : config["textures"])
+        {
+            auto texture_name = pair.first.as<std::string>();
+            auto texture_handle = pair.second.as<AssetHandle>();
+            material->set_texture("u_" + texture_name, AssetManager::get<Texture2D>(texture_handle));
+        }
+    }
+
+    if (config["color"])
+    {
+        auto color = glm::vec4(0.0f);
+        color.x = config["color"]["red"].as<float>();
+        color.y = config["color"]["green"].as<float>();
+        color.z = config["color"]["blue"].as<float>();
+        color.w = config["color"]["alpha"].as<float>();
+        material->set_color("u_color", color);
     }
 
     return std::static_pointer_cast<Asset>(material);

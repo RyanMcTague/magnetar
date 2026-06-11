@@ -1,0 +1,27 @@
+- guid: 1000
+  type: shader
+  path: ./sample/assets/shaders/GL_texture.glsl
+
+- guid: 1001
+  type: texture2D
+  path: ./sample/assets/images/wall.jpg
+
+- guid: 1002
+  type: material
+  path: ./sample/assets/materials/wall.material
+
+- guid: 1003
+  type: mesh
+  path: ./sample/assets/models/square.obj
+
+- guid: 1004
+  type: mesh
+  path: ./sample/assets/models/cube.obj
+
+- guid: 1005
+  type: shader
+  path: ./sample/assets/shaders/GL_color.glsl
+
+- guid: 1006
+  type: material
+  path: ./sample/assets/materials/blue.material
