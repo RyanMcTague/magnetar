@@ -20,6 +20,10 @@ const char *raw_asset_config = R"""(
 - guid: 1003
   type: mesh
   path: ./sample/assets/models/square.obj
+
+- guid: 1004
+  type: mesh
+  path: ./sample/assets/models/cube.obj
 )""";
 
 namespace R
@@ -42,6 +46,7 @@ namespace R
     namespace meshes
     {
         AssetHandle square = 1003;
+        AssetHandle cube = 1004;
     }
 }
 
@@ -74,6 +79,7 @@ void SandboxApp::on_initialize()
     AssetManager::load<Shader>("./sample/assets/shaders/GL_Sample.glsl");
     AssetManager::load<Material>("./sample/assets/materials/wall.material");
     AssetManager::load<Mesh>("./sample/assets/models/square.obj");
+    AssetManager::load<Mesh>("./sample/assets/models/cube.obj");
 
     m_model = glm::mat4(1.0f);
     m_model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
@@ -86,7 +92,6 @@ void SandboxApp::on_initialize()
     m_model = glm::mat4(1.0f);
     m_model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
     m_model = glm::rotate(m_model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-
 
     m_scene = create_reference<Scene>();
     m_scene->set_camera(m_camera);
