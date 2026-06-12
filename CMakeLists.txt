@@ -102,6 +102,7 @@ target_sources(magnetar
             include/magnetar/renderer/material.h
             include/magnetar/renderer/vertex_array.h
             include/magnetar/renderer/vertex_buffer.h
+            include/magnetar/renderer/sprite_batch.h
 
             include/magnetar/renderer/backend/opengl/glad.h
             include/magnetar/renderer/backend/opengl/helpers.h
@@ -118,6 +119,7 @@ target_sources(magnetar
             include/magnetar/scene/ecs.h
             include/magnetar/scene/components.h
             include/magnetar/scene/systems/mesh_renderer_system.h
+            include/magnetar/scene/systems/sprite_renderer_system.h
 
             include/magnetar/utils/enum_utils.h
             include/magnetar/utils/string_utils.h
@@ -163,10 +165,11 @@ target_sources(magnetar
         src/renderer/mesh.cpp
         src/renderer/renderer.cpp
         src/renderer/material.cpp
+        src/renderer/camera.cpp
+        src/renderer/sprite_batch.cpp
         
         src/renderer/backend/opengl/glad.cpp
         src/renderer/backend/opengl/helpers.cpp
-        src/renderer/camera.cpp
         src/renderer/backend/opengl/shader_compiler.cpp
         src/renderer/backend/opengl/shader.cpp
         src/renderer/backend/opengl/index_buffer.cpp
@@ -178,6 +181,7 @@ target_sources(magnetar
         src/scene/scene.cpp
         src/scene/ecs.cpp
         src/scene/systems/mesh_renderer_system.cpp
+        src/scene/systems/sprite_renderer_system.cpp
         
         src/utils/string_utils.cpp
         src/utils/image_utils.cpp

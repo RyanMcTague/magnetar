@@ -28,4 +28,15 @@ namespace magnetar
         MeshRendererComponent(AssetHandle mesh, AssetHandle material)
             : mesh(mesh), material(material) {}
     };
+
+    struct MAGNETAR_API SpriteRendererComponent
+    {
+        MT_DECLARE_CLASS_NAME(SpriteRendererComponent)
+        
+        glm::vec2 size;
+        glm::vec4 color;
+
+        SpriteRendererComponent(const glm::vec2& size, const glm::vec4& color)
+            : size(size), color(color) {}
+    };
 }

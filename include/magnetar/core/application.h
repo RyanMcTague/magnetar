@@ -30,13 +30,15 @@ namespace magnetar
         template<typename T, typename ...TArgs>
         Ref<T> push_layer(TArgs&& ...args);
 
+        template<typename T>
+        Ref<T> get_layer();
+
     private:
         bool m_is_running;
         bool m_is_initialized;
         Ref<Window> m_window;
         LayerStack m_layer_stack;
         BufferMask m_mask;
-        std::vector<Ref<Layer>> m_layers;
         
         void update(float delta_time);
         void render();
@@ -51,5 +53,11 @@ namespace magnetar
         layer->on_attach();
         m_layer_stack.push_layer(layer);
         return ref;
+    }
+
+    template<typename T>
+    Ref<T> Application::get_layer()
+    {
+        return m_layer_stack.get_layer<T>();
     }
 }

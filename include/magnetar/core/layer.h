@@ -13,5 +13,7 @@ namespace magnetar
 
         virtual void on_update(float) {}
         virtual void on_render() {} 
+
+        virtual const char* class_name() const = 0;
     };
 }
