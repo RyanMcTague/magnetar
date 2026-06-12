@@ -28,8 +28,8 @@ void magnetar::MeshRendererSystem::render()
         model = glm::rotate(model, transform->rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
         model = glm::scale(model, transform->scale);
         Renderer::submit(
-            AssetManager::get<Mesh>(mesh_renderer->mesh),
-            AssetManager::get<Material>(mesh_renderer->material),
+            AssetManager::load<Mesh>(mesh_renderer->mesh),
+            AssetManager::load<Material>(mesh_renderer->material),
             model);
     }
 }

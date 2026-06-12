@@ -9,7 +9,6 @@
 
 namespace magnetar
 {
-
     struct MAGNETAR_API AssetLoadedEvent
     {
         MT_DECLARE_CLASS_NAME(AssetLoadedEvent)
@@ -40,13 +39,10 @@ namespace magnetar
         static void shutdown();
 
         template <typename T>
-        static AssetHandle load(const std::string &path);
+        static Ref<T> load(const std::string &path);
 
         template <typename T>
-        static AssetHandle load(AssetHandle handle);
-
-        template <typename T>
-        static Ref<T> get(AssetHandle handle);
+        static Ref<T> load(AssetHandle handle);
 
         template <typename T>
         static void register_loader();
@@ -69,14 +65,14 @@ void magnetar::AssetManager::register_loader()
 }
 
 template <typename T>
-magnetar::AssetHandle magnetar::AssetManager::load(const std::string &path)
+magnetar::Ref<T> magnetar::AssetManager::load(const std::string &path)
 {
     auto handle = s_registry->get_handle_for_path(path);
     auto asset_it = s_loaded_assets.find(handle);
     if(asset_it != s_loaded_assets.end())
     {
         LOG_TRACE(logger::tags::assets, "asset {:} already loaded", path);
-        return handle;
+        return std::static_pointer_cast<T>(s_loaded_assets[handle]);
     }
 
     auto loader = get_loader_from_type_index(typeid(T));
@@ -85,25 +81,13 @@ magnetar::AssetHandle magnetar::AssetManager::load(const std::string &path)
     s_loaded_assets.emplace(handle, asset);
     LOG_INFO(logger::tags::assets, "imported asset {}", path);
     EventSystem::emit(AssetLoadedEvent { path, loader->resource_name(), handle });
-    return handle;
+    return std::static_pointer_cast<T>(asset);
 }
 
 template <typename T>
-magnetar::AssetHandle magnetar::AssetManager::load(AssetHandle handle)
+magnetar::Ref<T> magnetar::AssetManager::load(AssetHandle handle)
 {
     auto path = s_registry->get_path_for_handle(handle);
     return load<T>(path);
 }
 
-template <typename T>
-magnetar::Ref<T> magnetar::AssetManager::get(AssetHandle handle)
-{
-    auto it = s_loaded_assets.find(handle);
-    if (it == s_loaded_assets.end())
-    {
-        LOG_WARN(logger::tags::assets, "asset {:x} is not loaded", handle);
-        return nullptr;
-    }
-
-    return std::static_pointer_cast<T>(it->second);
-}

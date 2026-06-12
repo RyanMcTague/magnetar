@@ -28,33 +28,24 @@ void SandboxApp::on_initialize()
 {
     InputSystem::register_action(actions::quit, KeyboardKey::ESCAPE);
 
-    AssetManager::load<Texture2D>(R::textures::wall);
-    AssetManager::load<Shader>("./sample/assets/shaders/GL_texture.glsl");
-    AssetManager::load<Material>("./sample/assets/materials/wall.material");
-    AssetManager::load<Mesh>("./sample/assets/models/square.obj");
-    AssetManager::load<Mesh>("./sample/assets/models/cube.obj");
-    AssetManager::load<Shader>("./sample/assets/shaders/GL_color.glsl");
-    AssetManager::load<Material>("./sample/assets/materials/blue.material");
-
     auto aspect_ratio = get_window()->aspect_ratio();
     float y = 4.0f;
     float x = y * aspect_ratio;
     m_camera = create_reference<Camera2D>(-x, x, y, -y, -1.0, 1.0);
 
     m_scene = create_reference<Scene>();
-    m_scene->set_camera(m_camera);
-
     m_layer = push_layer<GameLayer>();
+
+    m_scene->set_camera(m_camera);
     m_layer->set_scene(m_scene);
 
     auto player = m_scene->registry().create_entity();
+    auto enemy = m_scene->registry().create_entity();
     m_player_handle = player->handle();
+    m_enemy_handle = enemy->handle();
 
     player->add_component<MeshRendererComponent>(R::meshes::square, R::materials::wall);
     player->get_component<TransformComponent>()->rotation = glm::vec3(glm::radians(90.0f), 0.0f, 0.0f);
-
-    auto enemy = m_scene->registry().create_entity();
-    m_enemy_handle = enemy->handle();
 
     enemy->add_component<MeshRendererComponent>(R::meshes::square, R::materials::wall);
     enemy->get_component<TransformComponent>()->rotation = glm::vec3(glm::radians(90.0f), 0.0f, 0.0f);
@@ -71,7 +62,8 @@ const char *SandboxApp::asset_config()
 {
     if(m_asset_config.empty())
     {
-        auto file = FileSystem::get<NativeFileSystem>()->open("./sample/assets/manifest.yml", FileMode::READ);
+        auto fs = FileSystem::get<NativeFileSystem>();
+        auto file = fs->open("./sample/assets/manifest.yml", FileMode::READ);
         m_asset_config = file->to_string();
     }
     return m_asset_config.c_str();
