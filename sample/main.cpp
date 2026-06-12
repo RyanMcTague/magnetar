@@ -1,33 +1,7 @@
 #include <magnetar/magnetar.h>
 #include <glm/gtc/matrix_transform.hpp>
-
+#include "assets.h"
 using namespace magnetar;
-
-namespace R
-{
-    namespace shaders
-    {
-        AssetHandle GL_texture = 1000;
-        AssetHandle GL_color = 1005;
-    }
-
-    namespace textures
-    {
-        AssetHandle wall = 1001;
-    }
-
-    namespace materials
-    {
-        AssetHandle wall = 1002;
-        AssetHandle blue = 1005;
-    }
-
-    namespace meshes
-    {
-        AssetHandle square = 1003;
-        AssetHandle cube = 1004;
-    }
-}
 
 namespace actions
 {
@@ -54,7 +28,7 @@ void SandboxApp::on_initialize()
 {
     InputSystem::register_action(actions::quit, KeyboardKey::ESCAPE);
 
-    AssetManager::load<Texture2D>("./sample/assets/images/wall.jpg");
+    AssetManager::load<Texture2D>(R::textures::wall);
     AssetManager::load<Shader>("./sample/assets/shaders/GL_texture.glsl");
     AssetManager::load<Material>("./sample/assets/materials/wall.material");
     AssetManager::load<Mesh>("./sample/assets/models/square.obj");
@@ -76,7 +50,7 @@ void SandboxApp::on_initialize()
     auto player = m_scene->registry().create_entity();
     m_player_handle = player->handle();
 
-    player->add_component<MeshRendererComponent>(R::meshes::square, R::materials::blue);
+    player->add_component<MeshRendererComponent>(R::meshes::square, R::materials::wall);
     player->get_component<TransformComponent>()->rotation = glm::vec3(glm::radians(90.0f), 0.0f, 0.0f);
 
     auto enemy = m_scene->registry().create_entity();

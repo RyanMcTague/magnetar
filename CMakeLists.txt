@@ -262,7 +262,7 @@ endif()
 # Sandbox
 ########################################################
 if(MAGNETAR_BUILD_SANDBOX)
-    add_executable(sample sample/main.cpp)
+    add_executable(sample sample/main.cpp sample/assets.h)
     target_compile_features(sample PUBLIC cxx_std_20)
     target_link_libraries(sample PRIVATE Magnetar::Magnetar)
 endif()

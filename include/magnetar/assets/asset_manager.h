@@ -26,6 +26,7 @@ namespace magnetar
         const YAML::Node &get(AssetHandle handle) const;
 
         AssetHandle get_handle_for_path(const std::string &path) const;
+        const std::string& get_path_for_handle(AssetHandle handle) const;
 
     private:
         std::unordered_map<std::string, AssetHandle> m_handles;
@@ -40,6 +41,9 @@ namespace magnetar
 
         template <typename T>
         static AssetHandle load(const std::string &path);
+
+        template <typename T>
+        static AssetHandle load(AssetHandle handle);
 
         template <typename T>
         static Ref<T> get(AssetHandle handle);
@@ -82,6 +86,13 @@ magnetar::AssetHandle magnetar::AssetManager::load(const std::string &path)
     LOG_INFO(logger::tags::assets, "imported asset {}", path);
     EventSystem::emit(AssetLoadedEvent { path, loader->resource_name(), handle });
     return handle;
+}
+
+template <typename T>
+magnetar::AssetHandle magnetar::AssetManager::load(AssetHandle handle)
+{
+    auto path = s_registry->get_path_for_handle(handle);
+    return load<T>(path);
 }
 
 template <typename T>

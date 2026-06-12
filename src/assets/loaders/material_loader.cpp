@@ -12,7 +12,7 @@ magnetar::Ref<magnetar::Asset> magnetar::MaterialLoader::load(const YAML::Node &
     auto shader_handle = config["shader"].as<AssetHandle>();
 
     auto shader = AssetManager::get<Shader>(shader_handle);
-    MT_ASSERT(shader, "shader {} not found in material {}", shader_handle, path);
+    MT_ASSERT(shader != nullptr, "shader {} not found in material {}", shader_handle, path);
 
     auto material = create_reference<Material>(shader);
 
@@ -22,7 +22,14 @@ magnetar::Ref<magnetar::Asset> magnetar::MaterialLoader::load(const YAML::Node &
         {
             auto texture_name = pair.first.as<std::string>();
             auto texture_handle = pair.second.as<AssetHandle>();
-            material->set_texture("u_" + texture_name, AssetManager::get<Texture2D>(texture_handle));
+            auto texture = AssetManager::get<Texture2D>(texture_handle);
+            if(!texture)
+            {
+                AssetManager::load<Texture2D>(texture_handle);
+                texture = AssetManager::get<Texture2D>(texture_handle);
+            }
+            MT_ASSERT(texture != nullptr, "texture {} not found in material {}", texture_handle, path);
+            material->set_texture("u_" + texture_name, texture);
         }
     }
 

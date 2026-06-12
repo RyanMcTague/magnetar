@@ -43,6 +43,18 @@ magnetar::AssetHandle magnetar::AssetRegistry::get_handle_for_path(const std::st
     return it->second;
 }
 
+const std::string &magnetar::AssetRegistry::get_path_for_handle(AssetHandle handle) const
+{
+    auto it = m_handles.begin();
+    for (; it != m_handles.end(); it++)
+    {
+        if (it->second == handle)
+            break;
+    }
+    MT_ASSERT(it != m_handles.end(), "asset handle {} not found", handle);
+    return it->first;
+}
+
 void magnetar::AssetManager::initialize(const char *raw_config)
 {
     s_registry = create_reference<AssetRegistry>(raw_config);
