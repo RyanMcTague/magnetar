@@ -44,7 +44,7 @@ void SandboxApp::on_initialize()
     m_player_handle = player->handle();
     m_enemy_handle = enemy->handle();
 
-    player->add_component<MeshRendererComponent>(R::meshes::square, R::materials::wall);
+    player->add_component<MeshRendererComponent>(R::meshes::square, R::materials::blue);
     player->get_component<TransformComponent>()->rotation = glm::vec3(glm::radians(90.0f), 0.0f, 0.0f);
 
     enemy->add_component<MeshRendererComponent>(R::meshes::square, R::materials::wall);

@@ -26,3 +26,7 @@
   type: shader
   path: ./sample/assets/shaders/GL_texture.glsl
 
+- guid: 1007
+  type: texture2D
+  path: ./sample/assets/images/blue.png
+

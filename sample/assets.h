@@ -3,15 +3,16 @@
 
 namespace R
 {
+	namespace textures
+	{
+		magnetar::AssetHandle wall = 1002;
+		magnetar::AssetHandle blue = 1007;
+	}
+
 	namespace meshes
 	{
 		magnetar::AssetHandle cube = 1003;
 		magnetar::AssetHandle square = 1004;
-	}
-
-	namespace textures
-	{
-		magnetar::AssetHandle wall = 1002;
 	}
 
 	namespace shaders
