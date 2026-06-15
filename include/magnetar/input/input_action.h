@@ -14,7 +14,7 @@ namespace magnetar
     {
     public:
         InputAction();
-        InputAction(MappedInputCode code, const InputCode &input_code);
+        InputAction(const std::string& name, MappedInputCode code, const InputCode &input_code);
         virtual ~InputAction() = default;
 
         bool operator==(MappedInputCode code) const { return m_mapped_code == code; }
@@ -25,6 +25,7 @@ namespace magnetar
 
     private:
         InputCode m_input_code;
+        std::string m_name;
         MappedInputCode m_mapped_code;
     };
 }

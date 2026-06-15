@@ -51,11 +51,11 @@ private:
 
 void SandboxApp::on_initialize()
 {
-    InputSystem::register_action(actions::quit, KeyboardKey::ESCAPE);
-    InputSystem::register_action(actions::left, KeyboardKey::A);
-    InputSystem::register_action(actions::right, KeyboardKey::D);
-    InputSystem::register_action(actions::up, KeyboardKey::W);
-    InputSystem::register_action(actions::down, KeyboardKey::S);
+    InputSystem::register_action("quit", actions::quit, KeyboardKey::ESCAPE);
+    InputSystem::register_action("left", actions::left, KeyboardKey::A);
+    InputSystem::register_action("right", actions::right, KeyboardKey::D);
+    InputSystem::register_action("up", actions::up, KeyboardKey::W);
+    InputSystem::register_action("down", actions::down, KeyboardKey::S);
 
     auto aspect_ratio = get_window()->aspect_ratio();
     auto windwidth = get_window()->width();

@@ -29,17 +29,17 @@ void magnetar::InputSystem::update()
         device->update();
 }
 
-void magnetar::InputSystem::register_action(MappedInputCode code, const InputCode &input_code)
+void magnetar::InputSystem::register_action(const std::string &name, MappedInputCode code, const InputCode &input_code)
 {
     auto it = s_actions.find(code);
     MT_ASSERT(it == s_actions.end(), "Input action {} already exists", code);
     std::string input_type_string(magic_enum::enum_name(input_code.type()));
     std::string code_string(input_code.code_string());
-    LOG_DEBUG(logger::tags::input, "registered input action {} to {}->{}",
-              code,
+    LOG_DEBUG(logger::tags::input, "registered input action '{}' to {}->{}",
+              name,
               string_utils::lowercase(input_type_string),
               string_utils::lowercase(code_string));
-    s_actions[code] = InputAction(code, input_code);
+    s_actions[code] = InputAction(name, code, input_code);
 }
 
 magnetar::ButtonState magnetar::InputSystem::action_state(MappedInputCode code)
