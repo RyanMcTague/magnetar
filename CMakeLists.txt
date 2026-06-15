@@ -8,7 +8,7 @@ project(
 
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
-
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 ########################################################
 # Options 
 ########################################################
@@ -25,6 +25,8 @@ find_package(magic_enum REQUIRED CONFIG)
 find_package(glm REQUIRED CONFIG)
 find_package(yaml-cpp REQUIRED CONFIG)
 find_package(assimp REQUIRED CONFIG)
+find_package(EnTT REQUIRED CONFIG)
+
 
 ########################################################
 # Library
@@ -102,7 +104,7 @@ target_sources(magnetar
             include/magnetar/renderer/material.h
             include/magnetar/renderer/vertex_array.h
             include/magnetar/renderer/vertex_buffer.h
-            include/magnetar/renderer/sprite_batch.h
+            include/magnetar/renderer/renderer2d.h
 
             include/magnetar/renderer/backend/opengl/glad.h
             include/magnetar/renderer/backend/opengl/helpers.h
@@ -116,10 +118,9 @@ target_sources(magnetar
             include/magnetar/renderer/backend/opengl/graphics_device.h
 
             include/magnetar/scene/scene.h
-            include/magnetar/scene/ecs.h
             include/magnetar/scene/components.h
-            include/magnetar/scene/systems/mesh_renderer_system.h
-            include/magnetar/scene/systems/sprite_renderer_system.h
+            include/magnetar/scene/entity_handle.h
+            include/magnetar/scene/entity.h
 
             include/magnetar/utils/enum_utils.h
             include/magnetar/utils/string_utils.h
@@ -166,7 +167,7 @@ target_sources(magnetar
         src/renderer/renderer.cpp
         src/renderer/material.cpp
         src/renderer/camera.cpp
-        src/renderer/sprite_batch.cpp
+        src/renderer/renderer2d.cpp
         
         src/renderer/backend/opengl/glad.cpp
         src/renderer/backend/opengl/helpers.cpp
@@ -179,9 +180,7 @@ target_sources(magnetar
         src/renderer/backend/opengl/graphics_device.cpp
 
         src/scene/scene.cpp
-        src/scene/ecs.cpp
-        src/scene/systems/mesh_renderer_system.cpp
-        src/scene/systems/sprite_renderer_system.cpp
+        src/scene/entity.cpp
         
         src/utils/string_utils.cpp
         src/utils/image_utils.cpp
@@ -232,6 +231,7 @@ target_link_libraries(magnetar
         glm::glm
         yaml-cpp::yaml-cpp
         assimp::assimp
+        EnTT::EnTT
 )
 
 ########################################################

@@ -21,6 +21,10 @@ glm::vec4 rgba_color(uint32_t color)
 namespace actions
 {
     static constexpr int quit = 0;
+    static constexpr int left = 1;
+    static constexpr int right = 2;
+    static constexpr int up = 3;
+    static constexpr int down = 4;
 }
 
 namespace colors
@@ -41,18 +45,22 @@ private:
     Ref<GameLayer> m_layer;
     Ref<Scene> m_scene;
     std::string m_asset_config;
-    EntityHandle m_player_handle;
-    EntityHandle m_enemy_handle;
+    Entity m_player;
+    Entity m_enemy;
 };
 
 void SandboxApp::on_initialize()
 {
     InputSystem::register_action(actions::quit, KeyboardKey::ESCAPE);
+    InputSystem::register_action(actions::left, KeyboardKey::A);
+    InputSystem::register_action(actions::right, KeyboardKey::D);
+    InputSystem::register_action(actions::up, KeyboardKey::W);
+    InputSystem::register_action(actions::down, KeyboardKey::S);
 
     auto aspect_ratio = get_window()->aspect_ratio();
     auto windwidth = get_window()->width();
     auto winheight = get_window()->height();
-    float y = 4.0f;
+    float y = 50.0f;
     float x = y * aspect_ratio;
     m_camera = create_reference<Camera2D>(-x, x, y, -y, -1.0, 1.0);
 
@@ -62,27 +70,33 @@ void SandboxApp::on_initialize()
     m_scene->set_camera(m_camera);
     m_layer->set_scene(m_scene);
 
-    auto player = m_scene->registry().create_entity();
-    auto enemy = m_scene->registry().create_entity();
-    m_player_handle = player->handle();
-    m_enemy_handle = enemy->handle();
-
     // Renderer::set_viewport(0, 0, windwidth, winheight);
 
-    player->add_component<MeshRendererComponent>(R::meshes::square, R::materials::blue);
-    player->get_component<TransformComponent>()->rotation = glm::vec3(glm::radians(90.0f), 0.0f, 0.0f);
-    player->add_component<SpriteRendererComponent>(glm::vec2(10.0f, 10.0f), colors::blue);
-
-    enemy->add_component<MeshRendererComponent>(R::meshes::square, R::materials::wall);
-    enemy->get_component<TransformComponent>()->rotation = glm::vec3(glm::radians(90.0f), 0.0f, 0.0f);
-    enemy->get_component<TransformComponent>()->position = glm::vec3(2.0f, 2.0f, 1.0f);
-    enemy->add_component<SpriteRendererComponent>(glm::vec2(10.0f, 10.0f), colors::red);
+    m_player = m_scene->create_entity();
+    m_player.get_component<TransformComponent>().rotation = glm::vec3(glm::radians(90.0f), 0.0f, 0.0f);
+    m_player.add_component(SpriteRendererComponent(glm::vec2(10.0f, 10.0f), colors::blue));
+    
+    m_enemy = m_scene->create_entity();
+    m_enemy.get_component<TransformComponent>().rotation = glm::vec3(glm::radians(90.0f), 0.0f, 0.0f);
+    m_enemy.get_component<TransformComponent>().position = glm::vec3(20.0f, 20.0f, 1.0f);
+    m_enemy.add_component(SpriteRendererComponent(glm::vec2(10.0f, 10.0f), colors::red));
 }
 
 void SandboxApp::on_update(float delta_time)
 {
     if (InputSystem::action_pressed(actions::quit))
         close();
+
+    static float speed = 12.0f;
+    if(InputSystem::action_down(actions::left))
+        m_player.get_component<TransformComponent>().position.x -= speed * delta_time;
+    if(InputSystem::action_down(actions::right))
+        m_player.get_component<TransformComponent>().position.x += speed * delta_time;
+
+    if(InputSystem::action_down(actions::up))
+        m_player.get_component<TransformComponent>().position.y += speed * delta_time;
+    if(InputSystem::action_down(actions::down))
+        m_player.get_component<TransformComponent>().position.y -= speed * delta_time;
 }
 
 const char *SandboxApp::asset_config()

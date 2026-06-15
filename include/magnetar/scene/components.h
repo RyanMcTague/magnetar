@@ -3,6 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "magnetar/core/base.h"
 #include "magnetar/assets/asset_handle.h"
+#include "magnetar/renderer/camera.h"
 
 namespace magnetar
 {
@@ -38,5 +39,18 @@ namespace magnetar
 
         SpriteRendererComponent(const glm::vec2& size, const glm::vec4& color)
             : size(size), color(color) {}
+    };
+
+    struct MAGNETAR_API Camera2DComponent
+    {
+        MT_DECLARE_CLASS_NAME(Camera2DComponent)
+        
+        glm::vec2 size;
+        float near;
+        float far;
+        bool is_primary;
+
+        Camera2DComponent(const glm::vec2& size, float near, float far, bool is_primary = false)
+            : size(size), near(near), far(far), is_primary(is_primary) {}
     };
 }

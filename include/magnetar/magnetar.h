@@ -45,10 +45,9 @@
 #include "magnetar/renderer/texture.h"
 #include "magnetar/renderer/vertex_buffer.h"
 
-#include "magnetar/scene/ecs.h"
 #include "magnetar/scene/components.h"
 #include "magnetar/scene/scene.h"
-
+#include "magnetar/scene/entity.h"
 #include "magnetar/utils/string_utils.h"
 #include "magnetar/utils/enum_utils.h"
 #include "magnetar/utils/image_utils.h"

@@ -5,6 +5,7 @@
 #include "magnetar/events/event_system.h"
 #include "magnetar/filesystem/native_file_system.h"
 #include "magnetar/renderer/renderer.h"
+#include "magnetar/renderer/renderer2d.h"
 #include "magnetar/assets/asset_manager.h"
 
 magnetar::Application::Application()
@@ -59,6 +60,7 @@ void magnetar::Application::initialize()
 
     m_window = Window::create({"Untitled", 1200, 800});
     Renderer::initialize();
+    Renderer2D::initialize();
     AssetManager::initialize(asset_config());
     on_initialize();
 }
@@ -93,6 +95,7 @@ void magnetar::Application::shutdown()
     m_layer_stack.clear();
     
     AssetManager::shutdown();
+    Renderer2D::shutdown();
     Renderer::shutdown();
 }
 
