@@ -31,6 +31,8 @@ magnetar::Entity magnetar::Scene::get_entity_by_id(EntityHandle handle)
 
 void magnetar::Scene::mark_entity_handle_destroyed(EntityHandle handle)
 {
+    if (!m_destroyed_entities.contains(handle))
+        LOG_DEBUG(logger::tags::scene, "marking entity {} as destroyed", static_cast<uint32_t>(handle));
     m_destroyed_entities.emplace(handle);
 }
 
@@ -57,5 +59,17 @@ void magnetar::Scene::on_render()
     for (auto [_, transform, sr] : view.each())
     {
         Renderer2D::draw_quad(transform.position, sr.size, transform.rotation.z, sr.color);
+    }
+}
+
+void magnetar::Scene::on_update(float delta_time)
+{
+    auto view = m_registry.view<TransformComponent, RigidBody2DComponent>();
+    for (auto [_, transform, rb] : view.each())
+    {
+        transform.position.x += rb.velocity.x * delta_time;
+        transform.position.y += rb.velocity.y * delta_time;
+
+        transform.rotation += rb.angular_velocity * delta_time;
     }
 }

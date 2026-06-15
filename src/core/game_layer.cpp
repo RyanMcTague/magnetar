@@ -9,9 +9,10 @@ void magnetar::GameLayer::on_detach()
 {
 }
 
-void magnetar::GameLayer::on_update(float)
+void magnetar::GameLayer::on_update(float delta_time)
 {
     m_scene->flush_entities();
+    m_scene->on_update(delta_time);
 }
 
 void magnetar::GameLayer::on_render()

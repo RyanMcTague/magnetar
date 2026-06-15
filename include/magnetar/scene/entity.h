@@ -28,6 +28,8 @@ namespace magnetar
 
         operator bool() const { return m_handle != entt::null; }
 
+        EntityHandle handle() const { return m_handle; }
+
     private:
         Scene *m_scene;
         EntityHandle m_handle;        

@@ -42,6 +42,7 @@ namespace magnetar
         void end_scene();
 
         void on_render();
+        void on_update(float delta_time);
 
         void set_camera(Ref<Camera> camera) { m_camera = camera; }
 

@@ -33,24 +33,34 @@ namespace magnetar
     struct MAGNETAR_API SpriteRendererComponent
     {
         MT_DECLARE_CLASS_NAME(SpriteRendererComponent)
-        
+
         glm::vec2 size;
         glm::vec4 color;
 
-        SpriteRendererComponent(const glm::vec2& size, const glm::vec4& color)
+        SpriteRendererComponent(const glm::vec2 &size, const glm::vec4 &color)
             : size(size), color(color) {}
     };
 
     struct MAGNETAR_API Camera2DComponent
     {
         MT_DECLARE_CLASS_NAME(Camera2DComponent)
-        
+
         glm::vec2 size;
         float near;
         float far;
         bool is_primary;
 
-        Camera2DComponent(const glm::vec2& size, float near, float far, bool is_primary = false)
+        Camera2DComponent(const glm::vec2 &size, float near, float far, bool is_primary = false)
             : size(size), near(near), far(far), is_primary(is_primary) {}
+    };
+
+    struct MAGNETAR_API RigidBody2DComponent
+    {
+        MT_DECLARE_CLASS_NAME(RigidBody2DComponent)
+        glm::vec2 velocity;
+        float angular_velocity;
+
+        RigidBody2DComponent(const glm::vec2 &velocity, float angular_velocity)
+            : velocity(velocity), angular_velocity(angular_velocity) {}
     };
 }
