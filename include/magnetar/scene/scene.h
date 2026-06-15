@@ -5,14 +5,12 @@
 #include <set>
 #include "magnetar/core/base.h"
 #include "magnetar/renderer/camera.h"
-#include "magnetar/renderer/sprite_batch.h"
 #include "magnetar/events/event_system.h"
 #include "magnetar/scene/entity_handle.h"
 
 namespace magnetar
 {
     class Entity;
-    class System;
 
     struct MAGNETAR_API EntityDestroyedEvent
     {
