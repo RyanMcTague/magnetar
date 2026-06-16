@@ -9,6 +9,8 @@ project(
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(MONO_ROOT "${CMAKE_SOURCE_DIR}/vendor/mono")
+
 ########################################################
 # Options 
 ########################################################
@@ -27,6 +29,23 @@ find_package(yaml-cpp REQUIRED CONFIG)
 find_package(assimp REQUIRED CONFIG)
 find_package(EnTT REQUIRED CONFIG)
 
+find_path(
+    MONO_INCLUDE_DIR
+    mono/jit/jit.h
+    PATHS
+        "${MONO_ROOT}/include/mono-2.0"
+    REQUIRED
+)
+
+find_library(
+    MONO_LIBRARY
+    NAMES monosgen-2.0
+    PATHS
+        "${MONO_ROOT}/lib"
+    REQUIRED
+)
+message(STATUS "Mono include: ${MONO_INCLUDE_DIR}")
+message(STATUS "Mono library: ${MONO_LIBRARY}")
 
 ########################################################
 # Library
@@ -193,6 +212,8 @@ target_include_directories(magnetar
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
+    PRIVATE
+        ${MONO_INCLUDE_DIR}
 )
 
 ########################################################
@@ -216,6 +237,8 @@ else()
         -Wall
         -Wextra
         -Wpedantic
+        -Wno-zero-length-array
+        -Wgnu-anonymous-struct
     )
 endif()
 
@@ -232,6 +255,7 @@ target_link_libraries(magnetar
         yaml-cpp::yaml-cpp
         assimp::assimp
         EnTT::EnTT
+        ${MONO_LIBRARY}
 )
 
 ########################################################

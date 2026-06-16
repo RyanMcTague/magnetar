@@ -1,0 +1,9 @@
+prefix=/Users/ryan/Documents/portfolio/magnetar/mono/dist
+exec_prefix=${prefix}
+libdir=/Users/ryan/Documents/portfolio/magnetar/mono/dist/lib
+sourcesdir=${libdir}/monodoc/sources
+
+Name: Monodoc
+Description: Monodoc - Mono Documentation Tools
+Version: 6.13.0
+Libs: /r:${prefix}/lib/mono/monodoc/monodoc.dll 

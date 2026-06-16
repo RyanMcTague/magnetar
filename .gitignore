@@ -18,6 +18,8 @@ _deps/
 out/
 tmp/
 dist/
+bin/
+obj/
 
 # IDE-specific build directories
 cmake-build-*/

@@ -1,0 +1,4 @@
+Name: Reactive Extensions
+Description: Reactive Extensions
+Version: 6.13.0
+Libs: -r:/Users/ryan/Documents/portfolio/magnetar/mono/dist/lib/mono/4.5/System.Reactive.Interfaces.dll -r:/Users/ryan/Documents/portfolio/magnetar/mono/dist/lib/mono/4.5/System.Reactive.Core.dll -r:/Users/ryan/Documents/portfolio/magnetar/mono/dist/lib/mono/4.5/System.Reactive.Linq.dll -r:/Users/ryan/Documents/portfolio/magnetar/mono/dist/lib/mono/4.5/System.Reactive.PlatformServices.dll -r:/Users/ryan/Documents/portfolio/magnetar/mono/dist/lib/mono/4.5/System.Reactive.Providers.dll -r:/Users/ryan/Documents/portfolio/magnetar/mono/dist/lib/mono/4.5/System.Reactive.Debugger.dll -r:/Users/ryan/Documents/portfolio/magnetar/mono/dist/lib/mono/4.5/System.Reactive.Experimental.dll -r:/Users/ryan/Documents/portfolio/magnetar/mono/dist/lib/mono/4.5/System.Reactive.Runtime.Remoting.dll
