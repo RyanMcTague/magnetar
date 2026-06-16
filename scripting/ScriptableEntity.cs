@@ -1,16 +1,16 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace Magnetar
+namespace Magnetar.Core
 {
-    class ScriptableEntity
+    public abstract class ScriptableEntity
     {
         // [MethodImpl(MethodImplOptions.InternalCall)]
         // extern static int update();
 
-        static string GetMessage()
+        public ulong ID { get; internal set; }
+
+        protected T GetComponent<T>()
         {
-            update();
-            return "Hello World";
         }
     }
 }

@@ -3,7 +3,7 @@
 #include "assets.h"
 using namespace magnetar;
 
-glm::vec4 rgba_color(uint32_t color)
+glm::vec4 rgba(uint32_t color)
 {
     uint8_t red = (color & 0xff000000) >> 24;
     uint8_t green = (color & 0x00ff0000) >> 16;
@@ -30,9 +30,9 @@ namespace actions
 
 namespace colors
 {
-    const glm::vec4 blue = rgba_color(0x2596beff);
-    const glm::vec4 red = rgba_color(0xbf2443ff);
-    const glm::vec4 gray = rgba_color(0x666666ff);
+    const glm::vec4 blue = rgba(0x2596beff);
+    const glm::vec4 red = rgba(0xbf2443ff);
+    const glm::vec4 gray = rgba(0x666666ff);
 };
 
 class SandboxApp final : public Application
@@ -110,7 +110,7 @@ void SandboxApp::on_update(float delta_time)
 
     if (InputSystem::action_pressed(actions::fire))
         create_bullet();
-    
+
     update_bullets();
 }
 
@@ -127,7 +127,7 @@ const char *SandboxApp::asset_config()
 
 void SandboxApp::create_bullet()
 {
-    static float bullet_width = 5.0f;
+    static float bullet_width = 1.0f;
     float elapsed = (float)((double)m_bullet_timer.elapsed() / 1000.0);
     if (elapsed <= 0.5f)
         return;
@@ -138,10 +138,10 @@ void SandboxApp::create_bullet()
 
     auto bullet = m_scene->create_entity();
     bullet.get_component<TransformComponent>().position = glm::vec3(
-        player_pos.x + player_size.x - bullet_width * 0.5f,
+        player_pos.x + player_size.x * 0.5f - bullet_width * 0.5f,
         player_pos.y,
         0.0f);
-    bullet.add_component(SpriteRendererComponent(glm::vec2(bullet_width, 2.5f), colors::gray));
+    bullet.add_component(SpriteRendererComponent(glm::vec2(bullet_width, bullet_width), colors::gray));
     bullet.add_component(RigidBody2DComponent(glm::vec2(25.0f, 0.0f), 0.0f));
     m_bullets.push_back(bullet);
 }
