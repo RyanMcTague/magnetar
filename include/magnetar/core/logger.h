@@ -16,6 +16,7 @@ namespace magnetar
         static constexpr const char *assets = "assets";
         static constexpr const char *scene = "scene";
         static constexpr const char *scripting = "scripting";
+        static constexpr const char *client = "client";
     }
 
     class Logger

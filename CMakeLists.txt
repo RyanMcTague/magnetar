@@ -141,6 +141,19 @@ target_sources(magnetar
             include/magnetar/scene/entity_handle.h
             include/magnetar/scene/entity.h
 
+            include/magnetar/scripting/script_class.h
+            include/magnetar/scripting/script_instance.h
+            include/magnetar/scripting/script_runtime.h
+
+            include/magnetar/scripting/enums.h
+            include/magnetar/scripting/script_engine.h
+            include/magnetar/scripting/script_registry.h
+            include/magnetar/scripting/script_field.h
+            
+            include/magnetar/scripting/mono/mono_runtime.h
+            include/magnetar/scripting/mono/mono_script_class.h
+            include/magnetar/scripting/mono/mono_script_instance.h
+
             include/magnetar/utils/enum_utils.h
             include/magnetar/utils/string_utils.h
             include/magnetar/utils/image_utils.h
@@ -200,6 +213,13 @@ target_sources(magnetar
 
         src/scene/scene.cpp
         src/scene/entity.cpp
+
+        src/scripting/script_engine.cpp
+        src/scripting/script_registry.cpp
+
+        src/scripting/mono/mono_runtime.cpp
+        src/scripting/mono/mono_script_class.cpp
+        src/scripting/mono/mono_script_instance.cpp
         
         src/utils/string_utils.cpp
         src/utils/image_utils.cpp
@@ -239,6 +259,7 @@ else()
         -Wpedantic
         -Wno-zero-length-array
         -Wgnu-anonymous-struct
+        -Wno-nested-anon-types
     )
 endif()
 

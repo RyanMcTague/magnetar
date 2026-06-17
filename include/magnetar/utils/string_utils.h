@@ -11,4 +11,5 @@ namespace magnetar::string_utils
     MAGNETAR_API std::string replace(const std::string& str, char from, char to);
     MAGNETAR_API std::string trim(const std::string& str);
     MAGNETAR_API std::string line(const std::string& str, int line);
+    MAGNETAR_API std::string remove_from_start(const std::string& string, const std::string& prefix);
 }

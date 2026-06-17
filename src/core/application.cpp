@@ -7,6 +7,7 @@
 #include "magnetar/renderer/renderer.h"
 #include "magnetar/renderer/renderer2d.h"
 #include "magnetar/assets/asset_manager.h"
+#include "magnetar/scripting/script_engine.h"
 
 magnetar::Application::Application()
     : m_is_running(true), m_is_initialized(false), m_window(nullptr)
@@ -62,6 +63,7 @@ void magnetar::Application::initialize()
     Renderer::initialize();
     Renderer2D::initialize();
     AssetManager::initialize(asset_config());
+    ScriptEngine::initialize();
     on_initialize();
 }
 
@@ -94,6 +96,7 @@ void magnetar::Application::shutdown()
         layer->on_detach();
     m_layer_stack.clear();
     
+    ScriptEngine::shutdown();
     AssetManager::shutdown();
     Renderer2D::shutdown();
     Renderer::shutdown();

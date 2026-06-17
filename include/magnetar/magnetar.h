@@ -48,6 +48,13 @@
 #include "magnetar/scene/components.h"
 #include "magnetar/scene/scene.h"
 #include "magnetar/scene/entity.h"
+
+#include "magnetar/scripting/enums.h"
+#include "magnetar/scripting/script_class.h"
+#include "magnetar/scripting/script_engine.h"
+#include "magnetar/scripting/script_instance.h"
+#include "magnetar/scripting/script_runtime.h"
+
 #include "magnetar/utils/string_utils.h"
 #include "magnetar/utils/enum_utils.h"
 #include "magnetar/utils/image_utils.h"

@@ -13,7 +13,8 @@ namespace magnetar
         logger::tags::renderer,
         logger::tags::assets,
         logger::tags::scene,
-        logger::tags::scripting
+        logger::tags::scripting,
+        logger::tags::client,
     };
 }
 void magnetar::Logger::initialize(LogLevel level)
