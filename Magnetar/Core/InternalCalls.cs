@@ -4,13 +4,24 @@ using System.Runtime.CompilerServices;
 namespace Magnetar.Core
 {
     internal static class InternalCalls
-    {
-          
+    {  
+        //==========================================
+        // Logger
+        //==========================================
+
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern void Logger_Log(LogLevel level, string message);
         
+        //==========================================
+        // Entity
+        //==========================================
+
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern bool Entity_HasComponent(uint id, Type type);
+
+        //==========================================
+        // TransformComponent
+        //==========================================
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern void TransformComponent_GetPosition(uint id, out Vector3D position);
@@ -30,6 +41,11 @@ namespace Magnetar.Core
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern void TransformComponent_SetScale(uint id, ref Vector3D scale);
 
+
+        //==========================================
+        // SpriteRenderer
+        //==========================================
+
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern void SpriteRenderer_GetSize(uint id, out Vector2D size);
 
@@ -41,5 +57,22 @@ namespace Magnetar.Core
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern void SpriteRenderer_SetColor(uint id, ref Vector4D color);
+
+
+        //==========================================
+        // RigidBody2D
+        //==========================================
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void RigidBody2D_GetVelocity(uint id, out Vector2D velocity);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void RigidBody2D_SetVelocity(uint id, ref Vector2D velocity);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void RigidBody2D_GetAngularVelocity(uint id, out float velocity);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void RigidBody2D_SetAngularVelocity(uint id, ref float velocity);
     }
 }

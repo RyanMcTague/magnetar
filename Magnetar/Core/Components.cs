@@ -9,7 +9,7 @@ namespace Magnetar.Core
     public class TransformComponent : Component
     {
         public Vector3D Position
-        { 
+        {
             get
             {
                 InternalCalls.TransformComponent_GetPosition(Entity.ID, out Vector3D position);
@@ -22,7 +22,7 @@ namespace Magnetar.Core
         }
 
         public Vector3D Rotation
-        { 
+        {
             get
             {
                 InternalCalls.TransformComponent_GetRotation(Entity.ID, out Vector3D rotation);
@@ -35,7 +35,7 @@ namespace Magnetar.Core
         }
 
         public Vector3D Scale
-        { 
+        {
             get
             {
                 InternalCalls.TransformComponent_GetScale(Entity.ID, out Vector3D scale);
@@ -48,10 +48,10 @@ namespace Magnetar.Core
         }
     }
 
-    public class SpriteRendererComponent: Component
+    public class SpriteRendererComponent : Component
     {
         public Vector2D Size
-        { 
+        {
             get
             {
                 InternalCalls.SpriteRenderer_GetSize(Entity.ID, out Vector2D size);
@@ -63,7 +63,7 @@ namespace Magnetar.Core
             }
         }
         public Vector4D Color
-        { 
+        {
             get
             {
                 InternalCalls.SpriteRenderer_GetColor(Entity.ID, out Vector4D color);
@@ -72,6 +72,35 @@ namespace Magnetar.Core
             set
             {
                 InternalCalls.SpriteRenderer_SetColor(Entity.ID, ref value);
+            }
+        }
+    }
+
+    public class RigidBody2DComponent : Component
+    {
+        public Vector2D Velocity
+        {
+            get
+            {
+                InternalCalls.RigidBody2D_GetVelocity(Entity.ID, out Vector2D velocity);
+                return velocity;
+            }
+            set
+            {
+                InternalCalls.RigidBody2D_SetVelocity(Entity.ID, ref value);
+            }
+        }
+
+        public float AngularVelocity
+        {
+            get
+            {
+                InternalCalls.RigidBody2D_GetAngularVelocity(Entity.ID, out float velocity);
+                return velocity;
+            }
+            set
+            {
+                InternalCalls.RigidBody2D_SetAngularVelocity(Entity.ID, ref value);
             }
         }
     }

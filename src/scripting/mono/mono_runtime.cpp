@@ -145,6 +145,35 @@ namespace magnetar
         sc.color = *color;
     }
 
+
+    static void RigidBody2D_GetVelocity(uint32_t id, glm::vec2 *velocity)
+    {
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto &rc = entity.get_component<RigidBody2DComponent>();
+        *velocity = rc.velocity;
+    }
+
+    static void RigidBody2D_SetVelocity(uint32_t id, glm::vec4 *velocity)
+    {
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto &rc = entity.get_component<RigidBody2DComponent>();
+        rc.velocity = *velocity;
+    }
+
+    static void RigidBody2D_GetAngularVelocity(uint32_t id, float *velocity)
+    {
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto &rc = entity.get_component<RigidBody2DComponent>();
+        *velocity = rc.angular_velocity;
+    }
+
+    static void RigidBody2D_SetAngularVelocity(uint32_t id, float *velocity)
+    {
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto &rc = entity.get_component<RigidBody2DComponent>();
+        rc.angular_velocity = *velocity;
+    }
+
     static void add_internal_calls()
     {
         MT_ADD_INTERNAL_CALL(Logger_Log);
@@ -159,6 +188,10 @@ namespace magnetar
         MT_ADD_INTERNAL_CALL(SpriteRenderer_SetSize);
         MT_ADD_INTERNAL_CALL(SpriteRenderer_GetColor);
         MT_ADD_INTERNAL_CALL(SpriteRenderer_SetColor);
+        MT_ADD_INTERNAL_CALL(RigidBody2D_GetVelocity);
+        MT_ADD_INTERNAL_CALL(RigidBody2D_SetVelocity);
+        MT_ADD_INTERNAL_CALL(RigidBody2D_GetAngularVelocity);
+        MT_ADD_INTERNAL_CALL(RigidBody2D_SetAngularVelocity);
     }
 
     static void register_components(MonoImage *image)

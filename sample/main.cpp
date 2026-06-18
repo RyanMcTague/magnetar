@@ -93,6 +93,7 @@ void SandboxApp::on_initialize()
     m_enemy.get_component<TransformComponent>().position = glm::vec3(20.0f, 20.0f, 1.0f);
     m_enemy.add_component(SpriteRendererComponent(glm::vec2(10.0f, 10.0f), colors::red));
     m_enemy.add_component(RigidBody2DComponent(glm::vec2(0.0f, -13.0f), 0.0f));
+    m_enemy.add_component(ScriptComponent("Magnetar.Core.Enemy"));
 }
 
 void SandboxApp::on_update(float delta_time)
