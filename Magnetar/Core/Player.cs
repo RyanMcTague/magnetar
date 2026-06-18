@@ -3,12 +3,12 @@ namespace Magnetar.Core
 {
     public class Player: ScriptableEntity
     {
-        void OnStart()
+        protected void OnStart()
         {
             Logger.Debug($"Created Entity {Handle}");
         }
 
-        void OnUpdate(float dt)
+        protected void OnUpdate(float dt)
         {
         }
     }

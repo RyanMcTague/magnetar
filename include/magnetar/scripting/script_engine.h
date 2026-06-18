@@ -1,6 +1,7 @@
 #pragma once
 #include "magnetar/core/base.h"
 #include "magnetar/scripting/script_runtime.h"
+#include "magnetar/scripting/script_instance.h"
 
 namespace magnetar
 {
@@ -15,6 +16,10 @@ namespace magnetar
         static bool reload_assembly();
 
         static void update(float delta_time);
+
+        static ScriptInstance* create_entity_instance(const std::string& name, EntityHandle handle);
+
+        static void remove_entity_instance(const std::string& name, EntityHandle handle);
 
     private:
         ScriptEngine() = default;

@@ -14,7 +14,7 @@ bool magnetar::ScriptEngine::initialize()
 
 bool magnetar::ScriptEngine::shutdown()
 {
-    bool value =  s_runtime->shutdown();
+    bool value = s_runtime->shutdown();
     s_runtime = nullptr;
     return value;
 }
@@ -32,4 +32,14 @@ bool magnetar::ScriptEngine::reload_assembly()
 void magnetar::ScriptEngine::update(float delta_time)
 {
     return s_runtime->update(delta_time);
+}
+
+magnetar::ScriptInstance *magnetar::ScriptEngine::create_entity_instance(const std::string &name, EntityHandle handle)
+{
+    return s_runtime->create_entity_instance(name, handle);
+}
+
+void magnetar::ScriptEngine::remove_entity_instance(const std::string &name, EntityHandle handle)
+{
+    return s_runtime->remove_entity_instance(name, handle);
 }

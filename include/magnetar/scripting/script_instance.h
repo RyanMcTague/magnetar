@@ -1,13 +1,16 @@
 #pragma once
 #include "magnetar/core/base.h"
-
+#include "magnetar/scene/entity_handle.h"
 namespace magnetar
 {
     class MAGNETAR_API ScriptInstance
     {
     public:
-        virtual ~ScriptInstance() = default;    
-        
-        virtual void invoke(const std::string& method, void** args) = 0;
+        virtual ~ScriptInstance() = default;
+
+        virtual void invoke_ctor() = 0;
+        virtual void invoke_set_handle(EntityHandle handle) = 0;
+        virtual void invoke_on_start() = 0;
+        virtual void invoke_on_update(float delta_time) = 0;
     };
 }

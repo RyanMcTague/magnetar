@@ -87,6 +87,7 @@ void SandboxApp::on_initialize()
 
     m_player = m_scene->create_entity();
     m_player.add_component(SpriteRendererComponent(glm::vec2(10.0f, 10.0f), colors::blue));
+    m_player.add_component(ScriptComponent("Magnetar.Core.Player"));
 
     m_enemy = m_scene->create_entity();
     m_enemy.get_component<TransformComponent>().position = glm::vec3(20.0f, 20.0f, 1.0f);

@@ -3,12 +3,17 @@ namespace Magnetar.Core
 {
     public abstract class ScriptableEntity
     {
-        public ulong Handle { get; internal set; }
+        public uint Handle { get; internal set; }
 
         // protected T GetComponent<T>()
         // {
         //     return InternalCalls.GetComponent<T>(Handle);
         // }
+
+        protected bool HasComponent<T>()
+        {
+            return InternalCalls.HasComponent(Handle, typeof(T));
+        }
     }
 }
 

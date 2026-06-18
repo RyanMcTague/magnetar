@@ -1,6 +1,7 @@
 #include "magnetar/scene/scene.h"
 #include "magnetar/scene/entity.h"
 #include "magnetar/scene/components.h"
+#include "magnetar/scripting/script_engine.h"
 #include "magnetar/renderer/renderer2d.h"
 namespace magnetar
 {
@@ -12,6 +13,14 @@ namespace magnetar
 
 magnetar::Scene::Scene()
 {
+    m_eh_component_added = EventSystem::subscribe<EntityComponentAddedEvent>(this, &Scene::on_component_added);
+    m_eh_component_removed = EventSystem::subscribe<EntityComponentRemovedEvent>(this, &Scene::on_component_removed);
+}
+
+magnetar::Scene::~Scene()
+{
+    EventSystem::unsubscribe(m_eh_component_added);
+    EventSystem::unsubscribe(m_eh_component_removed);
 }
 
 magnetar::Entity magnetar::Scene::create_entity()
@@ -55,7 +64,7 @@ void magnetar::Scene::end_scene()
 
 void magnetar::Scene::on_render()
 {
-    auto view = m_registry.view<TransformComponent, SpriteRendererComponent>();
+    auto view = view_with_components<TransformComponent, SpriteRendererComponent>();
     for (auto [_, transform, sr] : view.each())
     {
         Renderer2D::draw_quad(transform.position, sr.size, transform.rotation.z, sr.color);
@@ -64,12 +73,31 @@ void magnetar::Scene::on_render()
 
 void magnetar::Scene::on_update(float delta_time)
 {
-    auto view = m_registry.view<TransformComponent, RigidBody2DComponent>();
+    auto view = view_with_components<TransformComponent, RigidBody2DComponent>();
     for (auto [_, transform, rb] : view.each())
     {
         transform.position.x += rb.velocity.x * delta_time;
         transform.position.y += rb.velocity.y * delta_time;
 
         transform.rotation += rb.angular_velocity * delta_time;
+    }
+    ScriptEngine::update(delta_time);
+}
+
+void magnetar::Scene::on_component_added(const EntityComponentAddedEvent &event)
+{
+    if (event.component_class_name == std::string(MT_STATIC_CLASS_NAME(ScriptComponent)))
+    {
+        auto &component = m_registry.get<ScriptComponent>(event.handle);
+        ScriptEngine::create_entity_instance(component.script_class_name, event.handle);
+    }
+}
+
+void magnetar::Scene::on_component_removed(const EntityComponentRemovedEvent &event)
+{
+    if (event.component_class_name == std::string(MT_STATIC_CLASS_NAME(ScriptComponent)))
+    {
+        auto &component = m_registry.get<ScriptComponent>(event.handle);
+        ScriptEngine::remove_entity_instance(component.script_class_name, event.handle);
     }
 }

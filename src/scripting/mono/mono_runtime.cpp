@@ -73,7 +73,6 @@ bool magnetar::MonoRuntime::load_assembly(const std::string &path)
         return false;
     }
     m_assembly = mono_assembly_load_from_full(m_image, path.c_str(), nullptr, false);
-
     const MonoTableInfo *type_info = mono_image_get_table_info(m_image, MONO_TABLE_TYPEDEF);
     int num_rows = mono_table_info_get_rows(type_info);
 
@@ -84,12 +83,17 @@ bool magnetar::MonoRuntime::load_assembly(const std::string &path)
         if (!klass)
             continue;
 
-        const char *class_name = mono_class_get_name(klass);
-        const char *name_space = mono_class_get_namespace(klass);
-        if (std::string(class_name) == "<Module>")
+        std::string class_name = mono_class_get_name(klass);
+        std::string name_space = mono_class_get_namespace(klass);
+        std::string full_name = name_space + "." + class_name;
+
+        if (class_name == "<Module>")
             continue;
 
-        LOG_TRACE(logger::tags::scripting, "found class {}.{}", name_space, class_name);
+        if (full_name == "Magnetar.Core.ScriptableEntity")
+            continue;
+
+        LOG_TRACE(logger::tags::scripting, "found class {}", full_name);
         auto ref = create_unique_reference<MonoScriptClass>(m_domain, m_image, name_space, class_name);
         ScriptRegistry::register_class(std::move(ref));
     }
@@ -102,6 +106,28 @@ bool magnetar::MonoRuntime::reload_assembly()
     return false;
 }
 
-void magnetar::MonoRuntime::update(float)
+void magnetar::MonoRuntime::update(float delta_time)
 {
+    for (auto &pair : m_entity_instances)
+        pair.second->invoke_on_update(delta_time);
+}
+
+magnetar::ScriptInstance *magnetar::MonoRuntime::create_entity_instance(const std::string &name, EntityHandle handle)
+{
+    auto klass = ScriptRegistry::find(name);
+    auto instance = klass->create_instance();
+    m_entity_instances.emplace(handle, std::move(instance));
+    m_entity_instances[handle]->invoke_ctor();
+    void *args[1];
+    args[0] = &handle;
+    m_entity_instances[handle]->invoke_set_handle(handle);
+    m_entity_instances[handle]->invoke_on_start();
+    return m_entity_instances[handle].get();
+}
+
+void magnetar::MonoRuntime::remove_entity_instance(const std::string &name, EntityHandle handle)
+{
+    auto it = m_entity_instances.find(handle);
+    if (it != m_entity_instances.end())
+        m_entity_instances.erase(it);
 }

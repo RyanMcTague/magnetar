@@ -1,7 +1,9 @@
 #pragma once
+#include <unordered_map>
 #include <mono/jit/jit.h>
 #include "magnetar/core/base.h"
 #include "magnetar/scripting/script_runtime.h"
+#include "magnetar/scripting/script_instance.h"
 
 namespace magnetar
 {
@@ -16,9 +18,13 @@ namespace magnetar
 
         void update(float delta_time) override;
 
+        ScriptInstance* create_entity_instance(const std::string& name, EntityHandle handle) override;
+
+        void remove_entity_instance(const std::string& name, EntityHandle handle) override;
     private:
         MonoDomain *m_domain;
         MonoAssembly *m_assembly;
         MonoImage* m_image;
+        std::unordered_map<EntityHandle, UniqueRef<ScriptInstance>> m_entity_instances;
     };
 }

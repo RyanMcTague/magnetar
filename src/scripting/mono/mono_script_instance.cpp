@@ -6,7 +6,19 @@ magnetar::MonoScriptInstance::MonoScriptInstance(MonoScriptClass* klass,MonoObje
 {
 }
 
-void magnetar::MonoScriptInstance::invoke(const std::string& method, void** args)
+void magnetar::MonoScriptInstance::invoke_ctor()
 {
-    m_class->invoke(m_object, method, args);
+    m_class->invoke_ctor(m_object);
+}
+void magnetar::MonoScriptInstance::invoke_set_handle( EntityHandle handle)
+{
+    m_class->invoke_set_handle(m_object, handle);
+}
+void magnetar::MonoScriptInstance::invoke_on_start()
+{
+    m_class->invoke_on_start(m_object);
+}
+void magnetar::MonoScriptInstance::invoke_on_update(float delta_time)
+{
+    m_class->invoke_on_update(m_object, delta_time);
 }

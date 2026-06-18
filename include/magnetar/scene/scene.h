@@ -19,10 +19,33 @@ namespace magnetar
         EntityHandle handle;
     };
 
+    struct EntityComponentAddedEvent
+    {
+        MT_DECLARE_CLASS_NAME(EntityComponentAddedEvent)
+
+        EntityHandle handle;
+        std::string component_class_name;
+
+        EntityComponentAddedEvent(EntityHandle handle, const std::string& component_class_name)
+            : handle(handle), component_class_name(component_class_name) {}
+    };
+
+    struct EntityComponentRemovedEvent
+    {
+        MT_DECLARE_CLASS_NAME(EntityComponentRemovedEvent)
+
+        EntityHandle handle;
+        std::string component_class_name;
+
+        EntityComponentRemovedEvent(EntityHandle handle, const std::string& component_class_name)
+            : handle(handle), component_class_name(component_class_name) {}
+    };
+
     class MAGNETAR_API Scene
     {
     public:
         Scene();
+        ~Scene();
 
         Entity create_entity();
 
@@ -51,6 +74,12 @@ namespace magnetar
         entt::registry m_registry;
         Ref<Camera> m_camera;
         std::set<EntityHandle> m_destroyed_entities;
+        EventHandle m_eh_component_added;
+        EventHandle m_eh_component_removed;
+
+
+        void on_component_added(const EntityComponentAddedEvent& event);
+        void on_component_removed(const EntityComponentRemovedEvent& event);
     };
 
 }

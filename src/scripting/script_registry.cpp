@@ -13,3 +13,8 @@ void magnetar::ScriptRegistry::register_class(UniqueRef<ScriptClass> klass)
 {
     s_classes.emplace(klass->name(), std::move(klass));
 }
+
+void magnetar::ScriptRegistry::shutdown()
+{
+    s_classes.clear();
+}

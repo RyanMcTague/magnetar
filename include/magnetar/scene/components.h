@@ -63,4 +63,13 @@ namespace magnetar
         RigidBody2DComponent(const glm::vec2 &velocity, float angular_velocity)
             : velocity(velocity), angular_velocity(angular_velocity) {}
     };
+
+    struct MAGNETAR_API ScriptComponent
+    {
+        MT_DECLARE_CLASS_NAME(ScriptComponent)
+        std::string script_class_name;
+
+        ScriptComponent(const std::string& class_name)
+            : script_class_name(class_name) {}
+    };
 }
