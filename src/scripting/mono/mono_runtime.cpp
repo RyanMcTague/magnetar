@@ -197,9 +197,7 @@ namespace magnetar
     static void register_components(MonoImage *image)
     {
         MT_REGISTER_COMPONENT(image, TransformComponent);
-        MT_REGISTER_COMPONENT(image, MeshRendererComponent);
         MT_REGISTER_COMPONENT(image, SpriteRendererComponent);
-        MT_REGISTER_COMPONENT(image, Camera2DComponent);
         MT_REGISTER_COMPONENT(image, RigidBody2DComponent);
     }
 }
