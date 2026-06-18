@@ -9,6 +9,16 @@ namespace magnetar
 {
     class InputDevice;
 
+    struct InputActionEvent
+    {
+        MT_DECLARE_CLASS_NAME(InputActionEvent)
+        MappedInputCode code;
+        ButtonState state;
+
+        InputActionEvent(MappedInputCode code, ButtonState state)
+            : code(code), state(state) {}
+    };
+
     class MAGNETAR_API InputSystem
     {
     public:
@@ -16,7 +26,7 @@ namespace magnetar
         static void update();
 
         static void add_device(UniqueRef<InputDevice> device);
-        static void register_action(const std::string& name, MappedInputCode code, const InputCode &input_code);
+        static void register_action(const std::string &name, MappedInputCode code, const InputCode &input_code);
 
         static ButtonState action_state(MappedInputCode code);
 

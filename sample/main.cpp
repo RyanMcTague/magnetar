@@ -69,7 +69,7 @@ void SandboxApp::on_initialize()
     ScriptEngine::load_assembly("./sample/Sample.dll");
 
     auto aspect_ratio = get_window()->aspect_ratio();
-    auto windwidth = get_window()->width();
+    auto winwidth = get_window()->width();
     auto winheight = get_window()->height();
     float y = 50.0f;
     float x = y * aspect_ratio;
@@ -83,7 +83,7 @@ void SandboxApp::on_initialize()
     m_scene->set_camera(m_camera);
     m_layer->set_scene(m_scene);
 
-    // Renderer::set_viewport(0, 0, windwidth, winheight);
+    // Renderer::set_viewport(0, 0, winwidth, winheight);
 
     m_player = m_scene->create_entity();
     m_player.add_component(SpriteRendererComponent(glm::vec2(10.0f, 10.0f), colors::blue));
