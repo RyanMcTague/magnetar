@@ -29,7 +29,7 @@ magnetar::MonoScriptClass::MonoScriptClass(MonoDomain *domain, MonoImage *image,
     m_method_on_start = mono_class_get_method_from_name(m_class, "OnStart", 0);
     m_method_on_update = mono_class_get_method_from_name(m_class, "OnUpdate", 1);
 
-    MonoProperty *prop = mono_class_get_property_from_name(parent, "Handle");
+    MonoProperty *prop = mono_class_get_property_from_name(parent, "ID");
     m_method_set_handle = mono_property_get_set_method(prop);
 }
 

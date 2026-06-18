@@ -3,16 +3,27 @@ namespace Magnetar.Core
 {
     public abstract class ScriptableEntity
     {
-        public uint Handle { get; internal set; }
+        public uint ID { get; internal set; }
 
-        protected bool HasComponent<T>()
+        public TransformComponent Transform
         {
-            return InternalCalls.HasComponent(Handle, typeof(T));
+            get
+            {
+                return GetComponent<TransformComponent>();
+            }
         }
 
-        protected T GetComponent<T>() where T : new()
+        protected bool HasComponent<T>() where T : Component, new()
         {
-            return InternalCalls.GetComponent<T>(Handle);
+            return InternalCalls.Entity_HasComponent(ID, typeof(T));
+        }
+
+        protected T GetComponent<T>() where T : Component, new()
+        {
+            if(!HasComponent<T>())
+                return null;
+            T component = new T() { Entity = this };
+            return component;
         }
     }
 }

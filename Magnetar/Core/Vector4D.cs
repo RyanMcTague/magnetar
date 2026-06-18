@@ -1,17 +1,19 @@
 
 namespace Magnetar.Core
 {
-    public struct Vector3D
+    public struct Vector4D
     {
         public float x;
         public float y;
         public float z;
+        public float w;
 
-        public Vector3D(float x, float y, float z)
+        public Vector4D(float x, float y, float z, float w)
         {
             this.x = x;
             this.y = y;
             this.z = z;
+            this.w = w;
         }
     }
 }

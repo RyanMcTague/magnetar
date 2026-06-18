@@ -7,10 +7,34 @@
 #include "magnetar/scripting/script_registry.h"
 #include "magnetar/scripting/mono/mono_script_class.h"
 #include "magnetar/scripting/mono/mono_script_instance.h"
+#include "magnetar/scene/entity.h"
+#include "magnetar/scene/components.h"
+
+#define MT_ADD_INTERNAL_CALL(func) \
+    mono_add_internal_call("Magnetar.Core.InternalCalls::" #func, reinterpret_cast<const void *>(func))
+
+#define MT_REGISTER_COMPONENT(image, Klass) \
+    register_component<Klass>(image, #Klass)
 
 namespace magnetar
 {
-    static void internal_log(int lvl, MonoObject *object)
+    static std::unordered_map<MonoClass *, std::function<bool(Entity)>> s_has_component_funcs;
+
+    template <typename T>
+    static void register_component(MonoImage *image, const char *class_name)
+    {
+        MonoClass *klass = mono_class_from_name(image, "Magnetar.Core", class_name);
+        if (!klass)
+            return;
+
+        std::function<bool(Entity)> func = [](Entity entity)
+        { return entity.has_component<T>(); };
+
+        s_has_component_funcs.emplace(klass, func);
+        LOG_TRACE(logger::tags::scripting, "registered component script {}", class_name);
+    }
+
+    static void Logger_Log(int lvl, MonoObject *object)
     {
         LogLevel level = static_cast<LogLevel>(lvl);
         char *str = mono_string_to_utf8((MonoString *)object);
@@ -41,13 +65,111 @@ namespace magnetar
         mono_free(str);
     }
 
+    static bool Entity_HasComponent(uint32_t id, MonoReflectionType *reflection)
+    {
+        MonoType *mono_type = mono_reflection_type_get_type(reflection);
+        MonoClass *klass = mono_class_from_mono_type(mono_type);
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto it = s_has_component_funcs.find(klass);
+        MT_ASSERT(it != s_has_component_funcs.end(), "component {} not found", mono_class_get_name(klass));
+        return it->second(entity);
+    }
+
+    static void TransformComponent_GetPosition(uint32_t id, glm::vec3 *position)
+    {
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto &tc = entity.get_component<TransformComponent>();
+        *position = tc.position;
+    }
+
+    static void TransformComponent_SetPosition(uint32_t id, glm::vec3 *position)
+    {
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto &tc = entity.get_component<TransformComponent>();
+        tc.position = *position;
+    }
+
+    static void TransformComponent_GetRotation(uint32_t id, glm::vec3 *rotation)
+    {
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto &tc = entity.get_component<TransformComponent>();
+        *rotation = tc.rotation;
+    }
+
+    static void TransformComponent_SetRotation(uint32_t id, glm::vec3 *rotation)
+    {
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto &tc = entity.get_component<TransformComponent>();
+        tc.rotation = *rotation;
+    }
+
+    static void TransformComponent_GetScale(uint32_t id, glm::vec3 *scale)
+    {
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto &tc = entity.get_component<TransformComponent>();
+        *scale = tc.scale;
+    }
+
+    static void TransformComponent_SetScale(uint32_t id, glm::vec3 *scale)
+    {
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto &tc = entity.get_component<TransformComponent>();
+        tc.scale = *scale;
+    }
+
+    static void SpriteRenderer_GetSize(uint32_t id, glm::vec2 *size)
+    {
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto &sc = entity.get_component<SpriteRendererComponent>();
+        *size = sc.size;
+    }
+
+    static void SpriteRenderer_SetSize(uint32_t id, glm::vec2 *size)
+    {
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto &sc = entity.get_component<SpriteRendererComponent>();
+        sc.size = *size;
+    }
+
+    static void SpriteRenderer_GetColor(uint32_t id, glm::vec4 *color)
+    {
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto &sc = entity.get_component<SpriteRendererComponent>();
+        *color = sc.color;
+    }
+
+    static void SpriteRenderer_SetColor(uint32_t id, glm::vec4 *color)
+    {
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto &sc = entity.get_component<SpriteRendererComponent>();
+        sc.color = *color;
+    }
+
     static void add_internal_calls()
     {
-        mono_add_internal_call("Magnetar.Core.InternalCalls::Log", reinterpret_cast<const void *>(internal_log));
+        MT_ADD_INTERNAL_CALL(Logger_Log);
+        MT_ADD_INTERNAL_CALL(Entity_HasComponent);
+        MT_ADD_INTERNAL_CALL(TransformComponent_GetPosition);
+        MT_ADD_INTERNAL_CALL(TransformComponent_SetPosition);
+        MT_ADD_INTERNAL_CALL(TransformComponent_GetRotation);
+        MT_ADD_INTERNAL_CALL(TransformComponent_SetRotation);
+        MT_ADD_INTERNAL_CALL(TransformComponent_GetScale);
+        MT_ADD_INTERNAL_CALL(TransformComponent_SetScale);
+        MT_ADD_INTERNAL_CALL(SpriteRenderer_GetSize);
+        MT_ADD_INTERNAL_CALL(SpriteRenderer_SetSize);
+        MT_ADD_INTERNAL_CALL(SpriteRenderer_GetColor);
+        MT_ADD_INTERNAL_CALL(SpriteRenderer_SetColor);
+    }
+
+    static void register_components(MonoImage *image)
+    {
+        MT_REGISTER_COMPONENT(image, TransformComponent);
+        MT_REGISTER_COMPONENT(image, MeshRendererComponent);
+        MT_REGISTER_COMPONENT(image, SpriteRendererComponent);
+        MT_REGISTER_COMPONENT(image, Camera2DComponent);
+        MT_REGISTER_COMPONENT(image, RigidBody2DComponent);
     }
 }
-
-#undef MT_INTERNAL_CALL
 
 bool magnetar::MonoRuntime::initialize()
 {
@@ -67,6 +189,7 @@ bool magnetar::MonoRuntime::load_assembly(const std::string &path)
     auto file = fs->open(path, FileMode::READ);
     auto data = file->read_all();
     m_image = mono_image_open_from_data((char *)&data[0], data.size(), true, nullptr);
+    register_components(m_image);
     if (!m_image)
     {
         LOG_ERROR(logger::tags::scripting, "could not open {}", path);

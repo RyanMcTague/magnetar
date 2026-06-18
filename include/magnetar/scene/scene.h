@@ -47,6 +47,8 @@ namespace magnetar
         Scene();
         ~Scene();
 
+        static Scene* current();
+
         Entity create_entity();
 
         Entity get_entity_by_id(EntityHandle handle);
@@ -71,6 +73,7 @@ namespace magnetar
 
     private:
         friend class Entity;
+        static Scene* s_current;
         entt::registry m_registry;
         Ref<Camera> m_camera;
         std::set<EntityHandle> m_destroyed_entities;

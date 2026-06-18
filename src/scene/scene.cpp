@@ -3,16 +3,12 @@
 #include "magnetar/scene/components.h"
 #include "magnetar/scripting/script_engine.h"
 #include "magnetar/renderer/renderer2d.h"
-namespace magnetar
-{
-    static inline Entity create_null_entity(Scene *scene)
-    {
-        return Entity(scene, entt::null);
-    }
-}
+
+magnetar::Scene* magnetar::Scene::s_current = nullptr;
 
 magnetar::Scene::Scene()
 {
+    s_current = this;
     m_eh_component_added = EventSystem::subscribe<EntityComponentAddedEvent>(this, &Scene::on_component_added);
     m_eh_component_removed = EventSystem::subscribe<EntityComponentRemovedEvent>(this, &Scene::on_component_removed);
 }
@@ -21,6 +17,11 @@ magnetar::Scene::~Scene()
 {
     EventSystem::unsubscribe(m_eh_component_added);
     EventSystem::unsubscribe(m_eh_component_removed);
+}
+
+magnetar::Scene* magnetar::Scene::current()
+{
+    return s_current;
 }
 
 magnetar::Entity magnetar::Scene::create_entity()
@@ -35,7 +36,7 @@ magnetar::Entity magnetar::Scene::get_entity_by_id(EntityHandle handle)
 {
     if (!m_registry.valid(handle))
         return Entity(this, entt::null);
-    return create_null_entity(this);
+    return Entity(this, handle);
 }
 
 void magnetar::Scene::mark_entity_handle_destroyed(EntityHandle handle)
