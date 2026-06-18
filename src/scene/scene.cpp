@@ -97,7 +97,6 @@ void magnetar::Scene::on_component_removed(const EntityComponentRemovedEvent &ev
 {
     if (event.component_class_name == std::string(MT_STATIC_CLASS_NAME(ScriptComponent)))
     {
-        auto &component = m_registry.get<ScriptComponent>(event.handle);
-        ScriptEngine::remove_entity_instance(component.script_class_name, event.handle);
+        ScriptEngine::remove_entity_instance(event.handle);
     }
 }

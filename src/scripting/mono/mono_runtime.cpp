@@ -125,7 +125,7 @@ magnetar::ScriptInstance *magnetar::MonoRuntime::create_entity_instance(const st
     return m_entity_instances[handle].get();
 }
 
-void magnetar::MonoRuntime::remove_entity_instance(const std::string &name, EntityHandle handle)
+void magnetar::MonoRuntime::remove_entity_instance(EntityHandle handle)
 {
     auto it = m_entity_instances.find(handle);
     if (it != m_entity_instances.end())
