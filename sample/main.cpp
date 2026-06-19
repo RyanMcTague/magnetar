@@ -84,7 +84,6 @@ void SandboxApp::on_initialize()
     m_layer->set_scene(m_scene);
 
     // Renderer::set_viewport(0, 0, winwidth, winheight);
-
     m_player = m_scene->create_entity();
     m_player.add_component(SpriteRendererComponent(glm::vec2(10.0f, 10.0f), colors::blue));
     m_player.add_component(ScriptComponent("Magnetar.Core.Player"));

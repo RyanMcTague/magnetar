@@ -12,7 +12,7 @@ namespace Magnetar.Core
         protected void OnStart()
         {
             rigidBody = GetComponent<RigidBody2DComponent>();
-            rigidBody.AngularVelocity = 45.0f * 3.14159f / 180.0f;
+            rigidBody.AngularVelocity = Math.ToRadians(45.0f);
         }
 
         protected void OnUpdate(float dt)
@@ -21,7 +21,7 @@ namespace Magnetar.Core
 
             if(step >= 1.0)
             {
-                rigidBody.AngularVelocity = sign * 45.0f * 3.14159f / 180.0f;
+                rigidBody.AngularVelocity = sign * Math.ToRadians(45.0f);
                 step = 0.0f;
                 sign *= -1.0f;
             }
