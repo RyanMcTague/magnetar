@@ -13,6 +13,10 @@ namespace Magnetar.Core
         {
             rigidBody = GetComponent<RigidBody2DComponent>();
             rigidBody.AngularVelocity = Math.ToRadians(45.0f);
+            Logger.Debug(Tag);
+
+            ScriptableEntity entity = GetEntityByName("Player");
+            Logger.Debug(entity.Tag);
         }
 
         protected void OnUpdate(float dt)

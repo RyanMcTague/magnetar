@@ -53,6 +53,8 @@ namespace magnetar
 
         Entity get_entity_by_id(EntityHandle handle);
 
+        Entity get_entity_by_name(const std::string_view& name);
+
         void mark_entity_handle_destroyed(EntityHandle handle);
 
         void flush_entities();

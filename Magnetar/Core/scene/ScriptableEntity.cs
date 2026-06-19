@@ -1,9 +1,13 @@
 ﻿
 namespace Magnetar.Core
 {
-    public abstract class ScriptableEntity
+    public class ScriptableEntity
     {
         public uint ID { get; internal set; }
+
+        public ScriptableEntity() { ID = 0; }
+
+        internal ScriptableEntity(uint id) { ID = id; }
 
         public Vector3D Position
         {
@@ -41,14 +45,32 @@ namespace Magnetar.Core
             }
         }
 
-        protected bool HasComponent<T>() where T : Component, new()
+        public string Tag
+        {
+            get
+            {
+                return GetComponent<TagComponent>().Value;
+            }
+            set
+            {
+                GetComponent<TagComponent>().Value = value;
+            }
+        }
+
+        public static ScriptableEntity GetEntityByName(string name)
+        {
+            uint id = InternalCalls.Entity_GetByName(name);
+            return new ScriptableEntity(id);
+        }
+
+        public bool HasComponent<T>() where T : Component, new()
         {
             return InternalCalls.Entity_HasComponent(ID, typeof(T));
         }
 
-        protected T GetComponent<T>() where T : Component, new()
+        public T GetComponent<T>() where T : Component, new()
         {
-            if(!HasComponent<T>())
+            if (!HasComponent<T>())
                 return null;
             T component = new T() { Entity = this };
             return component;

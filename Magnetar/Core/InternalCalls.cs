@@ -19,6 +19,9 @@ namespace Magnetar.Core
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern bool Entity_HasComponent(uint id, Type type);
 
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern uint Entity_GetByName(string name);
+
         //==========================================
         // TransformComponent
         //==========================================
@@ -74,5 +77,15 @@ namespace Magnetar.Core
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern void RigidBody2D_SetAngularVelocity(uint id, ref float velocity);
+
+        //==========================================
+        // Tag
+        //==========================================
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void Tag_GetValue(uint id, out string str);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void Tag_SetValue(uint id, ref string str);
     }
 }

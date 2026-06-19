@@ -75,6 +75,18 @@ namespace magnetar
         return it->second(entity);
     }
 
+    static uint32_t Entity_GetByName(MonoString *name)
+    {
+        char *cstr = mono_string_to_utf8(name);
+        Scene *scene = Scene::current();
+        Entity entity = scene->get_entity_by_name(cstr);
+        mono_free(cstr);
+
+        if (!entity)
+            return 0;
+        return entity;
+    }
+
     static void TransformComponent_GetPosition(uint32_t id, glm::vec3 *position)
     {
         Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
@@ -145,7 +157,6 @@ namespace magnetar
         sc.color = *color;
     }
 
-
     static void RigidBody2D_GetVelocity(uint32_t id, glm::vec2 *velocity)
     {
         Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
@@ -174,10 +185,27 @@ namespace magnetar
         rc.angular_velocity = *velocity;
     }
 
+    static void Tag_GetValue(uint32_t id, MonoString **str)
+    {
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto &tc = entity.get_component<TagComponent>();
+        *str = mono_string_new(mono_domain_get(), tc.tag.c_str());
+    }
+
+    static void Tag_SetValue(uint32_t id, MonoString **str)
+    {
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto &tc = entity.get_component<TagComponent>();
+        char *cstr = mono_string_to_utf8(*str);
+        tc.tag = cstr;
+        mono_free(cstr);
+    }
+
     static void add_internal_calls()
     {
         MT_ADD_INTERNAL_CALL(Logger_Log);
         MT_ADD_INTERNAL_CALL(Entity_HasComponent);
+        MT_ADD_INTERNAL_CALL(Entity_GetByName);
         MT_ADD_INTERNAL_CALL(TransformComponent_GetPosition);
         MT_ADD_INTERNAL_CALL(TransformComponent_SetPosition);
         MT_ADD_INTERNAL_CALL(TransformComponent_GetRotation);
@@ -192,6 +220,8 @@ namespace magnetar
         MT_ADD_INTERNAL_CALL(RigidBody2D_SetVelocity);
         MT_ADD_INTERNAL_CALL(RigidBody2D_GetAngularVelocity);
         MT_ADD_INTERNAL_CALL(RigidBody2D_SetAngularVelocity);
+        MT_ADD_INTERNAL_CALL(Tag_GetValue);
+        MT_ADD_INTERNAL_CALL(Tag_SetValue);
     }
 
     static void register_components(MonoImage *image)
@@ -199,6 +229,7 @@ namespace magnetar
         MT_REGISTER_COMPONENT(image, TransformComponent);
         MT_REGISTER_COMPONENT(image, SpriteRendererComponent);
         MT_REGISTER_COMPONENT(image, RigidBody2DComponent);
+        MT_REGISTER_COMPONENT(image, TagComponent);
     }
 }
 

@@ -4,7 +4,7 @@
 #include "magnetar/scripting/script_engine.h"
 #include "magnetar/renderer/renderer2d.h"
 
-magnetar::Scene* magnetar::Scene::s_current = nullptr;
+magnetar::Scene *magnetar::Scene::s_current = nullptr;
 
 magnetar::Scene::Scene()
 {
@@ -19,7 +19,7 @@ magnetar::Scene::~Scene()
     EventSystem::unsubscribe(m_eh_component_removed);
 }
 
-magnetar::Scene* magnetar::Scene::current()
+magnetar::Scene *magnetar::Scene::current()
 {
     return s_current;
 }
@@ -28,7 +28,9 @@ magnetar::Entity magnetar::Scene::create_entity()
 {
     auto handle = m_registry.create();
     auto entity = Entity(this, handle);
+    auto default_tag = fmt::format("entity#{:08x}", static_cast<uint32_t>(handle));
     entity.add_component(TransformComponent(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)));
+    entity.add_component(TagComponent(default_tag));
     return entity;
 }
 
@@ -37,6 +39,18 @@ magnetar::Entity magnetar::Scene::get_entity_by_id(EntityHandle handle)
     if (!m_registry.valid(handle))
         return Entity(this, entt::null);
     return Entity(this, handle);
+}
+
+magnetar::Entity magnetar::Scene::get_entity_by_name(const std::string_view &name)
+{
+    auto view = m_registry.view<TagComponent>();
+    for (auto handle : view)
+    {
+        const TagComponent &tc = view.get<TagComponent>(handle);
+        if (tc.tag == name)
+            return Entity(this, handle);
+    }
+    return Entity(this, entt::null);
 }
 
 void magnetar::Scene::mark_entity_handle_destroyed(EntityHandle handle)

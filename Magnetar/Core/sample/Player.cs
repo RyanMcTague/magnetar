@@ -5,6 +5,7 @@ namespace Magnetar.Core
     {
         protected void OnStart()
         {
+            Tag = "Player";
         }
 
         protected void OnUpdate(float dt)

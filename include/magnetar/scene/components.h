@@ -69,7 +69,16 @@ namespace magnetar
         MT_DECLARE_CLASS_NAME(ScriptComponent)
         std::string script_class_name;
 
-        ScriptComponent(const std::string& class_name)
+        ScriptComponent(const std::string &class_name)
             : script_class_name(class_name) {}
+    };
+
+    struct MAGNETAR_API TagComponent
+    {
+        MT_DECLARE_CLASS_NAME(TagComponent)
+        std::string tag;
+
+        TagComponent(const std::string &tag)
+            : tag(tag) {}
     };
 }
