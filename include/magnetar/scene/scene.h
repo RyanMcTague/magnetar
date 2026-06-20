@@ -72,6 +72,7 @@ namespace magnetar
         void on_update(float delta_time);
 
         void set_camera(Ref<Camera> camera) { m_camera = camera; }
+        Ref<Camera> camera() { return m_camera; }
 
     private:
         friend class Entity;

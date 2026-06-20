@@ -86,6 +86,20 @@ namespace magnetar
         return static_cast<int>(state);
     }
 
+    static int Game_GetResolutionX()
+    {
+        Scene* scene = Scene::current();
+        Ref<Camera2D> camera = std::static_pointer_cast<Camera2D>(scene->camera());
+        return (int)camera->width();
+    }
+
+    static int Game_GetResolutionY()
+    {
+        Scene* scene = Scene::current();
+        Ref<Camera2D> camera = std::static_pointer_cast<Camera2D>(scene->camera());
+        return (int)camera->height();
+    }
+
     static bool Entity_HasComponent(uint32_t id, MonoReflectionType *reflection)
     {
         MonoType *mono_type = mono_reflection_type_get_type(reflection);
@@ -276,6 +290,8 @@ namespace magnetar
     {
         MT_ADD_INTERNAL_CALL(Logger_Log);
         MT_ADD_INTERNAL_CALL(Input_GetActionState);
+        MT_ADD_INTERNAL_CALL(Game_GetResolutionX);
+        MT_ADD_INTERNAL_CALL(Game_GetResolutionY);
         MT_ADD_INTERNAL_CALL(Entity_HasComponent);
         MT_ADD_INTERNAL_CALL(Entity_AddComponent);
         MT_ADD_INTERNAL_CALL(Entity_RemoveComponent);

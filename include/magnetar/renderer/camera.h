@@ -31,6 +31,9 @@ namespace magnetar
 
         void move(const glm::vec2 &amount);
 
+        float width() { return m_right + abs(m_left); } 
+        float height() { return m_top + abs(m_bottom); } 
+
     private:
         glm::mat4 m_matrix;
         float m_left;
