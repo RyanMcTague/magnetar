@@ -15,6 +15,7 @@ namespace Sample
             rigidBody = GetComponent<RigidBody2DComponent>();
             rigidBody.AngularVelocity = Magnetar.Core.Math.ToRadians(45.0f);
             GetEntityByName("Player").As<Player>().RunMessage();
+            CreateEntity<Bullet>();
         }
 
         protected void OnUpdate(float dt)

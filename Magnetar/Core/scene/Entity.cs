@@ -84,6 +84,12 @@ namespace Magnetar.Core
             object instance = InternalCalls.Entity_GetScriptInstance(ID);
             return instance as T;
         }
+
+        public static T CreateEntity<T>() where T: Entity, new()
+        {
+            object instance = InternalCalls.Entity_CreateEntity(typeof(T));
+            return instance as T;
+        }
     }
 }
 

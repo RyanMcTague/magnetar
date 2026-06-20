@@ -69,6 +69,8 @@ void magnetar::MonoScriptClass::invoke_set_handle(MonoObject *object, EntityHand
 }
 void magnetar::MonoScriptClass::invoke_on_start(MonoObject *object)
 {
+    if (!m_method_on_start)
+        return;
     MonoObject *exception = nullptr;
     mono_runtime_invoke(m_method_on_start, object, nullptr, &exception);
     if (exception)
@@ -76,6 +78,8 @@ void magnetar::MonoScriptClass::invoke_on_start(MonoObject *object)
 }
 void magnetar::MonoScriptClass::invoke_on_update(MonoObject *object, float delta_time)
 {
+    if (!m_method_on_update)
+        return;
     void *args[1];
     args[0] = &delta_time;
     MonoObject *exception = nullptr;

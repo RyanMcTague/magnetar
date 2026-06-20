@@ -39,6 +39,11 @@ magnetar::ScriptInstance *magnetar::ScriptEngine::create_entity_instance(const s
     return s_runtime->create_entity_instance(name, handle);
 }
 
+magnetar::ScriptInstance *magnetar::ScriptEngine::allocate_entity_instance(const std::string &name, EntityHandle handle)
+{
+    return s_runtime->allocate_entity_instance(name, handle);
+}
+
 void magnetar::ScriptEngine::start_all_entity_instances()
 {
     s_runtime->start_all_entity_instances();

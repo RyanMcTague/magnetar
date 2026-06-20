@@ -4,6 +4,8 @@
 #include <mono/metadata/appdomain.h>
 #include <mono/metadata/image.h>
 
+#include <unordered_set>
+
 #include "magnetar/scripting/mono/mono_runtime.h"
 #include "magnetar/filesystem/native_file_system.h"
 #include "magnetar/scripting/script_registry.h"
@@ -101,6 +103,23 @@ namespace magnetar
             return nullptr;
         return (MonoObject *)instance->get_native_handle();
     };
+
+    static MonoObject* Entity_CreateEntity(MonoReflectionType *reflection)
+    {
+        MonoType *mono_type = mono_reflection_type_get_type(reflection);
+        MonoClass *klass = mono_class_from_mono_type(mono_type);
+        std::string name_space = mono_class_get_namespace(klass);
+        std::string class_name = mono_class_get_name(klass);
+        std::string name = name_space + "." + class_name;
+        Entity entity = Scene::current()->create_entity();
+        // Use allocate_entity_instance (mono_object_new only, zero managed calls) because
+        // we're inside a managed→native frame. Any mono_runtime_invoke here would create a
+        // nested managed frame that corrupts Mono's execution context on return.
+        // start_all_entity_instances() handles invoke_ctor, invoke_set_handle, and invoke_on_start
+        // for these newly-allocated instances once the current managed frame has fully unwound.
+        auto instance = ScriptEngine::allocate_entity_instance(name, entity.handle());
+        return (MonoObject *)instance->get_native_handle();
+    }
 
     static void TransformComponent_GetPosition(uint32_t id, glm::vec3 *position)
     {
@@ -222,6 +241,7 @@ namespace magnetar
         MT_ADD_INTERNAL_CALL(Entity_HasComponent);
         MT_ADD_INTERNAL_CALL(Entity_GetByName);
         MT_ADD_INTERNAL_CALL(Entity_GetScriptInstance);
+        MT_ADD_INTERNAL_CALL(Entity_CreateEntity);
         MT_ADD_INTERNAL_CALL(TransformComponent_GetPosition);
         MT_ADD_INTERNAL_CALL(TransformComponent_SetPosition);
         MT_ADD_INTERNAL_CALL(TransformComponent_GetRotation);
@@ -282,7 +302,7 @@ bool magnetar::MonoRuntime::load_assembly(const std::string &path)
         m_engine_assembly = assembly;
         m_engine_image = image;
         register_components(m_engine_image);
-        MonoClass* klass = mono_class_from_name(m_engine_image, "Magnetar.Core", "Entity");
+        MonoClass *klass = mono_class_from_name(m_engine_image, "Magnetar.Core", "Entity");
         MT_ASSERT(klass != nullptr, "could not find Magnetar.Core.Entity in assembly");
         ScriptRegistry::set_entity_class(klass);
     }
@@ -338,10 +358,53 @@ magnetar::ScriptInstance *magnetar::MonoRuntime::create_entity_instance(const st
     return m_entity_instances[handle].get();
 }
 
+magnetar::ScriptInstance *magnetar::MonoRuntime::allocate_entity_instance(const std::string &name, EntityHandle handle)
+{
+    auto klass = ScriptRegistry::find(name);
+    auto instance = klass->create_instance(); // mono_object_new only — no managed calls
+    m_entity_instances.emplace(handle, std::move(instance));
+    return m_entity_instances[handle].get();
+}
+
 void magnetar::MonoRuntime::start_all_entity_instances()
 {
+    // Entities in m_entity_instances at this point were created via create_entity_instance()
+    // and already had invoke_ctor/invoke_set_handle called. Mark them as initialized.
+    // Entities added later (via allocate_entity_instance from Entity_CreateEntity during OnStart)
+    // skipped those steps and need them called here, safely outside any managed frame.
+    std::unordered_set<EntityHandle> initialized;
     for (auto &pair : m_entity_instances)
-        pair.second->invoke_on_start();
+        initialized.insert(pair.first);
+
+    std::unordered_set<EntityHandle> started;
+    while (true)
+    {
+        std::vector<EntityHandle> pending;
+        for (auto &pair : m_entity_instances)
+            if (!started.count(pair.first))
+                pending.push_back(pair.first);
+
+        if (pending.empty())
+            break;
+
+        for (auto handle : pending)
+        {
+            started.insert(handle);
+            auto it = m_entity_instances.find(handle);
+            if (it == m_entity_instances.end())
+                continue;
+
+            if (!initialized.count(handle))
+            {
+                // Allocated via Entity_CreateEntity (no managed calls yet) — initialize now
+                initialized.insert(handle);
+                it->second->invoke_ctor();
+                it->second->invoke_set_handle(handle);
+            }
+
+            it->second->invoke_on_start();
+        }
+    }
 }
 
 magnetar::ScriptInstance *magnetar::MonoRuntime::get_script_instance(EntityHandle handle)

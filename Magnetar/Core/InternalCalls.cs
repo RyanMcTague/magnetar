@@ -25,6 +25,9 @@ namespace Magnetar.Core
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern object Entity_GetScriptInstance(uint id);
 
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern object Entity_CreateEntity(Type type);
+
         //==========================================
         // TransformComponent
         //==========================================

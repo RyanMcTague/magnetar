@@ -19,6 +19,8 @@ namespace magnetar
 
         virtual ScriptInstance* create_entity_instance(const std::string& name, EntityHandle handle) = 0;
 
+        virtual ScriptInstance* allocate_entity_instance(const std::string& name, EntityHandle handle) = 0;
+
         virtual void start_all_entity_instances() = 0;
 
         virtual ScriptInstance* get_script_instance(EntityHandle handle) = 0;
