@@ -1,5 +1,6 @@
+using Magnetar.Core;
 
-namespace Magnetar.Core
+namespace Sample
 {
     public class Player: Entity
     {

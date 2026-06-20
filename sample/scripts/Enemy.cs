@@ -1,5 +1,6 @@
+using Magnetar.Core;
 
-namespace Magnetar.Core
+namespace Sample
 {
     public class Enemy: Entity
     {
@@ -12,7 +13,7 @@ namespace Magnetar.Core
         protected void OnStart()
         {
             rigidBody = GetComponent<RigidBody2DComponent>();
-            rigidBody.AngularVelocity = Math.ToRadians(45.0f);
+            rigidBody.AngularVelocity = Magnetar.Core.Math.ToRadians(45.0f);
             GetEntityByName("Player").As<Player>().RunMessage();
         }
 
@@ -21,7 +22,7 @@ namespace Magnetar.Core
             step += dt;
             if(step >= 1.0)
             {
-                rigidBody.AngularVelocity = sign * Math.ToRadians(45.0f);
+                rigidBody.AngularVelocity = sign * Magnetar.Core.Math.ToRadians(45.0f);
                 step = 0.0f;
                 sign *= -1.0f;
             }

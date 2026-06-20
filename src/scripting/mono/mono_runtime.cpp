@@ -1,6 +1,8 @@
 #include <mono/jit/jit.h>
 #include <mono/metadata/assembly.h>
 #include <mono/metadata/tokentype.h>
+#include <mono/metadata/appdomain.h>
+#include <mono/metadata/image.h>
 
 #include "magnetar/scripting/mono/mono_runtime.h"
 #include "magnetar/filesystem/native_file_system.h"
@@ -76,7 +78,7 @@ namespace magnetar
         return it->second(entity);
     }
 
-    static uint32_t Entity_GetByName(MonoString *name, int* found)
+    static uint32_t Entity_GetByName(MonoString *name, int *found)
     {
         char *cstr = mono_string_to_utf8(name);
         Scene *scene = Scene::current();
@@ -92,11 +94,12 @@ namespace magnetar
         return static_cast<uint32_t>(entity.handle());
     }
 
-    static MonoObject* Entity_GetScriptInstance(uint id)
+    static MonoObject *Entity_GetScriptInstance(uint id)
     {
-        ScriptInstance* instance = ScriptEngine::get_script_instance(entt::entity{id});
-        if (!instance) return nullptr;
-        return (MonoObject*)instance->get_native_handle();
+        ScriptInstance *instance = ScriptEngine::get_script_instance(entt::entity{id});
+        if (!instance)
+            return nullptr;
+        return (MonoObject *)instance->get_native_handle();
     };
 
     static void TransformComponent_GetPosition(uint32_t id, glm::vec3 *position)
@@ -263,39 +266,54 @@ bool magnetar::MonoRuntime::load_assembly(const std::string &path)
     auto fs = FileSystem::get<NativeFileSystem>();
     auto file = fs->open(path, FileMode::READ);
     auto data = file->read_all();
-    m_image = mono_image_open_from_data((char *)&data[0], data.size(), true, nullptr);
-    register_components(m_image);
-    if (!m_image)
+    MonoImage *image = mono_image_open_from_data((char *)&data[0], data.size(), true, nullptr);
+    if (!image)
     {
         LOG_ERROR(logger::tags::scripting, "could not open {}", path);
         return false;
     }
-    m_assembly = mono_assembly_load_from_full(m_image, path.c_str(), nullptr, false);
-    const MonoTableInfo *type_info = mono_image_get_table_info(m_image, MONO_TABLE_TYPEDEF);
-    int num_rows = mono_table_info_get_rows(type_info);
+    MonoAssembly *assembly = mono_assembly_load_from_full(image, path.c_str(), nullptr, false);
 
-    for (int i = 1; i <= num_rows; i++)
+    MonoAssemblyName *name = mono_assembly_get_name(assembly);
+    std::string full_name = mono_assembly_name_get_name(name);
+
+    if (full_name == "Magnetar-ScriptCore")
     {
-        uint32_t token = MONO_TOKEN_TYPE_DEF | i;
-        MonoClass *klass = mono_class_get(m_image, token);
-        if (!klass)
-            continue;
-
-        std::string class_name = mono_class_get_name(klass);
-        std::string name_space = mono_class_get_namespace(klass);
-        std::string full_name = name_space + "." + class_name;
-
-        if (class_name == "<Module>")
-            continue;
-
-        if (full_name == "Magnetar.Core.Entity")
-            continue;
-
-        LOG_TRACE(logger::tags::scripting, "found class {}", full_name);
-        auto ref = create_unique_reference<MonoScriptClass>(m_domain, m_image, name_space, class_name);
-        ScriptRegistry::register_class(std::move(ref));
+        m_engine_assembly = assembly;
+        m_engine_image = image;
+        register_components(m_engine_image);
+        MonoClass* klass = mono_class_from_name(m_engine_image, "Magnetar.Core", "Entity");
+        MT_ASSERT(klass != nullptr, "could not find Magnetar.Core.Entity in assembly");
+        ScriptRegistry::set_entity_class(klass);
     }
-    LOG_DEBUG(logger::tags::scripting, "loaded assembly {}", path);
+    else
+    {
+        m_client_assembly = assembly;
+        m_client_image = image;
+        const MonoTableInfo *type_info = mono_image_get_table_info(image, MONO_TABLE_TYPEDEF);
+        int num_rows = mono_table_info_get_rows(type_info);
+
+        for (int i = 1; i <= num_rows; i++)
+        {
+            uint32_t token = MONO_TOKEN_TYPE_DEF | i;
+            MonoClass *klass = mono_class_get(image, token);
+            if (!klass)
+                continue;
+
+            std::string class_name = mono_class_get_name(klass);
+            std::string name_space = mono_class_get_namespace(klass);
+            std::string full_name = name_space + "." + class_name;
+
+            if (class_name == "<Module>")
+                continue;
+
+            LOG_TRACE(logger::tags::scripting, "found class {}", full_name);
+            auto ref = create_unique_reference<MonoScriptClass>(m_domain, image, name_space, class_name);
+            ScriptRegistry::register_class(std::move(ref));
+        }
+    }
+
+    LOG_DEBUG(logger::tags::scripting, "loaded assembly {}", full_name);
     return true;
 }
 
@@ -326,7 +344,7 @@ void magnetar::MonoRuntime::start_all_entity_instances()
         pair.second->invoke_on_start();
 }
 
-magnetar::ScriptInstance* magnetar::MonoRuntime::get_script_instance(EntityHandle handle)
+magnetar::ScriptInstance *magnetar::MonoRuntime::get_script_instance(EntityHandle handle)
 {
     auto it = m_entity_instances.find(handle);
     return it == m_entity_instances.end() ? nullptr : it->second.get();

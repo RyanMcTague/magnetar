@@ -12,5 +12,7 @@ namespace magnetar
         virtual const std::string &name() const = 0;
 
         virtual UniqueRef<class ScriptInstance> create_instance() = 0;
+
+        virtual void* get_native_handle() = 0;
     };
 }

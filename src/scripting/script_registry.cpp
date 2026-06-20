@@ -1,5 +1,7 @@
 #include "magnetar/scripting/script_registry.h"
 
+void* magnetar::ScriptRegistry::s_entity_class = nullptr;
+
 std::unordered_map<std::string, magnetar::UniqueRef<magnetar::ScriptClass>> magnetar::ScriptRegistry::s_classes;
 
 magnetar::ScriptClass* magnetar::ScriptRegistry::find(const std::string& name)

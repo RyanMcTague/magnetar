@@ -6,6 +6,7 @@
 #include <mono/metadata/loader.h>
 #include "magnetar/scripting/mono/mono_script_class.h"
 #include "magnetar/scripting/mono/mono_script_instance.h"
+#include "magnetar/scripting/script_registry.h"
 #include "magnetar/utils/string_utils.h"
 // ECMA-335 II.23.1.10 — not exposed in Mono's public headers
 // static constexpr uint32_t METHOD_ATTRIBUTE_MEMBER_ACCESS_MASK = 0x0007;
@@ -23,7 +24,7 @@ magnetar::MonoScriptClass::MonoScriptClass(MonoDomain *domain, MonoImage *image,
     MT_ASSERT(m_class != nullptr, "could not find class {}.{}", ns, name);
     m_name = ns + "." + name;
 
-    MonoClass *parent = mono_class_from_name(image, "Magnetar.Core", "Entity");
+    MonoClass *parent = (MonoClass*)ScriptRegistry::entity_class();
 
     m_method_constructor = mono_class_get_method_from_name(m_class, ".ctor", 0);
     m_method_on_start = mono_class_get_method_from_name(m_class, "OnStart", 0);
@@ -43,6 +44,11 @@ magnetar::UniqueRef<magnetar::ScriptInstance> magnetar::MonoScriptClass::create_
     MonoObject *object = mono_object_new(m_domain, m_class);
     auto ref = create_unique_reference<MonoScriptInstance>(this, object);
     return ref;
+}
+
+void* magnetar::MonoScriptClass::get_native_handle()
+{
+    return (void*)m_class;
 }
 
 void magnetar::MonoScriptClass::invoke_ctor(MonoObject *object)

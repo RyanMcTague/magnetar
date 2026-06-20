@@ -19,6 +19,7 @@ out/
 tmp/
 dist/
 bin/
+!/vendor/mono/bin
 obj/
 
 # IDE-specific build directories
@@ -29,3 +30,4 @@ cmake-build-*/
 
 # Misc. Files 
 *.DS_Store
+.claude

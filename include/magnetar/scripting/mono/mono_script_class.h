@@ -15,6 +15,8 @@ namespace magnetar
 
         UniqueRef<class ScriptInstance> create_instance() override;
 
+        void* get_native_handle() override;
+
     private:
         std::string m_name;
         MonoMethod* m_method_set_handle;
