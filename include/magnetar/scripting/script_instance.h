@@ -12,5 +12,7 @@ namespace magnetar
         virtual void invoke_set_handle(EntityHandle handle) = 0;
         virtual void invoke_on_start() = 0;
         virtual void invoke_on_update(float delta_time) = 0;
+
+        virtual void* get_native_handle() = 0;
     };
 }

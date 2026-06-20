@@ -16,7 +16,7 @@ namespace magnetar
         void invoke_set_handle( EntityHandle handle) override;
         void invoke_on_start() override;
         void invoke_on_update(float delta_time) override;
-
+        void* get_native_handle() override;
     private:
         MonoObject* m_object;
         MonoScriptClass *m_class;

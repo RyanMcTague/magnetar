@@ -23,7 +23,7 @@ magnetar::MonoScriptClass::MonoScriptClass(MonoDomain *domain, MonoImage *image,
     MT_ASSERT(m_class != nullptr, "could not find class {}.{}", ns, name);
     m_name = ns + "." + name;
 
-    MonoClass *parent = mono_class_from_name(image, "Magnetar.Core", "ScriptableEntity");
+    MonoClass *parent = mono_class_from_name(image, "Magnetar.Core", "Entity");
 
     m_method_constructor = mono_class_get_method_from_name(m_class, ".ctor", 0);
     m_method_on_start = mono_class_get_method_from_name(m_class, "OnStart", 0);

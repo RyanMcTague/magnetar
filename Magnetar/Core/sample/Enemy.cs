@@ -1,7 +1,7 @@
 
 namespace Magnetar.Core
 {
-    public class Enemy: ScriptableEntity
+    public class Enemy: Entity
     {
         RigidBody2DComponent rigidBody;
 
@@ -13,16 +13,12 @@ namespace Magnetar.Core
         {
             rigidBody = GetComponent<RigidBody2DComponent>();
             rigidBody.AngularVelocity = Math.ToRadians(45.0f);
-            Logger.Debug(Tag);
-
-            ScriptableEntity entity = GetEntityByName("Player");
-            Logger.Debug(entity.Tag);
+            GetEntityByName("Player").As<Player>().RunMessage();
         }
 
         protected void OnUpdate(float dt)
         {
             step += dt;
-
             if(step >= 1.0)
             {
                 rigidBody.AngularVelocity = sign * Math.ToRadians(45.0f);

@@ -20,6 +20,10 @@ namespace magnetar
 
         ScriptInstance* create_entity_instance(const std::string& name, EntityHandle handle) override;
 
+        void start_all_entity_instances() override;
+
+        ScriptInstance* get_script_instance(EntityHandle handle) override;
+
         void remove_entity_instance(EntityHandle handle) override;
     private:
         MonoDomain *m_domain;

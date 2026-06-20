@@ -20,7 +20,10 @@ namespace Magnetar.Core
         internal static extern bool Entity_HasComponent(uint id, Type type);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
-        internal static extern uint Entity_GetByName(string name);
+        internal static extern uint Entity_GetByName(string name, out int found);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern object Entity_GetScriptInstance(uint id);
 
         //==========================================
         // TransformComponent

@@ -65,6 +65,7 @@ void magnetar::Application::initialize()
     AssetManager::initialize(asset_config());
     ScriptEngine::initialize();
     on_initialize();
+    ScriptEngine::start_all_entity_instances();
 }
 
 void magnetar::Application::update(float delta_time)

@@ -22,3 +22,8 @@ void magnetar::MonoScriptInstance::invoke_on_update(float delta_time)
 {
     m_class->invoke_on_update(m_object, delta_time);
 }
+
+void* magnetar::MonoScriptInstance::get_native_handle()
+{
+    return (void*)m_object;
+}

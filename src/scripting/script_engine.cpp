@@ -39,6 +39,16 @@ magnetar::ScriptInstance *magnetar::ScriptEngine::create_entity_instance(const s
     return s_runtime->create_entity_instance(name, handle);
 }
 
+void magnetar::ScriptEngine::start_all_entity_instances()
+{
+    s_runtime->start_all_entity_instances();
+}
+
+magnetar::ScriptInstance* magnetar::ScriptEngine::get_script_instance(EntityHandle handle)
+{
+    return s_runtime->get_script_instance(handle);
+}
+
 void magnetar::ScriptEngine::remove_entity_instance(EntityHandle handle)
 {
     return s_runtime->remove_entity_instance(handle);

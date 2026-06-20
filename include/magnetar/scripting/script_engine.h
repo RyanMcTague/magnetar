@@ -19,6 +19,10 @@ namespace magnetar
 
         static ScriptInstance* create_entity_instance(const std::string& name, EntityHandle handle);
 
+        static void start_all_entity_instances();
+
+        static ScriptInstance* get_script_instance(EntityHandle handle);
+
         static void remove_entity_instance(EntityHandle handle);
 
     private:

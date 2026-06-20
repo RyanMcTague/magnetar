@@ -5,8 +5,9 @@
 #include "magnetar/scripting/mono/mono_runtime.h"
 #include "magnetar/filesystem/native_file_system.h"
 #include "magnetar/scripting/script_registry.h"
-#include "magnetar/scripting/mono/mono_script_class.h"
+#include "magnetar/scripting/script_engine.h"
 #include "magnetar/scripting/mono/mono_script_instance.h"
+#include "magnetar/scripting/mono/mono_script_class.h"
 #include "magnetar/scene/entity.h"
 #include "magnetar/scene/components.h"
 
@@ -75,7 +76,7 @@ namespace magnetar
         return it->second(entity);
     }
 
-    static uint32_t Entity_GetByName(MonoString *name)
+    static uint32_t Entity_GetByName(MonoString *name, int* found)
     {
         char *cstr = mono_string_to_utf8(name);
         Scene *scene = Scene::current();
@@ -83,9 +84,20 @@ namespace magnetar
         mono_free(cstr);
 
         if (!entity)
+        {
+            *found = -1;
             return 0;
-        return entity;
+        }
+        *found = 1;
+        return static_cast<uint32_t>(entity.handle());
     }
+
+    static MonoObject* Entity_GetScriptInstance(uint id)
+    {
+        ScriptInstance* instance = ScriptEngine::get_script_instance(entt::entity{id});
+        if (!instance) return nullptr;
+        return (MonoObject*)instance->get_native_handle();
+    };
 
     static void TransformComponent_GetPosition(uint32_t id, glm::vec3 *position)
     {
@@ -206,6 +218,7 @@ namespace magnetar
         MT_ADD_INTERNAL_CALL(Logger_Log);
         MT_ADD_INTERNAL_CALL(Entity_HasComponent);
         MT_ADD_INTERNAL_CALL(Entity_GetByName);
+        MT_ADD_INTERNAL_CALL(Entity_GetScriptInstance);
         MT_ADD_INTERNAL_CALL(TransformComponent_GetPosition);
         MT_ADD_INTERNAL_CALL(TransformComponent_SetPosition);
         MT_ADD_INTERNAL_CALL(TransformComponent_GetRotation);
@@ -275,7 +288,7 @@ bool magnetar::MonoRuntime::load_assembly(const std::string &path)
         if (class_name == "<Module>")
             continue;
 
-        if (full_name == "Magnetar.Core.ScriptableEntity")
+        if (full_name == "Magnetar.Core.Entity")
             continue;
 
         LOG_TRACE(logger::tags::scripting, "found class {}", full_name);
@@ -303,11 +316,20 @@ magnetar::ScriptInstance *magnetar::MonoRuntime::create_entity_instance(const st
     auto instance = klass->create_instance();
     m_entity_instances.emplace(handle, std::move(instance));
     m_entity_instances[handle]->invoke_ctor();
-    void *args[1];
-    args[0] = &handle;
     m_entity_instances[handle]->invoke_set_handle(handle);
-    m_entity_instances[handle]->invoke_on_start();
     return m_entity_instances[handle].get();
+}
+
+void magnetar::MonoRuntime::start_all_entity_instances()
+{
+    for (auto &pair : m_entity_instances)
+        pair.second->invoke_on_start();
+}
+
+magnetar::ScriptInstance* magnetar::MonoRuntime::get_script_instance(EntityHandle handle)
+{
+    auto it = m_entity_instances.find(handle);
+    return it == m_entity_instances.end() ? nullptr : it->second.get();
 }
 
 void magnetar::MonoRuntime::remove_entity_instance(EntityHandle handle)
