@@ -45,7 +45,7 @@ namespace magnetar
         s_has_component_funcs.emplace(klass, func);
         s_component_factories.emplace(klass, factory);
         s_component_remove_factories.emplace(klass, remove);
-        
+
         LOG_TRACE(logger::tags::scripting, "registered component script {}", class_name);
     }
 
