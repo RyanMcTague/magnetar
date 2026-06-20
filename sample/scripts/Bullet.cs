@@ -6,7 +6,8 @@ namespace Sample
     {
         protected void OnStart()
         {
-            Logger.Debug("Created bullet!");
+            Tag = "Bullet-" + ID.ToString();
+            Logger.Debug($"Created bullet {Tag}");
         }
     }
 }

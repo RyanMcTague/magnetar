@@ -1,11 +1,9 @@
+#include <unordered_set>
 #include <mono/jit/jit.h>
 #include <mono/metadata/assembly.h>
 #include <mono/metadata/tokentype.h>
 #include <mono/metadata/appdomain.h>
 #include <mono/metadata/image.h>
-
-#include <unordered_set>
-
 #include "magnetar/scripting/mono/mono_runtime.h"
 #include "magnetar/filesystem/native_file_system.h"
 #include "magnetar/scripting/script_registry.h"
