@@ -20,6 +20,16 @@ namespace Magnetar.Core
         internal static extern ActionState Input_GetActionState(uint code);
 
         //==========================================
+        // Game
+        //==========================================
+        
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern int Game_GetResolutionX();
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern int Game_GetResolutionY();
+
+        //==========================================
         // Entity
         //==========================================
 
