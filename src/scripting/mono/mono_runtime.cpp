@@ -12,6 +12,7 @@
 #include "magnetar/scripting/mono/mono_script_class.h"
 #include "magnetar/scene/entity.h"
 #include "magnetar/scene/components.h"
+#include "magnetar/input/input_system.h"
 
 #define MT_ADD_INTERNAL_CALL(func) \
     mono_add_internal_call("Magnetar.Core.InternalCalls::" #func, reinterpret_cast<const void *>(func))
@@ -22,6 +23,8 @@
 namespace magnetar
 {
     static std::unordered_map<MonoClass *, std::function<bool(Entity)>> s_has_component_funcs;
+    static std::unordered_map<MonoClass *, std::function<void(Entity)>> s_component_factories;
+    static std::unordered_map<MonoClass *, std::function<void(Entity)>> s_component_remove_factories;
 
     template <typename T>
     static void register_component(MonoImage *image, const char *class_name)
@@ -33,7 +36,16 @@ namespace magnetar
         std::function<bool(Entity)> func = [](Entity entity)
         { return entity.has_component<T>(); };
 
+        std::function<void(Entity)> factory = [](Entity entity)
+        { entity.add_component(T()); };
+
+        std::function<void(Entity)> remove = [](Entity entity)
+        { entity.remove_component<T>(); };
+
         s_has_component_funcs.emplace(klass, func);
+        s_component_factories.emplace(klass, factory);
+        s_component_remove_factories.emplace(klass, remove);
+        
         LOG_TRACE(logger::tags::scripting, "registered component script {}", class_name);
     }
 
@@ -68,6 +80,12 @@ namespace magnetar
         mono_free(str);
     }
 
+    static int Input_GetActionState(uint32_t code)
+    {
+        auto state = input::action_state(code);
+        return static_cast<int>(state);
+    }
+
     static bool Entity_HasComponent(uint32_t id, MonoReflectionType *reflection)
     {
         MonoType *mono_type = mono_reflection_type_get_type(reflection);
@@ -76,6 +94,26 @@ namespace magnetar
         auto it = s_has_component_funcs.find(klass);
         MT_ASSERT(it != s_has_component_funcs.end(), "component {} not found", mono_class_get_name(klass));
         return it->second(entity);
+    }
+
+    static void Entity_AddComponent(uint32_t id, MonoReflectionType *reflection)
+    {
+        MonoType *mono_type = mono_reflection_type_get_type(reflection);
+        MonoClass *klass = mono_class_from_mono_type(mono_type);
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto it = s_component_factories.find(klass);
+        MT_ASSERT(it != s_component_factories.end(), "component {} not found", mono_class_get_name(klass));
+        it->second(entity);
+    }
+
+    static void Entity_RemoveComponent(uint32_t id, MonoReflectionType *reflection)
+    {
+        MonoType *mono_type = mono_reflection_type_get_type(reflection);
+        MonoClass *klass = mono_class_from_mono_type(mono_type);
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto it = s_component_remove_factories.find(klass);
+        MT_ASSERT(it != s_component_remove_factories.end(), "component {} not found", mono_class_get_name(klass));
+        it->second(entity);
     }
 
     static uint32_t Entity_GetByName(MonoString *name, int *found)
@@ -102,7 +140,7 @@ namespace magnetar
         return (MonoObject *)instance->get_native_handle();
     };
 
-    static MonoObject* Entity_CreateEntity(MonoReflectionType *reflection)
+    static MonoObject *Entity_CreateEntity(MonoReflectionType *reflection)
     {
         MonoType *mono_type = mono_reflection_type_get_type(reflection);
         MonoClass *klass = mono_class_from_mono_type(mono_type);
@@ -110,6 +148,7 @@ namespace magnetar
         std::string class_name = mono_class_get_name(klass);
         std::string name = name_space + "." + class_name;
         Entity entity = Scene::current()->create_entity();
+        entity.add_component(ScriptComponent(name, true));
         // Use allocate_entity_instance (mono_object_new only, zero managed calls) because
         // we're inside a managed→native frame. Any mono_runtime_invoke here would create a
         // nested managed frame that corrupts Mono's execution context on return.
@@ -236,7 +275,10 @@ namespace magnetar
     static void add_internal_calls()
     {
         MT_ADD_INTERNAL_CALL(Logger_Log);
+        MT_ADD_INTERNAL_CALL(Input_GetActionState);
         MT_ADD_INTERNAL_CALL(Entity_HasComponent);
+        MT_ADD_INTERNAL_CALL(Entity_AddComponent);
+        MT_ADD_INTERNAL_CALL(Entity_RemoveComponent);
         MT_ADD_INTERNAL_CALL(Entity_GetByName);
         MT_ADD_INTERNAL_CALL(Entity_GetScriptInstance);
         MT_ADD_INTERNAL_CALL(Entity_CreateEntity);
@@ -321,13 +363,23 @@ bool magnetar::MonoRuntime::load_assembly(const std::string &path)
             std::string class_name = mono_class_get_name(klass);
             std::string name_space = mono_class_get_namespace(klass);
             std::string full_name = name_space + "." + class_name;
-
             if (class_name == "<Module>")
                 continue;
 
             LOG_TRACE(logger::tags::scripting, "found class {}", full_name);
-            auto ref = create_unique_reference<MonoScriptClass>(m_domain, image, name_space, class_name);
-            ScriptRegistry::register_class(std::move(ref));
+
+            MonoClass *parent_class = mono_class_get_parent(klass);
+            if (parent_class)
+            {
+                std::string parent_class_name = mono_class_get_name(parent_class);
+                std::string parent_name_space = mono_class_get_namespace(parent_class);
+                std::string parent_full_name = parent_name_space + "." + parent_class_name;
+                if (parent_full_name == "Magnetar.Core.Entity")
+                {
+                    auto ref = create_unique_reference<MonoScriptClass>(m_domain, image, name_space, class_name);
+                    ScriptRegistry::register_class(std::move(ref));
+                }
+            }
         }
     }
 

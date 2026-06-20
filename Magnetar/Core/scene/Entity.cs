@@ -60,7 +60,7 @@ namespace Magnetar.Core
         public static Entity GetEntityByName(string name)
         {
             uint id = InternalCalls.Entity_GetByName(name, out int wasFound);
-            if(wasFound < 0)
+            if (wasFound < 0)
                 return null;
 
             return new Entity(id);
@@ -71,6 +71,12 @@ namespace Magnetar.Core
             return InternalCalls.Entity_HasComponent(ID, typeof(T));
         }
 
+        public T AddComponent<T>() where T : Component, new()
+        {
+            InternalCalls.Entity_AddComponent(ID, typeof(T));
+            return GetComponent<T>();
+        }
+
         public T GetComponent<T>() where T : Component, new()
         {
             if (!HasComponent<T>())
@@ -79,13 +85,18 @@ namespace Magnetar.Core
             return component;
         }
 
+        public void RemoveComponent<T>() where T : Component
+        {
+            InternalCalls.Entity_RemoveComponent(ID, typeof(T));
+        }
+
         public T As<T>() where T : Entity, new()
         {
             object instance = InternalCalls.Entity_GetScriptInstance(ID);
             return instance as T;
         }
 
-        public static T CreateEntity<T>() where T: Entity, new()
+        public static T CreateEntity<T>() where T : Entity, new()
         {
             object instance = InternalCalls.Entity_CreateEntity(typeof(T));
             return instance as T;

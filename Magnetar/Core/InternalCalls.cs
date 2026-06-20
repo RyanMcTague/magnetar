@@ -11,13 +11,26 @@ namespace Magnetar.Core
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern void Logger_Log(LogLevel level, string message);
+
+        //==========================================
+        // Input
+        //==========================================
         
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern ActionState Input_GetActionState(uint code);
+
         //==========================================
         // Entity
         //==========================================
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern bool Entity_HasComponent(uint id, Type type);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void Entity_AddComponent(uint id, Type type);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void Entity_RemoveComponent(uint id, Type type);
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern uint Entity_GetByName(string name, out int found);

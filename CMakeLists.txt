@@ -42,6 +42,7 @@ find_library(
     NAMES monosgen-2.0
     PATHS
         "${MONO_ROOT}/lib"
+    NO_DEFAULT_PATH
     REQUIRED
 )
 message(STATUS "Mono include: ${MONO_INCLUDE_DIR}")
@@ -313,6 +314,10 @@ if(MAGNETAR_BUILD_SANDBOX)
     add_executable(sample sample/main.cpp sample/assets.h)
     target_compile_features(sample PUBLIC cxx_std_20)
     target_link_libraries(sample PRIVATE Magnetar::Magnetar)
+    set_target_properties(sample PROPERTIES
+        BUILD_RPATH "${MONO_ROOT}/lib"
+        INSTALL_RPATH "${MONO_ROOT}/lib"
+    )
 endif()
 
 ########################################################

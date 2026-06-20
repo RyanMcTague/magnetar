@@ -104,6 +104,8 @@ void magnetar::Scene::on_component_added(const EntityComponentAddedEvent &event)
     if (event.component_class_name == std::string(MT_STATIC_CLASS_NAME(ScriptComponent)))
     {
         auto &component = m_registry.get<ScriptComponent>(event.handle);
+        if(component.skip_add)
+            return;
         ScriptEngine::create_entity_instance(component.script_class_name, event.handle);
     }
 }

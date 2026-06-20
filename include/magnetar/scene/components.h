@@ -15,7 +15,9 @@ namespace magnetar
         glm::vec3 rotation;
         glm::vec3 scale;
 
-        TransformComponent(const glm::vec3 &position, const glm::vec3 &rotation, const glm::vec3 &scale)
+        TransformComponent(const glm::vec3 &position = glm::vec3(0.0f),
+                           const glm::vec3 &rotation = glm::vec3(0.0f), 
+                           const glm::vec3 &scale = glm::vec3(0.0f))
             : position(position), rotation(rotation), scale(scale) {}
     };
 
@@ -37,7 +39,7 @@ namespace magnetar
         glm::vec2 size;
         glm::vec4 color;
 
-        SpriteRendererComponent(const glm::vec2 &size, const glm::vec4 &color)
+        SpriteRendererComponent(const glm::vec2 &size = glm::vec2(0.0f), const glm::vec4 &color = glm::vec4(0.0f))
             : size(size), color(color) {}
     };
 
@@ -60,7 +62,7 @@ namespace magnetar
         glm::vec2 velocity;
         float angular_velocity;
 
-        RigidBody2DComponent(const glm::vec2 &velocity, float angular_velocity)
+        RigidBody2DComponent(const glm::vec2 &velocity = glm::vec2(0.0f), float angular_velocity = 0.0f)
             : velocity(velocity), angular_velocity(angular_velocity) {}
     };
 
@@ -68,9 +70,10 @@ namespace magnetar
     {
         MT_DECLARE_CLASS_NAME(ScriptComponent)
         std::string script_class_name;
+        bool skip_add;
 
-        ScriptComponent(const std::string &class_name)
-            : script_class_name(class_name) {}
+        ScriptComponent(const std::string &class_name, bool skip_add = false)
+            : script_class_name(class_name), skip_add(skip_add) {}
     };
 
     struct MAGNETAR_API TagComponent
@@ -78,7 +81,7 @@ namespace magnetar
         MT_DECLARE_CLASS_NAME(TagComponent)
         std::string tag;
 
-        TagComponent(const std::string &tag)
+        TagComponent(const std::string &tag = "")
             : tag(tag) {}
     };
 }
