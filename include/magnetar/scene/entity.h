@@ -39,7 +39,7 @@ namespace magnetar
     T &Entity::add_component(const T &component)
     {
         auto &c = m_scene->m_registry.emplace<T>(m_handle, component);
-        LOG_INFO(logger::tags::scene, "added {} to entity {}", MT_STATIC_CLASS_NAME(T), static_cast<uint32_t>(m_handle));
+        LOG_TRACE(logger::tags::scene, "added {} to entity {}", MT_STATIC_CLASS_NAME(T), static_cast<uint32_t>(m_handle));
         EventSystem::emit(EntityComponentAddedEvent(m_handle, MT_STATIC_CLASS_NAME(T)));
         return c;
     }
@@ -63,7 +63,7 @@ namespace magnetar
     void Entity::remove_component()
     {
         m_scene->m_registry.remove<T>(m_handle);
-        LOG_INFO(logger::tags::scene, "removed {} from entity {}", MT_STATIC_CLASS_NAME(T), static_cast<uint32_t>(m_handle));
+        LOG_TRACE(logger::tags::scene, "removed {} from entity {}", MT_STATIC_CLASS_NAME(T), static_cast<uint32_t>(m_handle));
         EventSystem::emit(EntityComponentRemovedEvent(m_handle, MT_STATIC_CLASS_NAME(T)));
     }
 }
