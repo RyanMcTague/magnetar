@@ -105,6 +105,8 @@ target_sources(magnetar
             include/magnetar/input/keyboard_device.h
             include/magnetar/input/input_system.h
 
+            include/magnetar/math/rect.h
+
             include/magnetar/platforms/glfw/glfw_keyboard_device.h
             include/magnetar/platforms/glfw/glfw_mouse_device.h
             include/magnetar/platforms/glfw/glfw_window.h

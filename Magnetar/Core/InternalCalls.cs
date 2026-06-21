@@ -12,6 +12,9 @@ namespace Magnetar.Core
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern void Logger_Log(LogLevel level, string message);
 
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void Logger_SetLevel(LogLevel level);
+
         //==========================================
         // Input
         //==========================================
@@ -116,5 +119,21 @@ namespace Magnetar.Core
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern void Tag_SetValue(uint id, ref string str);
+
+        //==========================================
+        // BoxCollider
+        //==========================================
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void BoxCollider_GetSize(uint id, out Vector2D size);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void BoxCollider_SetSize(uint id, ref Vector2D size);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void BoxCollider_GetPosition(uint id, out Vector2D size);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void BoxCollider_SetPosition(uint id, ref Vector2D size);
     }
 }

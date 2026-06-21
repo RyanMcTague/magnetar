@@ -80,6 +80,12 @@ namespace magnetar
         mono_free(str);
     }
 
+    static void Logger_SetLevel(int lvl)
+    {
+        LogLevel level = static_cast<LogLevel>(lvl);
+        Logger::set_level(level);
+    }
+
     static int Input_GetActionState(uint32_t code)
     {
         auto state = input::action_state(code);
@@ -286,9 +292,38 @@ namespace magnetar
         mono_free(cstr);
     }
 
+    static void BoxCollider_GetSize(uint32_t id, glm::vec2 *size)
+    {
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto &bc = entity.get_component<BoxColliderComponent>();
+        *size = bc.size;
+    }
+
+    static void BoxCollider_SetSize(uint32_t id, glm::vec4 *size)
+    {
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto &bc = entity.get_component<BoxColliderComponent>();
+        bc.size = *size;
+    }
+
+    static void BoxCollider_GetPosition(uint32_t id, glm::vec2 *position)
+    {
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto &bc = entity.get_component<BoxColliderComponent>();
+        *position = bc.position;
+    }
+
+    static void BoxCollider_SetPosition(uint32_t id, glm::vec4 *position)
+    {
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto &bc = entity.get_component<BoxColliderComponent>();
+        bc.position = *position;
+    }
+
     static void add_internal_calls()
     {
         MT_ADD_INTERNAL_CALL(Logger_Log);
+        MT_ADD_INTERNAL_CALL(Logger_SetLevel);
         MT_ADD_INTERNAL_CALL(Input_GetActionState);
         MT_ADD_INTERNAL_CALL(Game_GetResolutionX);
         MT_ADD_INTERNAL_CALL(Game_GetResolutionY);
@@ -314,6 +349,10 @@ namespace magnetar
         MT_ADD_INTERNAL_CALL(RigidBody2D_SetAngularVelocity);
         MT_ADD_INTERNAL_CALL(Tag_GetValue);
         MT_ADD_INTERNAL_CALL(Tag_SetValue);
+        MT_ADD_INTERNAL_CALL(BoxCollider_GetPosition);
+        MT_ADD_INTERNAL_CALL(BoxCollider_SetPosition);
+        MT_ADD_INTERNAL_CALL(BoxCollider_GetSize);
+        MT_ADD_INTERNAL_CALL(BoxCollider_SetSize);
     }
 
     static void register_components(MonoImage *image)
@@ -322,6 +361,7 @@ namespace magnetar
         MT_REGISTER_COMPONENT(image, SpriteRendererComponent);
         MT_REGISTER_COMPONENT(image, RigidBody2DComponent);
         MT_REGISTER_COMPONENT(image, TagComponent);
+        MT_REGISTER_COMPONENT(image, BoxColliderComponent);
     }
 }
 

@@ -3,6 +3,12 @@ namespace Magnetar.Core
 {
     public static class Logger
     {
+
+        public static void SetLevel(LogLevel level)
+        {
+            InternalCalls.Logger_SetLevel(level);
+        }
+
         public static void Fatal(string message)
         {
             InternalCalls.Logger_Log(LogLevel.Fatal, message);

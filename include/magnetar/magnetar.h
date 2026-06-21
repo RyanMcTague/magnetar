@@ -29,6 +29,8 @@
 #include "magnetar/input/mapped_input_code.h"
 #include "magnetar/input/mouse_device.h"
 
+#include "magnetar/math/rect.h"
+
 #include "magnetar/renderer/enums.h"
 #include "magnetar/renderer/buffer_mask.h"
 #include "magnetar/renderer/graphics_device.h"

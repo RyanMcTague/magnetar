@@ -4,6 +4,7 @@
 #include "magnetar/core/base.h"
 #include "magnetar/assets/asset_handle.h"
 #include "magnetar/renderer/camera.h"
+#include "magnetar/math/rect.h"
 
 namespace magnetar
 {
@@ -83,5 +84,16 @@ namespace magnetar
 
         TagComponent(const std::string &tag = "")
             : tag(tag) {}
+    };
+
+    struct MAGNETAR_API BoxColliderComponent
+    {
+        MT_DECLARE_CLASS_NAME(BoxColliderComponent)
+
+        glm::vec2 size;
+        glm::vec2 position;
+
+        BoxColliderComponent(const glm::vec2& size = glm::vec2(0.0f), const glm::vec2& position = glm::vec2(0.0f))
+            : size(size), position(position) {}
     };
 }
