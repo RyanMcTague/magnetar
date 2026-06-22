@@ -94,14 +94,14 @@ namespace magnetar
 
     static int Game_GetResolutionX()
     {
-        Scene* scene = Scene::current();
+        Scene *scene = Scene::current();
         Ref<Camera2D> camera = std::static_pointer_cast<Camera2D>(scene->camera());
         return (int)camera->width();
     }
 
     static int Game_GetResolutionY()
     {
-        Scene* scene = Scene::current();
+        Scene *scene = Scene::current();
         Ref<Camera2D> camera = std::static_pointer_cast<Camera2D>(scene->camera());
         return (int)camera->height();
     }
@@ -154,7 +154,7 @@ namespace magnetar
 
     static MonoObject *Entity_GetScriptInstance(uint id)
     {
-        ScriptInstance *instance = ScriptEngine::get_script_instance(entt::entity{id});
+        ScriptInstance *instance = ScriptEngine::get_entity_instance(entt::entity{id});
         if (!instance)
             return nullptr;
         return (MonoObject *)instance->get_native_handle();
@@ -451,7 +451,7 @@ bool magnetar::MonoRuntime::reload_assembly()
 void magnetar::MonoRuntime::update(float delta_time)
 {
     for (auto &pair : m_entity_instances)
-        pair.second->invoke_on_update(delta_time);
+        pair.second->invoke("OnUpdate", delta_time);
 }
 
 magnetar::ScriptInstance *magnetar::MonoRuntime::create_entity_instance(const std::string &name, EntityHandle handle)
@@ -459,8 +459,8 @@ magnetar::ScriptInstance *magnetar::MonoRuntime::create_entity_instance(const st
     auto klass = ScriptRegistry::find(name);
     auto instance = klass->create_instance();
     m_entity_instances.emplace(handle, std::move(instance));
-    m_entity_instances[handle]->invoke_ctor();
-    m_entity_instances[handle]->invoke_set_handle(handle);
+    m_entity_instances[handle]->invoke(".ctor");
+    m_entity_instances[handle]->invoke("set_ID", handle);
     return m_entity_instances[handle].get();
 }
 
@@ -504,16 +504,16 @@ void magnetar::MonoRuntime::start_all_entity_instances()
             {
                 // Allocated via Entity_CreateEntity (no managed calls yet) — initialize now
                 initialized.insert(handle);
-                it->second->invoke_ctor();
-                it->second->invoke_set_handle(handle);
+                it->second->invoke(".ctor");
+                it->second->invoke("set_ID", handle);
             }
 
-            it->second->invoke_on_start();
+            it->second->invoke("OnStart");
         }
     }
 }
 
-magnetar::ScriptInstance *magnetar::MonoRuntime::get_script_instance(EntityHandle handle)
+magnetar::ScriptInstance *magnetar::MonoRuntime::get_entity_instance(EntityHandle handle)
 {
     auto it = m_entity_instances.find(handle);
     return it == m_entity_instances.end() ? nullptr : it->second.get();

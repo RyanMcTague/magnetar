@@ -49,9 +49,9 @@ void magnetar::ScriptEngine::start_all_entity_instances()
     s_runtime->start_all_entity_instances();
 }
 
-magnetar::ScriptInstance* magnetar::ScriptEngine::get_script_instance(EntityHandle handle)
+magnetar::ScriptInstance* magnetar::ScriptEngine::get_entity_instance(EntityHandle handle)
 {
-    return s_runtime->get_script_instance(handle);
+    return s_runtime->get_entity_instance(handle);
 }
 
 void magnetar::ScriptEngine::remove_entity_instance(EntityHandle handle)

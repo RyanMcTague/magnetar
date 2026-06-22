@@ -23,15 +23,8 @@ magnetar::MonoScriptClass::MonoScriptClass(MonoDomain *domain, MonoImage *image,
     m_class = mono_class_from_name(image, ns.c_str(), name.c_str());
     MT_ASSERT(m_class != nullptr, "could not find class {}.{}", ns, name);
     m_name = ns + "." + name;
-
-    MonoClass *parent = (MonoClass*)ScriptRegistry::entity_class();
-
-    m_method_constructor = mono_class_get_method_from_name(m_class, ".ctor", 0);
-    m_method_on_start = mono_class_get_method_from_name(m_class, "OnStart", 0);
-    m_method_on_update = mono_class_get_method_from_name(m_class, "OnUpdate", 1);
-
-    MonoProperty *prop = mono_class_get_property_from_name(parent, "ID");
-    m_method_set_handle = mono_property_get_set_method(prop);
+    
+    register_methods(m_class);
 }
 
 const std::string &magnetar::MonoScriptClass::name() const
@@ -46,44 +39,53 @@ magnetar::UniqueRef<magnetar::ScriptInstance> magnetar::MonoScriptClass::create_
     return ref;
 }
 
-void* magnetar::MonoScriptClass::get_native_handle()
+void *magnetar::MonoScriptClass::get_native_handle()
 {
-    return (void*)m_class;
+    return (void *)m_class;
 }
 
-void magnetar::MonoScriptClass::invoke_ctor(MonoObject *object)
+void magnetar::MonoScriptClass::invoke_method(void *object, const char *name, void **args, int argc)
 {
+    MonoMethod *method = nullptr;
+    auto it = m_methods.find(name);
+    if (it == m_methods.end())
+    {
+        method = mono_class_get_method_from_name(m_class, name, argc);
+        MT_ASSERT(method != nullptr, "method {} not found in {}", name, m_name);
+        m_methods.emplace(name, method);
+    }
+    else
+    {
+        method = it->second;
+    }
+
     MonoObject *exception = nullptr;
-    mono_runtime_invoke(m_method_constructor, object, nullptr, &exception);
+    mono_runtime_invoke(method, object, args, &exception);
     if (exception)
         mono_print_unhandled_exception(exception);
 }
-void magnetar::MonoScriptClass::invoke_set_handle(MonoObject *object, EntityHandle handle)
+
+void magnetar::MonoScriptClass::register_methods(MonoClass *klass)
 {
-    void *args[1];
-    args[0] = &handle;
-    MonoObject *exception = nullptr;
-    mono_runtime_invoke(m_method_set_handle, object, args, &exception);
-    if (exception)
-        mono_print_unhandled_exception(exception);
-}
-void magnetar::MonoScriptClass::invoke_on_start(MonoObject *object)
-{
-    if (!m_method_on_start)
+    void *iter = nullptr;
+    MonoMethod *method = nullptr;
+    std::string class_name = mono_class_get_name(klass);
+    std::string name_space = mono_class_get_namespace(klass);
+    std::string full_name = name_space + "." + class_name;
+
+    if (full_name == "System.Object")
         return;
-    MonoObject *exception = nullptr;
-    mono_runtime_invoke(m_method_on_start, object, nullptr, &exception);
-    if (exception)
-        mono_print_unhandled_exception(exception);
-}
-void magnetar::MonoScriptClass::invoke_on_update(MonoObject *object, float delta_time)
-{
-    if (!m_method_on_update)
-        return;
-    void *args[1];
-    args[0] = &delta_time;
-    MonoObject *exception = nullptr;
-    mono_runtime_invoke(m_method_on_update, object, args, &exception);
-    if (exception)
-        mono_print_unhandled_exception(exception);
+
+    while ((method = mono_class_get_methods(klass, &iter)))
+    {
+        std::string name = mono_method_get_name(method);
+        auto it = m_methods.find(name);
+        if (it != m_methods.end())
+            continue;
+        m_methods.emplace(name, method);
+    }
+
+    MonoClass *parent = mono_class_get_parent(klass);
+    if (parent)
+        register_methods(parent);
 }

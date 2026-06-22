@@ -17,20 +17,23 @@ namespace magnetar
 
         void* get_native_handle() override;
 
+    protected:
+        void invoke_method(void* object, const char *name, void **args, int argc) override;
+
     private:
         std::string m_name;
-        MonoMethod* m_method_set_handle;
-        MonoMethod* m_method_constructor;
-        MonoMethod* m_method_on_start;
-        MonoMethod* m_method_on_update;
         MonoClass *m_class;
         MonoDomain *m_domain;
+
+        std::unordered_map<std::string, MonoMethod*> m_methods;
         
-        void invoke_ctor(MonoObject* object);
-        void invoke_set_handle(MonoObject* object, EntityHandle handle);
-        void invoke_on_start(MonoObject* object);
-        void invoke_on_update(MonoObject* object, float delta_time);
+        // void invoke_ctor(MonoObject* object);
+        // void invoke_set_handle(MonoObject* object, EntityHandle handle);
+        // void invoke_on_start(MonoObject* object);
+        // void invoke_on_update(MonoObject* object, float delta_time);
 
         friend class MonoScriptInstance;
+
+        void register_methods(MonoClass* klass);
     };
 }

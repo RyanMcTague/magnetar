@@ -23,7 +23,7 @@ namespace magnetar
 
         static void start_all_entity_instances();
 
-        static ScriptInstance* get_script_instance(EntityHandle handle);
+        static ScriptInstance* get_entity_instance(EntityHandle handle);
 
         static void remove_entity_instance(EntityHandle handle);
 

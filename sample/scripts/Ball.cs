@@ -6,6 +6,8 @@ namespace Sample
     {
         protected void OnStart()
         {
+            Tag = "Ball";
+
             SpriteRendererComponent sr = AddComponent<SpriteRendererComponent>();
             sr.Size = new Vector2D(2f, 2f);
             sr.Color = Vector4D.FromRGBA(255, 255, 255);

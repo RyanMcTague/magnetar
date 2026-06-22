@@ -58,9 +58,9 @@ void SandboxApp::on_initialize()
     game_controller.get_component<TagComponent>().tag = "game-controller";
     game_controller.add_component(ScriptComponent("Sample.GameController"));
 
-    Rect a(glm::vec2(-5.0f, -5.0f), glm::vec2(5.0f, 5.0f));
-    Rect b(glm::vec2(-2.0f, -2.0f), glm::vec2(2.0f, 2.0f));
-    LOG_DEBUG(nullptr, b.is_inside(a));
+    // Rect a(glm::vec2(-5.0f, -5.0f), glm::vec2(5.0f, 5.0f));
+    // Rect b(glm::vec2(-2.0f, -2.0f), glm::vec2(2.0f, 2.0f));
+    // LOG_DEBUG(nullptr, b.is_inside(a));
 }
 
 void SandboxApp::on_update(float delta_time)

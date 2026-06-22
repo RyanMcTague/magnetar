@@ -24,7 +24,7 @@ namespace magnetar
 
         void start_all_entity_instances() override;
 
-        ScriptInstance *get_script_instance(EntityHandle handle) override;
+        ScriptInstance *get_entity_instance(EntityHandle handle) override;
 
         void remove_entity_instance(EntityHandle handle) override;
 

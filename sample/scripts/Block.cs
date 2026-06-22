@@ -2,7 +2,7 @@ using Magnetar.Core;
 
 namespace Sample
 {
-    public class Block: Entity
+    public class Block : Entity
     {
         public static int BlocksPerRow { get => 20; }
 
