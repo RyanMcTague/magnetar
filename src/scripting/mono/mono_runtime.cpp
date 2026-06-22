@@ -51,6 +51,17 @@ namespace magnetar
         LOG_TRACE(logger::tags::scripting, "registered component script {}", class_name);
     }
 
+    static int Math_Random(int min, int max)
+    {
+        static bool first = false;
+        if (first)
+        {
+            srand(time(NULL));
+            first = false;
+        }
+        return (rand() % (max - min + 1)) + min;
+    }
+
     static void Logger_Log(int lvl, MonoObject *object)
     {
         LogLevel level = static_cast<LogLevel>(lvl);
@@ -106,6 +117,12 @@ namespace magnetar
         Scene *scene = Scene::current();
         Ref<Camera2D> camera = std::static_pointer_cast<Camera2D>(scene->camera());
         return (int)camera->height();
+    }
+
+    static void Entity_Destroy(uint32_t id)
+    {
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        entity.mark_destroyed();
     }
 
     static bool Entity_HasComponent(uint32_t id, MonoReflectionType *reflection)
@@ -328,11 +345,13 @@ namespace magnetar
 
     static void add_internal_calls()
     {
+        MT_ADD_INTERNAL_CALL(Math_Random);
         MT_ADD_INTERNAL_CALL(Logger_Log);
         MT_ADD_INTERNAL_CALL(Logger_SetLevel);
         MT_ADD_INTERNAL_CALL(Input_GetActionState);
         MT_ADD_INTERNAL_CALL(Game_GetResolutionX);
         MT_ADD_INTERNAL_CALL(Game_GetResolutionY);
+        MT_ADD_INTERNAL_CALL(Entity_Destroy);
         MT_ADD_INTERNAL_CALL(Entity_HasComponent);
         MT_ADD_INTERNAL_CALL(Entity_AddComponent);
         MT_ADD_INTERNAL_CALL(Entity_RemoveComponent);
@@ -404,7 +423,7 @@ bool magnetar::MonoRuntime::load_assembly(const std::string &path)
         m_engine_assembly = assembly;
         m_engine_image = image;
         register_components(m_engine_image);
-        
+
         MonoClass *klass = mono_class_from_name(m_engine_image, "Magnetar.Core", "Entity");
         MT_ASSERT(klass != nullptr, "could not find Magnetar.Core.Entity in assembly");
 

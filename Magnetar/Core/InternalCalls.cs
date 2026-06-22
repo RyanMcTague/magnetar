@@ -4,7 +4,13 @@ using System.Runtime.CompilerServices;
 namespace Magnetar.Core
 {
     internal static class InternalCalls
-    {  
+    {
+        //==========================================
+        // Logger
+        //==========================================
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern int Math_Random(int min, int max);
+        
         //==========================================
         // Logger
         //==========================================
@@ -18,14 +24,14 @@ namespace Magnetar.Core
         //==========================================
         // Input
         //==========================================
-        
+
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern ActionState Input_GetActionState(uint code);
 
         //==========================================
         // Game
         //==========================================
-        
+
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern int Game_GetResolutionX();
 
@@ -35,6 +41,10 @@ namespace Magnetar.Core
         //==========================================
         // Entity
         //==========================================
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern bool Entity_Destroy(uint id);
+
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern bool Entity_HasComponent(uint id, Type type);

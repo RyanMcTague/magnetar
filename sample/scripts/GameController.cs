@@ -11,6 +11,7 @@ namespace Sample
         protected void OnStart()
         {
             CreateEntity<Paddle>();
+            CreateEntity<Block>();
             CreateEntity<Ball>();
             CreateBorders();
         }

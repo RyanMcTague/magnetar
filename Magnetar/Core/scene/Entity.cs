@@ -96,6 +96,11 @@ namespace Magnetar.Core
             return instance as T;
         }
 
+        public void Destroy()
+        {
+            InternalCalls.Entity_Destroy(ID);
+        }
+
         public static T CreateEntity<T>() where T : Entity, new()
         {
             object instance = InternalCalls.Entity_CreateEntity(typeof(T));

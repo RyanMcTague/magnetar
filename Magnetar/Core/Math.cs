@@ -16,5 +16,10 @@ namespace Magnetar.Core
         {
             return degrees * DEGRESS_CONVERSION;
         }
+
+        public static int Random(int min, int max)
+        {
+            return InternalCalls.Math_Random(min, max);
+        }
     }    
 }
