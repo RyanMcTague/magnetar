@@ -134,11 +134,18 @@ void magnetar::Renderer2D::submit()
 
 void magnetar::Renderer2D::draw_quad(const glm::mat4 &transform, const glm::vec4 &color)
 {
+    // static glm::vec4 points[] = {
+    //     glm::vec4(-0.5f, -0.5f, 0.0f, 1.0f),
+    //     glm::vec4(0.5f, -0.5f, 0.0f, 1.0f),
+    //     glm::vec4(0.5f, 0.5f, 0.0f, 1.0f),
+    //     glm::vec4(-0.5f, 0.5f, 0.0f, 1.0f),
+    // };
+
     static glm::vec4 points[] = {
-        glm::vec4(-0.5f, -0.5f, 0.0f, 1.0f),
-        glm::vec4(0.5f, -0.5f, 0.0f, 1.0f),
-        glm::vec4(0.5f, 0.5f, 0.0f, 1.0f),
-        glm::vec4(-0.5f, 0.5f, 0.0f, 1.0f),
+        glm::vec4(0.0f, 0.0f, 0.0f, 1.0f),
+        glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
+        glm::vec4(1.0f, 1.0f, 0.0f, 1.0f),
+        glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
     };
 
     static glm::vec2 texture_coords[] = {

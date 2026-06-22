@@ -42,10 +42,10 @@ void SandboxApp::on_initialize()
     auto aspect_ratio = get_window()->aspect_ratio();
     auto winwidth = get_window()->width();
     auto winheight = get_window()->height();
-    float y = 160.0f / 2.0f;
+    float y = 160.0f;
     float x = y * aspect_ratio;
     // LOG_DEBUG(nullptr, "resolution {}x{}", x * 2.0f, y * 2.0f);
-    m_camera = create_reference<Camera2D>(-x, x, y, -y, -1.0, 1.0);
+    m_camera = create_reference<Camera2D>(0.0f, x, y, 0.0f, -1.0, 1.0);
 
     m_scene = create_reference<Scene>();
     m_layer = push_layer<GameLayer>();
@@ -57,10 +57,6 @@ void SandboxApp::on_initialize()
     Entity game_controller = m_scene->create_entity();
     game_controller.get_component<TagComponent>().tag = "game-controller";
     game_controller.add_component(ScriptComponent("Sample.GameController"));
-
-    // Rect a(glm::vec2(-5.0f, -5.0f), glm::vec2(5.0f, 5.0f));
-    // Rect b(glm::vec2(-2.0f, -2.0f), glm::vec2(2.0f, 2.0f));
-    // LOG_DEBUG(nullptr, b.is_inside(a));
 }
 
 void SandboxApp::on_update(float delta_time)

@@ -4,6 +4,7 @@
 #include <mono/metadata/tokentype.h>
 #include <mono/metadata/appdomain.h>
 #include <mono/metadata/image.h>
+#include <mono/metadata/object.h>
 #include "magnetar/scripting/mono/mono_runtime.h"
 #include "magnetar/filesystem/native_file_system.h"
 #include "magnetar/scripting/script_registry.h"
@@ -25,6 +26,7 @@ namespace magnetar
     static std::unordered_map<MonoClass *, std::function<bool(Entity)>> s_has_component_funcs;
     static std::unordered_map<MonoClass *, std::function<void(Entity)>> s_component_factories;
     static std::unordered_map<MonoClass *, std::function<void(Entity)>> s_component_remove_factories;
+    static MonoClassField *s_entity_id_field = nullptr;
 
     template <typename T>
     static void register_component(MonoImage *image, const char *class_name)
@@ -172,9 +174,13 @@ namespace magnetar
         // Use allocate_entity_instance (mono_object_new only, zero managed calls) because
         // we're inside a managed→native frame. Any mono_runtime_invoke here would create a
         // nested managed frame that corrupts Mono's execution context on return.
-        // start_all_entity_instances() handles invoke_ctor, invoke_set_handle, and invoke_on_start
-        // for these newly-allocated instances once the current managed frame has fully unwound.
+        // start_all_entity_instances() handles invoke_ctor and invoke_on_start for these
+        // newly-allocated instances once the current managed frame has fully unwound.
         auto instance = ScriptEngine::allocate_entity_instance(name, entity.handle());
+        // Set ID directly via field write — safe in a managed frame, unlike mono_runtime_invoke.
+        // Without this, ID stays 0 and any AddComponent call before OnStart returns hits the wrong entity.
+        uint32_t id = static_cast<uint32_t>(entity.handle());
+        mono_field_set_value((MonoObject *)instance->get_native_handle(), s_entity_id_field, &id);
         return (MonoObject *)instance->get_native_handle();
     }
 
@@ -402,6 +408,8 @@ bool magnetar::MonoRuntime::load_assembly(const std::string &path)
         MonoClass *klass = mono_class_from_name(m_engine_image, "Magnetar.Core", "Entity");
         MT_ASSERT(klass != nullptr, "could not find Magnetar.Core.Entity in assembly");
 
+        s_entity_id_field = mono_class_get_field_from_name(klass, "<ID>k__BackingField");
+        MT_ASSERT(s_entity_id_field != nullptr, "could not find Entity.<ID>k__BackingField");
         ScriptRegistry::set_entity_class(klass);
         auto ref = create_unique_reference<MonoScriptClass>(m_domain, m_engine_image, "Magnetar.Core", "Entity");
         ScriptRegistry::register_class(std::move(ref));

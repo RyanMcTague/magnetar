@@ -89,6 +89,7 @@ void magnetar::Scene::on_render()
 
 void magnetar::Scene::on_update(float delta_time)
 {
+    ScriptEngine::update(delta_time);
     {
         auto view = view_with_components<TransformComponent, RigidBody2DComponent>();
         for (auto [_, transform, rb] : view.each())
@@ -128,7 +129,6 @@ void magnetar::Scene::on_update(float delta_time)
             }
         }
     }
-    ScriptEngine::update(delta_time);
 }
 
 void magnetar::Scene::on_component_added(const EntityComponentAddedEvent &event)
