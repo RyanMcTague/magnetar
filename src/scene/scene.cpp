@@ -3,6 +3,7 @@
 #include "magnetar/scene/components.h"
 #include "magnetar/scripting/script_engine.h"
 #include "magnetar/renderer/renderer2d.h"
+#include "magnetar/math/rect.h"
 
 magnetar::Scene *magnetar::Scene::s_current = nullptr;
 
@@ -88,13 +89,44 @@ void magnetar::Scene::on_render()
 
 void magnetar::Scene::on_update(float delta_time)
 {
-    auto view = view_with_components<TransformComponent, RigidBody2DComponent>();
-    for (auto [_, transform, rb] : view.each())
     {
-        transform.position.x += rb.velocity.x * delta_time;
-        transform.position.y += rb.velocity.y * delta_time;
+        auto view = view_with_components<TransformComponent, RigidBody2DComponent>();
+        for (auto [_, transform, rb] : view.each())
+        {
+            transform.position.x += rb.velocity.x * delta_time;
+            transform.position.y += rb.velocity.y * delta_time;
 
-        transform.rotation += rb.angular_velocity * delta_time;
+            transform.rotation += rb.angular_velocity * delta_time;
+        }
+    }
+    {
+        auto view = view_with_components<TransformComponent, BoxColliderComponent>();
+        for (auto [handle, transform, collider] : view.each())
+        {
+            Rect rect;
+            rect.bl = glm::vec2(collider.position.x + transform.position.x, collider.position.y + transform.position.y);
+            rect.tr = glm::vec2(rect.bl.x + collider.size.x, rect.bl.y + collider.size.y);
+
+            for (auto [o_handle, o_transform, o_collider] : view.each())
+            {
+                if (handle == o_handle)
+                    continue;
+
+                Rect o_rect;
+                o_rect.bl = glm::vec2(o_collider.position.x + o_transform.position.x, o_collider.position.y + o_transform.position.y);
+                o_rect.tr = glm::vec2(o_rect.bl.x + o_collider.size.x, o_rect.bl.y + o_collider.size.y);
+
+                if (rect.is_overlapping(o_rect))
+                {
+                    auto instance = ScriptEngine::get_entity_instance(handle);
+                    auto o_instance = ScriptEngine::get_entity_instance(o_handle);
+                    if (instance && instance->has_method("OnCollision"))
+                    {
+                        instance->invoke_on_collision(o_instance);
+                    }
+                }
+            }
+        }
     }
     ScriptEngine::update(delta_time);
 }
@@ -104,7 +136,7 @@ void magnetar::Scene::on_component_added(const EntityComponentAddedEvent &event)
     if (event.component_class_name == std::string(MT_STATIC_CLASS_NAME(ScriptComponent)))
     {
         auto &component = m_registry.get<ScriptComponent>(event.handle);
-        if(component.skip_add)
+        if (component.skip_add)
             return;
         ScriptEngine::create_entity_instance(component.script_class_name, event.handle);
     }

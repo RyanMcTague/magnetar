@@ -23,8 +23,18 @@ magnetar::MonoScriptClass::MonoScriptClass(MonoDomain *domain, MonoImage *image,
     m_class = mono_class_from_name(image, ns.c_str(), name.c_str());
     MT_ASSERT(m_class != nullptr, "could not find class {}.{}", ns, name);
     m_name = ns + "." + name;
-    
-    register_methods(m_class);
+
+    MonoClass *parent = (MonoClass *)ScriptRegistry::entity_class();
+    MonoProperty *id_prop = mono_class_get_property_from_name(parent, "ID");
+
+    auto try_add = [&](const char *key, MonoMethod *method) {
+        if (method) m_methods[key] = method;
+    };
+    try_add(".ctor", mono_class_get_method_from_name(m_class, ".ctor", 0));
+    try_add("OnStart", mono_class_get_method_from_name(m_class, "OnStart", 0));
+    try_add("OnUpdate", mono_class_get_method_from_name(m_class, "OnUpdate", 1));
+    try_add("OnCollision", mono_class_get_method_from_name(m_class, "OnCollision", 1));
+    try_add("set_ID", mono_property_get_set_method(id_prop));
 }
 
 const std::string &magnetar::MonoScriptClass::name() const
@@ -44,48 +54,58 @@ void *magnetar::MonoScriptClass::get_native_handle()
     return (void *)m_class;
 }
 
-void magnetar::MonoScriptClass::invoke_method(void *object, const char *name, void **args, int argc)
+void magnetar::MonoScriptClass::invoke_ctor(MonoObject *object)
 {
-    MonoMethod *method = nullptr;
-    auto it = m_methods.find(name);
-    if (it == m_methods.end())
-    {
-        method = mono_class_get_method_from_name(m_class, name, argc);
-        MT_ASSERT(method != nullptr, "method {} not found in {}", name, m_name);
-        m_methods.emplace(name, method);
-    }
-    else
-    {
-        method = it->second;
-    }
-
+    if (!m_methods.contains(".ctor"))
+        return;
     MonoObject *exception = nullptr;
-    mono_runtime_invoke(method, object, args, &exception);
+    mono_runtime_invoke(m_methods[".ctor"], object, nullptr, &exception);
     if (exception)
         mono_print_unhandled_exception(exception);
 }
 
-void magnetar::MonoScriptClass::register_methods(MonoClass *klass)
+void magnetar::MonoScriptClass::invoke_set_id(MonoObject *object, EntityHandle handle)
 {
-    void *iter = nullptr;
-    MonoMethod *method = nullptr;
-    std::string class_name = mono_class_get_name(klass);
-    std::string name_space = mono_class_get_namespace(klass);
-    std::string full_name = name_space + "." + class_name;
-
-    if (full_name == "System.Object")
+    if (!m_methods.contains("set_ID"))
         return;
 
-    while ((method = mono_class_get_methods(klass, &iter)))
-    {
-        std::string name = mono_method_get_name(method);
-        auto it = m_methods.find(name);
-        if (it != m_methods.end())
-            continue;
-        m_methods.emplace(name, method);
-    }
+    MonoObject *exception = nullptr;
+    void *args[1];
+    args[0] = &handle;
+    mono_runtime_invoke(m_methods["set_ID"], object, args, &exception);
+    if (exception)
+        mono_print_unhandled_exception(exception);
+}
+void magnetar::MonoScriptClass::invoke_on_start(MonoObject *object)
+{
+    if (!m_methods.contains("OnStart"))
+        return;
+    MonoObject *exception = nullptr;
+    mono_runtime_invoke(m_methods["OnStart"], object, nullptr, &exception);
+    if (exception)
+        mono_print_unhandled_exception(exception);
+}
+void magnetar::MonoScriptClass::invoke_on_update(MonoObject *object, float delta_time)
+{
+    if (!m_methods.contains("OnUpdate"))
+        return;
 
-    MonoClass *parent = mono_class_get_parent(klass);
-    if (parent)
-        register_methods(parent);
+    MonoObject *exception = nullptr;
+    void *args[1];
+    args[0] = &delta_time;
+    mono_runtime_invoke(m_methods["OnUpdate"], object, args, &exception);
+    if (exception)
+        mono_print_unhandled_exception(exception);
+}
+void magnetar::MonoScriptClass::invoke_on_collision(MonoObject *object, MonoObject *entity)
+{
+    if (!m_methods.contains("OnCollision"))
+        return;
+
+    MonoObject *exception = nullptr;
+    void *args[1];
+    args[0] = entity;
+    mono_runtime_invoke(m_methods["OnCollision"], object, args, &exception);
+    if (exception)
+        mono_print_unhandled_exception(exception);
 }

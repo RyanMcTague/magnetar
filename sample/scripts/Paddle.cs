@@ -19,6 +19,10 @@ namespace Sample
             Position = new Vector3D(Position.x, bottom, Position.z);
 
             rb = AddComponent<RigidBody2DComponent>();
+
+            BoxColliderComponent collider = AddComponent<BoxColliderComponent>();
+            collider.Size = sr.Size;
+            collider.Position = new Vector2D(0f, 0f);
         }
 
         protected void OnUpdate(float dt)
@@ -27,6 +31,12 @@ namespace Sample
             float right = Input.IsActionDown(Action.Right) ? 1f : 0;
             float speed = (right - left) * movementSpeed;
             rb.Velocity = new Vector2D(speed, 0.0f);
+        }
+
+        protected void OnCollision(Entity entity)
+        {
+            Ball ball = entity.As<Ball>();
+            ball.ReverseMovement();
         }
     }
 }

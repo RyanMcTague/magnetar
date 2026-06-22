@@ -22,5 +22,11 @@ namespace Sample
             collider.Position = new Vector2D(0f, 0f);
             collider.Size = sr.Size;
         }
+
+        protected void OnCollision(Entity entity)
+        {
+            Ball ball = entity.As<Ball>();
+            ball.ReverseMovement();
+        }
     }
 }

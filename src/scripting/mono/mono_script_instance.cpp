@@ -13,13 +13,26 @@ void *magnetar::MonoScriptInstance::get_native_handle()
 
 bool magnetar::MonoScriptInstance::has_method(const std::string &name) const
 {
-    auto it = m_class->m_methods.find(name);
-    return it != m_class->m_methods.end();
+    return m_class->m_methods.contains(name);
 }
 
-void magnetar::MonoScriptInstance::invoke_method(const char *name, void **args, int argc)
+void magnetar::MonoScriptInstance::invoke_ctor()
 {
-    if (!has_method(name))
-        return;
-    m_class->invoke_method(m_object, name, args, argc);
+    m_class->invoke_ctor(m_object);
+}
+void magnetar::MonoScriptInstance::invoke_set_id(EntityHandle handle)
+{
+    m_class->invoke_set_id(m_object, handle);
+}
+void magnetar::MonoScriptInstance::invoke_on_start()
+{
+    m_class->invoke_on_start(m_object);
+}
+void magnetar::MonoScriptInstance::invoke_on_update(float delta_time)
+{
+    m_class->invoke_on_update(m_object, delta_time);
+}
+void magnetar::MonoScriptInstance::invoke_on_collision(ScriptInstance *entity)
+{
+    m_class->invoke_on_collision(m_object, (MonoObject *)entity->get_native_handle());
 }

@@ -7,23 +7,22 @@ namespace magnetar
 {
     class MonoScriptClass;
 
-    class MAGNETAR_API MonoScriptInstance: public ScriptInstance
+    class MAGNETAR_API MonoScriptInstance : public ScriptInstance
     {
     public:
-        MonoScriptInstance(MonoScriptClass* klass, MonoObject* object);
+        MonoScriptInstance(MonoScriptClass *klass, MonoObject *object);
 
-        // void invoke_ctor() override;
-        // void invoke_set_handle( EntityHandle handle) override;
-        // void invoke_on_start() override;
-        // void invoke_on_update(float delta_time) override;
-        void* get_native_handle() override;
+        void *get_native_handle() override;
 
-        bool has_method(const std::string& name) const override;
-        
-    protected:
-        void invoke_method(const char *name, void **args, int argc) override;
+        bool has_method(const std::string &name) const override;
+        void invoke_ctor() override;
+        void invoke_set_id(EntityHandle handle) override;
+        void invoke_on_start() override;
+        void invoke_on_update(float delta_time) override;
+        void invoke_on_collision(ScriptInstance *entity) override;
+
     private:
-        MonoObject* m_object;
+        MonoObject *m_object;
         MonoScriptClass *m_class;
     };
 }

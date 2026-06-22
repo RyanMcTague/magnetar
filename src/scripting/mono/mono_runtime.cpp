@@ -451,7 +451,7 @@ bool magnetar::MonoRuntime::reload_assembly()
 void magnetar::MonoRuntime::update(float delta_time)
 {
     for (auto &pair : m_entity_instances)
-        pair.second->invoke("OnUpdate", delta_time);
+        pair.second->invoke_on_update(delta_time);
 }
 
 magnetar::ScriptInstance *magnetar::MonoRuntime::create_entity_instance(const std::string &name, EntityHandle handle)
@@ -459,8 +459,8 @@ magnetar::ScriptInstance *magnetar::MonoRuntime::create_entity_instance(const st
     auto klass = ScriptRegistry::find(name);
     auto instance = klass->create_instance();
     m_entity_instances.emplace(handle, std::move(instance));
-    m_entity_instances[handle]->invoke(".ctor");
-    m_entity_instances[handle]->invoke("set_ID", handle);
+    m_entity_instances[handle]->invoke_ctor();
+    m_entity_instances[handle]->invoke_set_id(handle);
     return m_entity_instances[handle].get();
 }
 
@@ -504,11 +504,11 @@ void magnetar::MonoRuntime::start_all_entity_instances()
             {
                 // Allocated via Entity_CreateEntity (no managed calls yet) — initialize now
                 initialized.insert(handle);
-                it->second->invoke(".ctor");
-                it->second->invoke("set_ID", handle);
+                it->second->invoke_ctor();
+                it->second->invoke_set_id(handle);
             }
 
-            it->second->invoke("OnStart");
+            it->second->invoke_on_start();
         }
     }
 }
