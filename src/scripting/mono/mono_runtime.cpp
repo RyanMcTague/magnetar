@@ -398,9 +398,13 @@ bool magnetar::MonoRuntime::load_assembly(const std::string &path)
         m_engine_assembly = assembly;
         m_engine_image = image;
         register_components(m_engine_image);
+        
         MonoClass *klass = mono_class_from_name(m_engine_image, "Magnetar.Core", "Entity");
         MT_ASSERT(klass != nullptr, "could not find Magnetar.Core.Entity in assembly");
+
         ScriptRegistry::set_entity_class(klass);
+        auto ref = create_unique_reference<MonoScriptClass>(m_domain, m_engine_image, "Magnetar.Core", "Entity");
+        ScriptRegistry::register_class(std::move(ref));
     }
     else
     {
