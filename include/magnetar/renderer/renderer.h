@@ -22,16 +22,16 @@ namespace magnetar
         static Ref<VertexArray> create_vertex_array();
         static Ref<VertexBuffer> create_vertex_buffer(size_t size, const void *data = nullptr);
         static Ref<IndexBuffer> create_index_buffer(size_t count, const void *data = nullptr);
-        static Ref<Texture2D> create_texture2D(const TextureSpecification &spec, const void* data = nullptr);
+        static Ref<Texture2D> create_texture2D(const TextureSpecification &spec, const void *data = nullptr);
 
         static void clear(const BufferMask &mask);
-        static void draw_arrays(Ref<VertexArray> vao, int count, int offset = 0);
-        static void draw_indexed(Ref<VertexArray> vao, Ref<IndexBuffer> ibo);
+        static void draw_arrays(DrawMode mode, Ref<VertexArray> vao, int count, int offset = 0);
+        static void draw_indexed(DrawMode mode, Ref<VertexArray> vao, Ref<IndexBuffer> ibo);
         static void set_viewport(int x, int y, int width, int height);
-        static void set_clear_color(const glm::vec4& color);
+        static void set_clear_color(const glm::vec4 &color);
 
         static void begin_scene(Ref<Camera> camera);
-        static void submit(const Ref<IMesh>& mesh, const Ref<Material>& material, const glm::mat4& transform);
+        static void submit(const Ref<IMesh> &mesh, const Ref<Material> &material, const glm::mat4 &transform);
         static void end_scene();
 
     private:

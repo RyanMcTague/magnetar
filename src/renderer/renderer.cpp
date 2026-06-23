@@ -50,14 +50,14 @@ void magnetar::Renderer::clear(const BufferMask &mask)
     s_device->clear(mask);
 }
 
-void magnetar::Renderer::draw_arrays(Ref<VertexArray> vao, int count, int offset)
+void magnetar::Renderer::draw_arrays(DrawMode mode, Ref<VertexArray> vao, int count, int offset)
 {
-    s_device->draw_arrays(vao, count, offset);
+    s_device->draw_arrays(mode, vao, count, offset);
 }
 
-void magnetar::Renderer::draw_indexed(Ref<VertexArray> vao, Ref<IndexBuffer> ibo)
+void magnetar::Renderer::draw_indexed(DrawMode mode, Ref<VertexArray> vao, Ref<IndexBuffer> ibo)
 {
-    s_device->draw_indexed(vao, ibo);
+    s_device->draw_indexed(mode, vao, ibo);
 }
 
 void magnetar::Renderer::set_viewport(int x, int y, int width, int height)

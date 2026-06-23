@@ -154,3 +154,20 @@ GLenum magnetar::GLHelpers::texture_wrap_type(TextureWrap wrap)
     }
     return value;
 }
+
+GLenum magnetar::GLHelpers::draw_mode_type(DrawMode mode)
+{
+    GLenum value = 0;
+    switch (mode)
+    {
+    case DrawMode::TRIANGLES:
+        value = GL_TRIANGLES;
+        break;
+    case DrawMode::LINES:
+        value = GL_LINES;
+        break;
+    default:
+        break;
+    }
+    return value;
+}

@@ -56,18 +56,18 @@ void magnetar::GLGraphicsDevice::clear(const BufferMask &mask) const
     glClear(bitfield);
 }
 
-void magnetar::GLGraphicsDevice::draw_arrays(Ref<VertexArray> vao, int count, int offset) const
+void magnetar::GLGraphicsDevice::draw_arrays(DrawMode mode, Ref<VertexArray> vao, int count, int offset) const
 {
     vao->bind();
-    glDrawArrays(GL_TRIANGLES, offset, count);
+    glDrawArrays(GLHelpers::draw_mode_type(mode), offset, count);
     vao->unbind();
 }
 
-void magnetar::GLGraphicsDevice::draw_indexed(Ref<VertexArray> vao, Ref<IndexBuffer> ibo) const
+void magnetar::GLGraphicsDevice::draw_indexed(DrawMode mode, Ref<VertexArray> vao, Ref<IndexBuffer> ibo) const
 {
     vao->bind();
     ibo->bind();
-    glDrawElements(GL_TRIANGLES, ibo->count(), GL_UNSIGNED_INT, nullptr);
+    glDrawElements(GLHelpers::draw_mode_type(mode), ibo->count(), GL_UNSIGNED_INT, nullptr);
     ibo->unbind();
     vao->unbind();
 }

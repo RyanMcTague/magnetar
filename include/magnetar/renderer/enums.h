@@ -3,6 +3,12 @@
 
 namespace magnetar
 {
+    enum class MAGNETAR_API DrawMode
+    {
+        TRIANGLES,
+        LINES
+    };
+
     enum class MAGNETAR_API ShaderType
     {
         VERTEX = 0,

@@ -19,5 +19,5 @@ magnetar::Mesh::Mesh(const std::vector<Vertex> &vertices, const std::vector<uint
 
 void magnetar::Mesh::draw() const
 {
-    Renderer::draw_indexed(m_vao, m_ibo);
+    Renderer::draw_indexed(DrawMode::TRIANGLES,m_vao, m_ibo);
 }

@@ -127,7 +127,7 @@ void magnetar::Renderer2D::submit()
         batch->vertex_buffer->update(batch->vertices, 0, size);
         batch->shader->bind();
         batch->shader->set_mat4("u_view_projection", s_data.view_projection);
-        Renderer::draw_indexed(batch->vertex_array, batch->index_buffer);
+        Renderer::draw_indexed(DrawMode::TRIANGLES, batch->vertex_array, batch->index_buffer);
         batch->shader->unbind();
     }
 }
