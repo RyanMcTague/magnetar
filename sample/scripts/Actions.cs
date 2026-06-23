@@ -1,7 +1,7 @@
 
 namespace Sample
 {
-    public class Action
+    class Action
     {
         public static uint Quit { get =>  0; }
         public static uint Left { get => 1; }
