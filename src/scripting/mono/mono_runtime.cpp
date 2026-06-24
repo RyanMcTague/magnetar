@@ -555,7 +555,11 @@ void magnetar::MonoRuntime::start_all_entity_instances()
                 it->second->invoke_set_id(handle);
             }
 
-            it->second->invoke_on_start();
+            if (!m_started_instances.count(handle))
+            {
+                m_started_instances.insert(handle);
+                it->second->invoke_on_start();
+            }
         }
     }
 }
@@ -571,4 +575,5 @@ void magnetar::MonoRuntime::remove_entity_instance(EntityHandle handle)
     auto it = m_entity_instances.find(handle);
     if (it != m_entity_instances.end())
         m_entity_instances.erase(it);
+    m_started_instances.erase(handle);
 }

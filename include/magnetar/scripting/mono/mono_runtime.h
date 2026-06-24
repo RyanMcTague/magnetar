@@ -1,5 +1,6 @@
 #pragma once
 #include <unordered_map>
+#include <unordered_set>
 #include <mono/jit/jit.h>
 #include "magnetar/core/base.h"
 #include "magnetar/scripting/script_runtime.h"
@@ -35,5 +36,6 @@ namespace magnetar
         MonoAssembly *m_engine_assembly;
         MonoImage *m_engine_image;
         std::unordered_map<EntityHandle, UniqueRef<ScriptInstance>> m_entity_instances;
+        std::unordered_set<EntityHandle> m_started_instances;
     };
 }

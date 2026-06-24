@@ -12,9 +12,14 @@ namespace Sample
 
         void OnStart()
         {
+            Tag = "alien";
+
             SpriteRendererComponent sr = AddComponent<SpriteRendererComponent>();
             sr.Size = new Vector2D(10f, 10f);
             sr.Color = Vector4D.FromHexRGBA(0x932aa3ff);
+
+            BoxColliderComponent collider = AddComponent<BoxColliderComponent>();
+            collider.Size = sr.Size;
         }
 
         void OnUpdate(float dt)

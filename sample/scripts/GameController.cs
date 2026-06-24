@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Magnetar.Core;
 
 namespace Sample
@@ -30,6 +29,8 @@ namespace Sample
                 }
                 y -= Alien.Height + Spacing;
             }
+
+            CreateEntity<Player>();
         }
     }
 }

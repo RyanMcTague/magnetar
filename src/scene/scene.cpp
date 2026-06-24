@@ -64,8 +64,10 @@ void magnetar::Scene::mark_entity_handle_destroyed(EntityHandle handle)
 void magnetar::Scene::flush_entities()
 {
     for (auto handle : m_destroyed_entities)
+    {
+        ScriptEngine::remove_entity_instance(handle);
         m_registry.destroy(handle);
-
+    }
     m_destroyed_entities.clear();
 }
 
@@ -93,6 +95,7 @@ void magnetar::Scene::on_render()
 void magnetar::Scene::on_update(float delta_time)
 {
     ScriptEngine::update(delta_time);
+    ScriptEngine::start_all_entity_instances();
     {
         auto view = view_with_components<TransformComponent, RigidBody2DComponent>();
         for (auto [_, transform, rb] : view.each())
@@ -124,7 +127,7 @@ void magnetar::Scene::on_update(float delta_time)
                 {
                     auto instance = ScriptEngine::get_entity_instance(handle);
                     auto o_instance = ScriptEngine::get_entity_instance(o_handle);
-                    if (instance && instance->has_method("OnCollision"))
+                    if (instance && o_instance && instance->has_method("OnCollision"))
                     {
                         instance->invoke_on_collision(o_instance);
                     }
@@ -132,6 +135,7 @@ void magnetar::Scene::on_update(float delta_time)
             }
         }
     }
+    flush_entities();
 }
 
 void magnetar::Scene::on_component_added(const EntityComponentAddedEvent &event)
