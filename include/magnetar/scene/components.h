@@ -39,9 +39,10 @@ namespace magnetar
 
         glm::vec2 size;
         glm::vec4 color;
+        AssetHandle texture;
 
-        SpriteRendererComponent(const glm::vec2 &size = glm::vec2(0.0f), const glm::vec4 &color = glm::vec4(0.0f))
-            : size(size), color(color) {}
+        SpriteRendererComponent(const glm::vec2 &size = glm::vec2(0.0f), const glm::vec4 &color = glm::vec4(0.0f), AssetHandle texture = 0)
+            : size(size), color(color), texture(texture) {}
     };
 
     struct MAGNETAR_API Camera2DComponent

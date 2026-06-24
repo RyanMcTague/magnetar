@@ -26,5 +26,18 @@ namespace Magnetar.Core
                 InternalCalls.SpriteRenderer_SetColor(Entity.ID, ref value);
             }
         }
+
+        public uint Texture
+        {
+            get
+            {
+                InternalCalls.SpriteRenderer_GetTexture(Entity.ID, out uint color);
+                return color;
+            }
+            set
+            {
+                InternalCalls.SpriteRenderer_SetTexture(Entity.ID, ref value);
+            }
+        }
     }
 }

@@ -103,6 +103,12 @@ namespace Magnetar.Core
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern void SpriteRenderer_SetColor(uint id, ref Vector4D color);
 
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void SpriteRenderer_GetTexture(uint id, out uint color);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void SpriteRenderer_SetTexture(uint id, ref uint color);
+
 
         //==========================================
         // RigidBody2D

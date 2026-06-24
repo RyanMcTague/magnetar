@@ -12,30 +12,64 @@ static const char *quad_shader_source = R"""(
 layout (location = 0) in vec4 a_position;
 layout (location = 1) in vec2 a_texcoord;
 layout (location = 2) in vec4 a_color;
+layout (location = 3) in float a_texture;
 
 uniform mat4 u_view_projection;
+uniform float u_null_texcoord;
 
 out vec4 o_color;
+out vec2 o_texcoord;
+out float o_texture;
+out float o_null_texcoord;
 
 void main()
 {
     o_color = a_color;
+    o_texcoord = a_texcoord;
+    o_texture = int(a_texture);
+    o_null_texcoord = u_null_texcoord;
     gl_Position = u_view_projection * a_position;
 }
 
 #stage fragment
 
 in vec4 o_color;
+in vec2 o_texcoord;
+in float o_texture;
+in float o_null_texcoord;
+
+int used_texture = int(o_texture);
+int null_texcoord = int(o_null_texcoord);
+
 out vec4 FragColor;
+
+uniform sampler2D u_texture0;
 
 void main()
 {
-    FragColor = o_color;
+    if(used_texture < null_texcoord)
+    {
+        switch(used_texture)
+        {
+        case 0:
+            FragColor = texture(u_texture0, o_texcoord);
+            break;
+        default:
+            break;
+        }
+    }
+    else
+    {
+        FragColor = o_color;
+    }
 }
 )""";
 
 namespace magnetar
 {
+    static constexpr int MAX_TEXTURE_SLOTS = 1;
+    static constexpr int NULL_TEXTURE_SLOT = MAX_TEXTURE_SLOTS + 1;
+
     static constexpr uint32_t MAX_QUADS = 1000;
     static constexpr uint32_t VERTICES_PER_QUAD = 4;
     static constexpr uint32_t INDICES_PER_QUAD = 6;
@@ -48,10 +82,13 @@ namespace magnetar
         glm::vec4 position;
         glm::vec2 texcoord;
         glm::vec4 color;
+        float texture;
     };
 
     struct QuadBatch
     {
+        Ref<Texture2D> textures[MAX_TEXTURE_SLOTS];
+        int texture_count;
         QuadVertex vertices[MAX_QUAD_VERTICES];
         QuadVertex *ptr;
         QuadVertex *end;
@@ -93,6 +130,7 @@ void magnetar::Renderer2D::initialize()
     s_data.quads.ptr = s_data.quads.vertices;
     s_data.quads.end = &s_data.quads.vertices[MAX_QUAD_VERTICES - 1] + 1;
     s_data.quads.count = 0;
+    s_data.quads.texture_count = 0;
 
     s_data.quads.shader = Renderer::create_shader("quad-batch-shader", quad_shader_source);
     s_data.quads.vertex_array = Renderer::create_vertex_array();
@@ -102,6 +140,7 @@ void magnetar::Renderer2D::initialize()
     s_data.quads.vertex_buffer->push_layout_element("a_position", RendererDataType::VEC4);
     s_data.quads.vertex_buffer->push_layout_element("a_texcoord", RendererDataType::VEC2);
     s_data.quads.vertex_buffer->push_layout_element("a_color", RendererDataType::VEC4);
+    s_data.quads.vertex_buffer->push_layout_element("a_texture", RendererDataType::FLOAT);
     s_data.quads.vertex_array->add_vertex_buffer(s_data.quads.vertex_buffer);
     s_data.quads.vertex_array->set_index_buffer(s_data.quads.index_buffer);
 }
@@ -116,6 +155,7 @@ void magnetar::Renderer2D::start(const glm::mat4 &view_projection)
     s_data.view_projection = view_projection;
     s_data.quads.ptr = s_data.quads.vertices;
     s_data.quads.count = 0;
+    s_data.quads.texture_count = 0;
 }
 
 void magnetar::Renderer2D::submit()
@@ -125,22 +165,24 @@ void magnetar::Renderer2D::submit()
         QuadBatch *batch = &s_data.quads;
         size_t size = sizeof(QuadVertex) * batch->count * VERTICES_PER_QUAD;
         batch->vertex_buffer->update(batch->vertices, 0, size);
+
         batch->shader->bind();
+        for (int i = 0; i < batch->texture_count; i++)
+        {
+            s_data.quads.textures[i]->bind(i);
+            std::string uniform_name = "u_texture" + std::to_string(i);
+            batch->shader->set_int(uniform_name, i);
+        }
+
         batch->shader->set_mat4("u_view_projection", s_data.view_projection);
+        batch->shader->set_float("u_null_texcoord", NULL_TEXTURE_SLOT);
         Renderer::draw_indexed(DrawMode::TRIANGLES, batch->vertex_array, batch->index_buffer);
         batch->shader->unbind();
     }
 }
 
-void magnetar::Renderer2D::draw_quad(const glm::mat4 &transform, const glm::vec4 &color)
+void magnetar::Renderer2D::draw_quad(const glm::mat4 &transform, const glm::vec4 &color, const Ref<Texture2D> &texture)
 {
-    // static glm::vec4 points[] = {
-    //     glm::vec4(-0.5f, -0.5f, 0.0f, 1.0f),
-    //     glm::vec4(0.5f, -0.5f, 0.0f, 1.0f),
-    //     glm::vec4(0.5f, 0.5f, 0.0f, 1.0f),
-    //     glm::vec4(-0.5f, 0.5f, 0.0f, 1.0f),
-    // };
-
     static glm::vec4 points[] = {
         glm::vec4(0.0f, 0.0f, 0.0f, 1.0f),
         glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
@@ -156,6 +198,31 @@ void magnetar::Renderer2D::draw_quad(const glm::mat4 &transform, const glm::vec4
     };
 
     QuadBatch *batch = &s_data.quads;
+
+    float texture_slot = (float)NULL_TEXTURE_SLOT;
+
+    if (texture)
+    {
+        bool found = false;
+        for (uint32_t i = 0; i < MAX_TEXTURE_SLOTS; i++)
+        {
+            if (s_data.quads.textures[i] == texture)
+            {
+                found = true;
+                texture_slot = (float)i;
+                break;
+            }
+        }
+
+        if (!found)
+        {
+            MT_ASSERT(batch->texture_count < MAX_TEXTURE_SLOTS, "quad texture overflow");
+            s_data.quads.textures[batch->texture_count] = texture;
+            texture_slot = (float)batch->texture_count;
+            s_data.quads.texture_count++;
+        }
+    }
+
     MT_ASSERT(batch->count < MAX_QUAD_VERTICES, "quad vertex overflow");
     batch->count++;
 
@@ -164,6 +231,7 @@ void magnetar::Renderer2D::draw_quad(const glm::mat4 &transform, const glm::vec4
         batch->ptr->position = transform * points[i];
         batch->ptr->texcoord = texture_coords[i];
         batch->ptr->color = color;
+        batch->ptr->texture = texture_slot;
         batch->ptr++;
     }
 }
@@ -183,4 +251,21 @@ void magnetar::Renderer2D::draw_quad(const glm::vec3 &position, const glm::vec2 
                      glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
 
     draw_quad(transform, color);
+}
+
+void magnetar::Renderer2D::draw_quad(const glm::vec3 &position, const glm::vec2 &size, const Ref<Texture2D> &texture)
+{
+    auto transform = glm::translate(glm::mat4(1.0f), position) *
+                     glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
+
+    draw_quad(transform, glm::vec4(0.0f), texture);
+}
+
+void magnetar::Renderer2D ::draw_quad(const glm::vec3 &position, const glm::vec2 &size, float rotation, const Ref<Texture2D> &texture)
+{
+    auto transform = glm::translate(glm::mat4(1.0f), position) *
+                     glm::rotate(glm::mat4(1.0f), rotation, glm::vec3(0.0f, 0.0f, 1.0f)) *
+                     glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
+
+    draw_quad(transform, glm::vec4(0.0f), texture);
 }

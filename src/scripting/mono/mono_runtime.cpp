@@ -271,6 +271,20 @@ namespace magnetar
         sc.color = *color;
     }
 
+    static void SpriteRenderer_GetTexture(uint32_t id, AssetHandle *texture)
+    {
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto &sc = entity.get_component<SpriteRendererComponent>();
+        *texture = sc.texture;
+    }
+
+    static void SpriteRenderer_SetTexture(uint32_t id, AssetHandle *texture)
+    {
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto &sc = entity.get_component<SpriteRendererComponent>();
+        sc.texture = *texture;
+    }
+
     static void RigidBody2D_GetVelocity(uint32_t id, glm::vec2 *velocity)
     {
         Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
@@ -368,6 +382,8 @@ namespace magnetar
         MT_ADD_INTERNAL_CALL(SpriteRenderer_SetSize);
         MT_ADD_INTERNAL_CALL(SpriteRenderer_GetColor);
         MT_ADD_INTERNAL_CALL(SpriteRenderer_SetColor);
+        MT_ADD_INTERNAL_CALL(SpriteRenderer_GetTexture);
+        MT_ADD_INTERNAL_CALL(SpriteRenderer_SetTexture);
         MT_ADD_INTERNAL_CALL(RigidBody2D_GetVelocity);
         MT_ADD_INTERNAL_CALL(RigidBody2D_SetVelocity);
         MT_ADD_INTERNAL_CALL(RigidBody2D_GetAngularVelocity);
