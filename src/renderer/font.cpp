@@ -63,7 +63,8 @@ magnetar::Font::Font(File *file)
         glyph.bearing.x = g->bitmap_left;
         glyph.bearing.y = g->bitmap_top;
 
-        glyph.advance = g->advance.x;
+        glyph.advance.x = g->advance.x;
+        glyph.advance.y = g->advance.y;
 
         m_glyphs.emplace(c, glyph);
 

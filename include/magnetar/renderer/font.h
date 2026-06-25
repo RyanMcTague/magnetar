@@ -18,7 +18,7 @@ namespace magnetar
             glm::ivec2 size;
             glm::ivec2 bearing;
 
-            float advance;
+            glm::vec2 advance;
         };
         Font(File *file);
 
