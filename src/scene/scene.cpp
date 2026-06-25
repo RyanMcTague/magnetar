@@ -5,6 +5,8 @@
 #include "magnetar/renderer/renderer2d.h"
 #include "magnetar/math/rect.h"
 #include "magnetar/assets/asset_manager.h"
+#include "magnetar/renderer/font.h"
+
 magnetar::Scene *magnetar::Scene::s_current = nullptr;
 
 magnetar::Scene::Scene()
@@ -82,13 +84,25 @@ void magnetar::Scene::end_scene()
 
 void magnetar::Scene::on_render()
 {
-    auto view = view_with_components<TransformComponent, SpriteRendererComponent>();
-    for (auto [_, transform, sr] : view.each())
     {
-        if (sr.texture)
-            Renderer2D::draw_quad(transform.position, sr.size, transform.rotation.z, AssetManager::load<Texture2D>(sr.texture));
-        else
-            Renderer2D::draw_quad(transform.position, sr.size, transform.rotation.z, sr.color);
+        auto view = view_with_components<TransformComponent, SpriteRendererComponent>();
+        for (auto [_, transform, sr] : view.each())
+        {
+            if (sr.texture)
+                Renderer2D::draw_quad(transform.position, sr.size, transform.rotation.z, AssetManager::load<Texture2D>(sr.texture));
+            else
+                Renderer2D::draw_quad(transform.position, sr.size, transform.rotation.z, sr.color);
+        }
+    }
+    {
+        auto view = view_with_components<TransformComponent, TextRendererComponent>();
+        for (auto [_, transform, tr] : view.each())
+        {
+            if (tr.font != 0)
+            {
+                Renderer2D::draw_text(tr.value, AssetManager::load<Font>(tr.font), transform.position, tr.color);
+            }
+        }
     }
 }
 

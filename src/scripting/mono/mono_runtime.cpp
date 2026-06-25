@@ -55,7 +55,7 @@ namespace magnetar
     {
         Timestamp timestamp;
         return timestamp.milliseconds_since_epoch() / 1000.0f;
-    }   
+    }
 
     static int Math_Random(int min, int max)
     {
@@ -363,6 +363,50 @@ namespace magnetar
         bc.position = *position;
     }
 
+    static void TextRenderer_GetValue(uint32_t id, MonoString **str)
+    {
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto &tc = entity.get_component<TextRendererComponent>();
+        *str = mono_string_new(mono_domain_get(), tc.value.c_str());
+    }
+
+    static void TextRenderer_SetValue(uint32_t id, MonoString **str)
+    {
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto &tc = entity.get_component<TextRendererComponent>();
+        char *cstr = mono_string_to_utf8(*str);
+        tc.value = cstr;
+        mono_free(cstr);
+    }
+
+    static void TextRenderer_GetColor(uint32_t id, glm::vec4 *color)
+    {
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto &tc = entity.get_component<TextRendererComponent>();
+        *color = tc.color;
+    }
+
+    static void TextRenderer_SetColor(uint32_t id, glm::vec4 *color)
+    {
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto &tc = entity.get_component<TextRendererComponent>();
+        tc.color = *color;
+    }
+
+    static void TextRenderer_GetFont(uint32_t id, AssetHandle *font)
+    {
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto &tc = entity.get_component<TextRendererComponent>();
+        *font = tc.font;
+    }
+
+    static void TextRenderer_SetFont(uint32_t id, AssetHandle *font)
+    {
+        Entity entity = Scene::current()->get_entity_by_id(entt::entity{id});
+        auto &tc = entity.get_component<TextRendererComponent>();
+        tc.font = *font;
+    }
+
     static void add_internal_calls()
     {
         MT_ADD_INTERNAL_CALL(Time_GetTime);
@@ -401,6 +445,12 @@ namespace magnetar
         MT_ADD_INTERNAL_CALL(BoxCollider_SetPosition);
         MT_ADD_INTERNAL_CALL(BoxCollider_GetSize);
         MT_ADD_INTERNAL_CALL(BoxCollider_SetSize);
+        MT_ADD_INTERNAL_CALL(TextRenderer_GetValue);
+        MT_ADD_INTERNAL_CALL(TextRenderer_SetValue);
+        MT_ADD_INTERNAL_CALL(TextRenderer_GetColor);
+        MT_ADD_INTERNAL_CALL(TextRenderer_SetColor);
+        MT_ADD_INTERNAL_CALL(TextRenderer_GetFont);
+        MT_ADD_INTERNAL_CALL(TextRenderer_SetFont);
     }
 
     static void register_components(MonoImage *image)
@@ -410,6 +460,7 @@ namespace magnetar
         MT_REGISTER_COMPONENT(image, RigidBody2DComponent);
         MT_REGISTER_COMPONENT(image, TagComponent);
         MT_REGISTER_COMPONENT(image, BoxColliderComponent);
+        MT_REGISTER_COMPONENT(image, TextRendererComponent);
     }
 }
 

@@ -97,4 +97,16 @@ namespace magnetar
         BoxColliderComponent(const glm::vec2& size = glm::vec2(0.0f), const glm::vec2& position = glm::vec2(0.0f))
             : size(size), position(position) {}
     };
+
+    struct MAGNETAR_API TextRendererComponent
+    {
+        MT_DECLARE_CLASS_NAME(TextRendererComponent)
+
+        std::string value;
+        glm::vec4 color;
+        AssetHandle font;
+
+        TextRendererComponent(AssetHandle font = 0, const std::string& value = "", const glm::vec4& color = glm::vec4(1.0f))  
+            : value(value), color(color), font(font) {}
+    };
 }

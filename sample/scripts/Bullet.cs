@@ -23,8 +23,12 @@ namespace Sample
 
         void OnCollision(Entity entity)
         {
-            entity.Destroy();
-            Destroy();
+            if(entity.Tag == "alien")
+            {
+                entity.Destroy();
+                Destroy();
+                GetEntityByName("score").As<Score>().AddScore();
+            }
         }
     }
 }

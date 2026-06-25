@@ -31,6 +31,7 @@ namespace Sample
             }
 
             CreateEntity<Player>();
+            CreateEntity<Score>();
         }
     }
 }

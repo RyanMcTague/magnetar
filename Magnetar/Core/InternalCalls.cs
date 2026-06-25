@@ -156,5 +156,26 @@ namespace Magnetar.Core
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern void BoxCollider_SetPosition(uint id, ref Vector2D size);
+
+        //==========================================
+        // TextRenderer
+        //==========================================
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void TextRenderer_GetValue(uint id, out string str);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void TextRenderer_SetValue(uint id, ref string str);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void TextRenderer_GetColor(uint id, out Vector4D color);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void TextRenderer_SetColor(uint id, ref Vector4D color);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void TextRenderer_GetFont(uint id, out uint font);
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern void TextRenderer_SetFont(uint id, ref uint font);
     }
 }
