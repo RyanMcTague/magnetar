@@ -7,6 +7,7 @@ glm/1.0.1
 yaml-cpp/0.9.0
 assimp/6.0.2
 entt/3.16.0
+freetype/2.14.3
 
 [generators]
 CMakeDeps

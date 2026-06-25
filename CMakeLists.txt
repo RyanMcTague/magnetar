@@ -28,6 +28,8 @@ find_package(glm REQUIRED CONFIG)
 find_package(yaml-cpp REQUIRED CONFIG)
 find_package(assimp REQUIRED CONFIG)
 find_package(EnTT REQUIRED CONFIG)
+find_package(freetype REQUIRED CONFIG)
+
 
 find_path(
     MONO_INCLUDE_DIR
@@ -279,6 +281,7 @@ target_link_libraries(magnetar
         yaml-cpp::yaml-cpp
         assimp::assimp
         EnTT::EnTT
+        Freetype::Freetype
         ${MONO_LIBRARY}
 )
 ########################################################
