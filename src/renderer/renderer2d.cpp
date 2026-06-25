@@ -6,6 +6,44 @@
 #include "magnetar/renderer/shader.h"
 #include "magnetar/renderer/renderer.h"
 
+#include "magnetar/core/application.h"
+#include "magnetar/core/window.h"
+
+static const char *text_shader_source = R"""(
+#stage vertex
+
+layout (location = 0) in vec4 a_position;
+layout (location = 1) in vec2 a_texcoord;
+layout (location = 2) in vec4 a_color;
+
+uniform mat4 u_view_projection;
+
+out vec4 o_color;
+out vec2 o_texcoord;
+
+void main()
+{
+    o_color = a_color;
+    o_texcoord = a_texcoord;
+    gl_Position = u_view_projection * a_position;
+}
+
+#stage fragment
+
+out vec4 FragColor;
+in vec4 o_color;
+in vec2 o_texcoord;
+
+uniform sampler2D u_texture;
+
+void main()
+{
+    float alpha = texture(u_texture, o_texcoord).r;
+    FragColor = vec4(o_color.rgb, o_color.a * alpha);
+}
+
+)""";
+
 static const char *quad_shader_source = R"""(
 #stage vertex
 
@@ -85,6 +123,13 @@ namespace magnetar
         float texture;
     };
 
+    struct TextVertex
+    {
+        glm::vec4 position;
+        glm::vec2 texcoord;
+        glm::vec4 color;
+    };
+
     struct QuadBatch
     {
         Ref<Texture2D> textures[MAX_TEXTURE_SLOTS];
@@ -99,23 +144,32 @@ namespace magnetar
         Ref<Shader> shader;
     };
 
+    struct TextBatch
+    {
+        Ref<Texture2D> textures[MAX_TEXTURE_SLOTS];
+        int texture_count;
+        TextVertex vertices[MAX_QUAD_VERTICES];
+        TextVertex *ptr;
+        TextVertex *end;
+        uint32_t count;
+        Ref<VertexArray> vertex_array;
+        Ref<VertexBuffer> vertex_buffer;
+        Ref<IndexBuffer> index_buffer;
+        Ref<Shader> shader;
+    };
+
     struct Renderer2DData
     {
         QuadBatch quads;
+        TextBatch text;
         glm::mat4 view_projection = glm::mat4(1.0f);
+        glm::mat4 text_view_projection = glm::mat4(1.0f);
     };
 
     static Renderer2DData s_data;
 
     inline static glm::vec2 get_indexed_uv(const Rect &rect, int i)
     {
-        // static glm::vec2 texture_coords[] = {
-        //     glm::vec2(0.0f, 0.0f), // bl
-        //     glm::vec2(1.0f, 0.0f), // tl
-        //     glm::vec2(1.0f, 1.0f), // tr
-        //     glm::vec2(0.0f, 1.0f), // br
-        // };
-
         switch (i)
         {
         case 0:
@@ -138,6 +192,7 @@ void magnetar::Renderer2D::initialize()
 {
     Renderer::set_blend_enabled(true);
     Renderer::set_blend_func(BlendFactor::SRC_ALPHA, BlendFactor::ONE_MINUS_SRC_ALPHA);
+
     //==== Quad Batch =========================
     uint32_t index_data[QUAD_INDICES_COUNT];
 
@@ -171,19 +226,46 @@ void magnetar::Renderer2D::initialize()
     s_data.quads.vertex_buffer->push_layout_element("a_texture", RendererDataType::FLOAT);
     s_data.quads.vertex_array->add_vertex_buffer(s_data.quads.vertex_buffer);
     s_data.quads.vertex_array->set_index_buffer(s_data.quads.index_buffer);
+
+    //==== Text Batch =========================
+    s_data.text.ptr = s_data.text.vertices;
+    s_data.text.end = &s_data.text.vertices[MAX_QUAD_VERTICES - 1] + 1;
+    s_data.text.count = 0;
+    s_data.text.texture_count = 0;
+
+    s_data.text.shader = Renderer::create_shader("text-batch-shader", text_shader_source);
+    s_data.text.vertex_array = Renderer::create_vertex_array();
+    s_data.text.index_buffer = Renderer::create_index_buffer(QUAD_INDICES_COUNT, index_data);
+    s_data.text.vertex_buffer = Renderer::create_vertex_buffer(sizeof(TextVertex) * MAX_QUADS, nullptr);
+
+    s_data.text.vertex_buffer->push_layout_element("a_position", RendererDataType::VEC4);
+    s_data.text.vertex_buffer->push_layout_element("a_texcoord", RendererDataType::VEC2);
+    s_data.text.vertex_buffer->push_layout_element("a_color", RendererDataType::VEC4);
+    s_data.text.vertex_array->add_vertex_buffer(s_data.text.vertex_buffer);
+    s_data.text.vertex_array->set_index_buffer(s_data.text.index_buffer);
 }
 
 void magnetar::Renderer2D::shutdown()
 {
     s_data.quads = QuadBatch();
+    s_data.text = TextBatch();
 }
 
 void magnetar::Renderer2D::start(const glm::mat4 &view_projection)
 {
+    float width = Application::get()->get_window()->width();
+    float height = Application::get()->get_window()->height();
+    
+    s_data.text_view_projection = glm::ortho(0.0f, width, 0.0f, height, -1.0f, 1.0f);
     s_data.view_projection = view_projection;
+
     s_data.quads.ptr = s_data.quads.vertices;
     s_data.quads.count = 0;
     s_data.quads.texture_count = 0;
+
+    s_data.text.ptr = s_data.text.vertices;
+    s_data.text.count = 0;
+    s_data.text.texture_count = 0;
 }
 
 void magnetar::Renderer2D::submit()
@@ -208,8 +290,29 @@ void magnetar::Renderer2D::submit()
         batch->shader->unbind();
     }
 
+    if (s_data.text.count)
+    {
+        TextBatch *batch = &s_data.text;
+        size_t size = sizeof(TextVertex) * batch->count * VERTICES_PER_QUAD;
+        batch->vertex_buffer->update(batch->vertices, 0, size);
+
+        batch->shader->bind();
+        if (batch->textures[0])
+        {
+            batch->textures[0]->bind(0);
+            batch->shader->set_int("u_texture", 0);
+        }
+
+        batch->shader->set_mat4("u_view_projection", s_data.text_view_projection);
+        Renderer::draw_indexed(DrawMode::TRIANGLES, batch->vertex_array, batch->index_buffer);
+        batch->shader->unbind();
+    }
+
     for (uint32_t i = 0; i < MAX_TEXTURE_SLOTS; i++)
+    {
         s_data.quads.textures[i] = nullptr;
+        s_data.text.textures[i] = nullptr;
+    }
 }
 
 void magnetar::Renderer2D::draw_quad(const glm::mat4 &transform, const glm::vec4 &color, const Ref<Texture2D> &texture, const Rect &rect)
@@ -292,11 +395,61 @@ void magnetar::Renderer2D::draw_quad(const glm::vec3 &position, const glm::vec2 
     draw_quad(transform, glm::vec4(0.0f), texture, rect);
 }
 
-void magnetar::Renderer2D ::draw_quad(const glm::vec3 &position, const glm::vec2 &size, float rotation, const Ref<Texture2D> &texture, const Rect &rect)
+void magnetar::Renderer2D::draw_quad(const glm::vec3 &position, const glm::vec2 &size, float rotation, const Ref<Texture2D> &texture, const Rect &rect)
 {
     auto transform = glm::translate(glm::mat4(1.0f), position) *
                      glm::rotate(glm::mat4(1.0f), rotation, glm::vec3(0.0f, 0.0f, 1.0f)) *
                      glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
 
     draw_quad(transform, glm::vec4(0.0f), texture, rect);
+}
+
+void magnetar::Renderer2D::draw_text(const std::string &text, Ref<Font> font, const glm::vec3 &position, const glm::vec4 &color)
+{
+    static glm::vec4 points[] = {
+        glm::vec4(0.0f, 0.0f, 0.0f, 1.0f),
+        glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
+        glm::vec4(1.0f, 1.0f, 0.0f, 1.0f),
+        glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
+    };
+
+    TextBatch *batch = &s_data.text;
+
+    Ref<Texture2D> texture = font->texture();
+    if (texture && !s_data.text.textures[0])
+    {
+        MT_ASSERT(batch->texture_count < MAX_TEXTURE_SLOTS, "text texture overflow");
+        s_data.text.textures[batch->texture_count] = texture;
+        batch->texture_count++;
+    }
+
+    float x = position.x;
+    float y = position.y;
+
+    for (auto ch : text)
+    {
+        Font::Glyph glyph = font->get(ch);
+
+        float gx = x + glyph.bearing.x;
+        float gy = y - (glyph.size.y - glyph.bearing.y);
+
+        auto transform = glm::translate(glm::mat4(1.0f), glm::vec3(gx, gy, position.z)) *
+                         glm::scale(glm::mat4(1.0f), glm::vec3(glyph.size.x, glyph.size.y, 1.0f));
+
+        MT_ASSERT(batch->count < MAX_QUAD_VERTICES, "text vertex overflow");
+        batch->count++;
+
+        Rect rect;
+        rect.bl = glyph.uv0;
+        rect.tr = glyph.uv1;
+
+        for (uint32_t i = 0; i < VERTICES_PER_QUAD; i++)
+        {
+            batch->ptr->position = transform * points[i];
+            batch->ptr->texcoord = get_indexed_uv(rect, i);
+            batch->ptr->color = color;
+            batch->ptr++;
+        }
+        x += glyph.advance.x / 64.0f;
+    }
 }

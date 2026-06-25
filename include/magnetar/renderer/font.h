@@ -6,7 +6,6 @@
 #include "magnetar/renderer/texture.h"
 namespace magnetar
 {
-
     class MAGNETAR_API Font
     {
     public:
@@ -20,6 +19,7 @@ namespace magnetar
 
             glm::vec2 advance;
         };
+        
         Font(File *file);
 
         const Glyph &get(char ch) const

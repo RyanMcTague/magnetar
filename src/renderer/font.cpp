@@ -16,7 +16,7 @@ magnetar::Font::Font(File *file)
     error = FT_New_Memory_Face(ft, &bytes[0], bytes.size(), 0, &face);
     MT_ASSERT(error == FT_Err_Ok, "failed to load font {}", file->uri());
 
-    FT_Set_Pixel_Sizes(face, 0, 60);
+    FT_Set_Pixel_Sizes(face, 0, 32);
 
     glm::ivec2 atlas_size(0, 0);
 

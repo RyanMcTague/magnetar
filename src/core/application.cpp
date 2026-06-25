@@ -9,11 +9,15 @@
 #include "magnetar/assets/asset_manager.h"
 #include "magnetar/scripting/script_engine.h"
 
+magnetar::Application* magnetar::Application::s_instance = nullptr;
+
 magnetar::Application::Application()
     : m_is_running(true), m_is_initialized(false), m_window(nullptr)
 {
     Logger::initialize(MAGNETAR_LOG_LEVEL);
+    s_instance = this;
 }
+
 
 magnetar::Application::~Application()
 {

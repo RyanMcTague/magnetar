@@ -20,17 +20,20 @@ namespace magnetar
 
         Window *get_window();
 
+        static Application *get() { return s_instance; }
+
     protected:
+        static Application *s_instance;
         virtual void on_initialize();
         virtual void on_shutdown();
         virtual void on_update(float delta_time);
         virtual void on_render();
-        virtual const char* asset_config() = 0;
+        virtual const char *asset_config() = 0;
 
-        template<typename T, typename ...TArgs>
-        Ref<T> push_layer(TArgs&& ...args);
+        template <typename T, typename... TArgs>
+        Ref<T> push_layer(TArgs &&...args);
 
-        template<typename T>
+        template <typename T>
         Ref<T> get_layer();
 
     private:
@@ -39,14 +42,14 @@ namespace magnetar
         Ref<Window> m_window;
         LayerStack m_layer_stack;
         BufferMask m_mask;
-        
+
         void update(float delta_time);
         void render();
         void shutdown();
     };
 
-    template<typename T, typename ...TArgs>
-    Ref<T> Application::push_layer(TArgs&& ...args)
+    template <typename T, typename... TArgs>
+    Ref<T> Application::push_layer(TArgs &&...args)
     {
         auto ref = create_reference<T>(std::forward<TArgs>(args)...);
         Ref<Layer> layer = std::static_pointer_cast<Layer>(ref);
@@ -55,7 +58,7 @@ namespace magnetar
         return ref;
     }
 
-    template<typename T>
+    template <typename T>
     Ref<T> Application::get_layer()
     {
         return m_layer_stack.get_layer<T>();

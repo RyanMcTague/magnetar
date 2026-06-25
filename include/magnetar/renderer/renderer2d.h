@@ -3,6 +3,7 @@
 #include "magnetar/math/rect.h"
 #include "magnetar/core/base.h"
 #include "magnetar/renderer/texture.h"
+#include "magnetar/renderer/font.h"
 
 namespace magnetar
 {
@@ -21,5 +22,7 @@ namespace magnetar
         
         static void draw_quad(const glm::vec3 &position, const glm::vec2 &size, const Ref<Texture2D> &texture, const Rect& rect = Rect(1.0f));
         static void draw_quad(const glm::vec3 &position, const glm::vec2 &size, float rotation, const Ref<Texture2D> &texture, const Rect& rect = Rect(1.0f));
+
+        static void draw_text(const std::string& text, Ref<Font> font, const glm::vec3 &position, const glm::vec4& color);
     };
 }
