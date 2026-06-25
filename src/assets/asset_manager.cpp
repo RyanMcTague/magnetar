@@ -7,6 +7,7 @@
 #include "magnetar/assets/loaders/shader_loader.h"
 #include "magnetar/assets/loaders/material_loader.h"
 #include "magnetar/assets/loaders/mesh_loader.h"
+#include "magnetar/assets/loaders/font_loader.h"
 
 magnetar::Ref<magnetar::AssetRegistry> magnetar::AssetManager::s_registry;
 std::unordered_map<magnetar::AssetHandle, magnetar::Ref<magnetar::Asset>> magnetar::AssetManager::s_loaded_assets;
@@ -62,6 +63,7 @@ void magnetar::AssetManager::initialize(const char *raw_config)
     register_loader<ShaderLoader>();
     register_loader<MaterialLoader>();
     register_loader<MeshLoader>();
+    register_loader<FontLoader>();
 }
 
 void magnetar::AssetManager::shutdown()

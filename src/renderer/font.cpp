@@ -3,7 +3,7 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-magnetar::Font::Font(File *file)
+magnetar::Font::Font(const void *data, size_t size)
 {
     FT_Error error;
 
@@ -12,9 +12,8 @@ magnetar::Font::Font(File *file)
     MT_ASSERT(error == FT_Err_Ok, "could not initialize freetype");
 
     FT_Face face;
-    auto bytes = file->read_all();
-    error = FT_New_Memory_Face(ft, &bytes[0], bytes.size(), 0, &face);
-    MT_ASSERT(error == FT_Err_Ok, "failed to load font {}", file->uri());
+    error = FT_New_Memory_Face(ft, (uint8_t *)data, size, 0, &face);
+    MT_ASSERT(error == FT_Err_Ok, "failed to load font");
 
     FT_Set_Pixel_Sizes(face, 0, 32);
 
@@ -72,7 +71,7 @@ magnetar::Font::Font(File *file)
     }
 
     Renderer::set_pixel_alignment(PixelStoreMode::UNPACK, 1);
-    
+
     TextureSpecification spec;
     spec.width = atlas_size.x;
     spec.height = atlas_size.y;

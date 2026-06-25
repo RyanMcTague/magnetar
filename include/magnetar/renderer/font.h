@@ -2,11 +2,11 @@
 #include <glm/glm.hpp>
 #include <unordered_map>
 #include "magnetar/core/base.h"
-#include "magnetar/filesystem/file_system.h"
+#include "magnetar/assets/asset.h"
 #include "magnetar/renderer/texture.h"
 namespace magnetar
 {
-    class MAGNETAR_API Font
+    class MAGNETAR_API Font: public Asset
     {
     public:
         struct Glyph
@@ -19,8 +19,8 @@ namespace magnetar
 
             glm::vec2 advance;
         };
-        
-        Font(File *file);
+
+        Font(const void* data, size_t size);
 
         const Glyph &get(char ch) const
         {

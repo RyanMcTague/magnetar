@@ -2,6 +2,8 @@
 #include "magnetar/renderer/renderer.h"
 #include "magnetar/renderer/renderer2d.h"
 #include "magnetar/filesystem/native_file_system.h"
+#include "magnetar/assets/asset_manager.h"
+#include "magnetar/renderer/font.h"
 void magnetar::GameLayer::on_attach()
 {
 }

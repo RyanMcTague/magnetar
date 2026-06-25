@@ -30,3 +30,7 @@
   type: texture2D
   path: ./sample/assets/images/blue.png
 
+- guid: 1009
+  type: font
+  path: ./sample/assets/fonts/Roboto-Regular.ttf
+
