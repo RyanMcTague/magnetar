@@ -30,7 +30,9 @@ namespace Sample
             rb.Velocity = new Vector2D((rightMovement - leftMovement) * speed, 0f);
 
             if(Input.IsActionPressed(Action.Fire))
+            {
                 CreateEntity<Bullet>();
+            }
         }
     }
 }

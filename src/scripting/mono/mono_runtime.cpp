@@ -51,6 +51,12 @@ namespace magnetar
         LOG_TRACE(logger::tags::scripting, "registered component script {}", class_name);
     }
 
+    static float Time_GetTime()
+    {
+        Timestamp timestamp;
+        return timestamp.milliseconds_since_epoch() / 1000.0f;
+    }   
+
     static int Math_Random(int min, int max)
     {
         static bool first = false;
@@ -359,6 +365,7 @@ namespace magnetar
 
     static void add_internal_calls()
     {
+        MT_ADD_INTERNAL_CALL(Time_GetTime);
         MT_ADD_INTERNAL_CALL(Math_Random);
         MT_ADD_INTERNAL_CALL(Logger_Log);
         MT_ADD_INTERNAL_CALL(Logger_SetLevel);
@@ -497,8 +504,17 @@ bool magnetar::MonoRuntime::reload_assembly()
 
 void magnetar::MonoRuntime::update(float delta_time)
 {
+    std::vector<EntityHandle> handles;
+    handles.reserve(m_entity_instances.size());
     for (auto &pair : m_entity_instances)
-        pair.second->invoke_on_update(delta_time);
+        handles.push_back(pair.first);
+
+    for (auto handle : handles)
+    {
+        auto it = m_entity_instances.find(handle);
+        if (it != m_entity_instances.end())
+            it->second->invoke_on_update(delta_time);
+    }
 }
 
 magnetar::ScriptInstance *magnetar::MonoRuntime::create_entity_instance(const std::string &name, EntityHandle handle)

@@ -6,6 +6,12 @@ namespace Magnetar.Core
     internal static class InternalCalls
     {
         //==========================================
+        // Time
+        //==========================================
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        internal static extern float Time_GetTime();
+
+        //==========================================
         // Logger
         //==========================================
         [MethodImpl(MethodImplOptions.InternalCall)]
@@ -44,7 +50,6 @@ namespace Magnetar.Core
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern bool Entity_Destroy(uint id);
-
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         internal static extern bool Entity_HasComponent(uint id, Type type);

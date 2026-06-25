@@ -5,10 +5,12 @@ namespace Sample
 {
     class Alien : Entity
     {
+        private static float direction = 1.0f;
+        private static float countTarget = 1f;
         public static float Width { get => 10f; }
         public static float Height { get => 10f; }
 
-        float counter = 0f;
+        float count =0;
 
         void OnStart()
         {
@@ -24,13 +26,31 @@ namespace Sample
 
         void OnUpdate(float dt)
         {
-            counter += dt;
-
-            if(dt >= 5f)
+            count += dt;
+            if(count > countTarget)
             {
-                counter = 0f;
-                Logger.Debug("Step");
-            }            
+                count = 0f;
+                float x = Position.x;
+                float xMovement = 4f;
+                float newX = x + direction * xMovement;
+                float y = Position.y;
+                if((newX + Width) > Game.ResolutionX)
+                {
+                    direction *= -1f;
+                    newX = x + direction * xMovement;
+                    countTarget -= 0.1f;
+                    y -= Height;
+                }
+                else if((newX - 5f) < 0f)
+                {
+                    direction *= -1f;
+                    newX = x + direction * xMovement;
+                    countTarget -= 0.1f;
+                    y -= Height;
+                }
+               
+                Position = new Vector3D(newX, y, Position.z);
+            }
         }
     }
 }

@@ -102,8 +102,7 @@ void magnetar::Scene::on_update(float delta_time)
         {
             transform.position.x += rb.velocity.x * delta_time;
             transform.position.y += rb.velocity.y * delta_time;
-
-            transform.rotation += rb.angular_velocity * delta_time;
+            transform.rotation.z += rb.angular_velocity * delta_time;
         }
     }
     {
