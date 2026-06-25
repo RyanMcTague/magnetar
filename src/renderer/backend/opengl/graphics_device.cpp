@@ -81,3 +81,19 @@ void magnetar::GLGraphicsDevice::set_clear_color(const glm::vec4 &color) const
 {
     glClearColor(color.x, color.y, color.z, color.w);
 }
+
+void magnetar::GLGraphicsDevice::set_pixel_alignment(PixelStoreMode mode, int count) const
+{
+    glPixelStorei(GLHelpers::pixel_store_mode_type(mode), count);
+}
+
+void magnetar::GLGraphicsDevice::set_blend_enabled(bool enabled) const
+{
+    if (enabled) glEnable(GL_BLEND);
+    else         glDisable(GL_BLEND);
+}
+
+void magnetar::GLGraphicsDevice::set_blend_func(BlendFactor src, BlendFactor dst) const
+{
+    glBlendFunc(GLHelpers::blend_factor_type(src), GLHelpers::blend_factor_type(dst));
+}

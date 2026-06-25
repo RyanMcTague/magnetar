@@ -21,6 +21,8 @@ namespace magnetar
         static GLenum texture_filter_type(TextureFilter filter);
         static GLenum texture_wrap_type(TextureWrap wrap);
         static GLenum draw_mode_type(DrawMode mode);
+        static GLenum pixel_store_mode_type(PixelStoreMode mode);
+        static GLenum blend_factor_type(BlendFactor factor);
     private:
         GLHelpers() = default;
     };

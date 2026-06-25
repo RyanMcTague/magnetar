@@ -13,6 +13,9 @@ namespace magnetar
         Rect()
             : bl(glm::vec2(0.0f)), tr(glm::vec2(0.0f)) {}
 
+        Rect(float s)
+            : bl(glm::vec2(0.0f, 0.0f)), tr(glm::vec2(s, s)) {}
+
         Rect(const glm::vec2 &bl, const glm::vec2 &tr)
             : bl(bl), tr(tr) {}
 

@@ -22,6 +22,9 @@ namespace magnetar
         void draw_indexed(DrawMode mode, Ref<VertexArray> vao, Ref<IndexBuffer> ibo) const override;
         void set_viewport(int x, int y, int width, int height) const override;
         void set_clear_color(const glm::vec4 &color) const override;
+        void set_pixel_alignment(PixelStoreMode mode, int count) const override;
+        void set_blend_enabled(bool enabled) const override;
+        void set_blend_func(BlendFactor src, BlendFactor dst) const override;
 
         const std::string &name() const override { return m_name; }
 

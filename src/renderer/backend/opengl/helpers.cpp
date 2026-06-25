@@ -101,6 +101,9 @@ GLenum magnetar::GLHelpers::texture_format_type(TextureFormat format)
 
     switch (format)
     {
+    case TextureFormat::R8:
+        f = GL_RED;
+        break;
     case TextureFormat::RGB8:
         f = GL_RGB;
         break;
@@ -170,4 +173,35 @@ GLenum magnetar::GLHelpers::draw_mode_type(DrawMode mode)
         break;
     }
     return value;
+}
+
+GLenum magnetar::GLHelpers::pixel_store_mode_type(PixelStoreMode mode)
+{
+    GLenum value = 0;
+    switch (mode)
+    {
+    case PixelStoreMode::PACK:
+        value = GL_PACK_ALIGNMENT;
+        break;
+    case PixelStoreMode::UNPACK:
+        value = GL_UNPACK_ALIGNMENT;
+        break;
+    default:
+        break;
+    }
+    return value;
+}
+
+GLenum magnetar::GLHelpers::blend_factor_type(BlendFactor factor)
+{
+    switch (factor)
+    {
+    case BlendFactor::ZERO:                return GL_ZERO;
+    case BlendFactor::ONE:                 return GL_ONE;
+    case BlendFactor::SRC_ALPHA:           return GL_SRC_ALPHA;
+    case BlendFactor::ONE_MINUS_SRC_ALPHA: return GL_ONE_MINUS_SRC_ALPHA;
+    case BlendFactor::DST_ALPHA:           return GL_DST_ALPHA;
+    case BlendFactor::ONE_MINUS_DST_ALPHA: return GL_ONE_MINUS_DST_ALPHA;
+    default:                               return GL_ONE;
+    }
 }

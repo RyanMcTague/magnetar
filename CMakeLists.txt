@@ -121,6 +121,7 @@ target_sources(magnetar
             include/magnetar/renderer/shader.h
             include/magnetar/renderer/texture.h
             include/magnetar/renderer/mesh.h
+            include/magnetar/renderer/font.h
             include/magnetar/renderer/render_command.h
             include/magnetar/renderer/buffer_mask.h
             include/magnetar/renderer/renderer.h
@@ -204,6 +205,7 @@ target_sources(magnetar
         src/renderer/renderer.cpp
         src/renderer/material.cpp
         src/renderer/camera.cpp
+        src/renderer/font.cpp
         src/renderer/renderer2d.cpp
         
         src/renderer/backend/opengl/glad.cpp

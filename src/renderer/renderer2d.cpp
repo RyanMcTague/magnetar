@@ -106,10 +106,38 @@ namespace magnetar
     };
 
     static Renderer2DData s_data;
+
+    inline static glm::vec2 get_indexed_uv(const Rect &rect, int i)
+    {
+        // static glm::vec2 texture_coords[] = {
+        //     glm::vec2(0.0f, 0.0f), // bl
+        //     glm::vec2(1.0f, 0.0f), // tl
+        //     glm::vec2(1.0f, 1.0f), // tr
+        //     glm::vec2(0.0f, 1.0f), // br
+        // };
+
+        switch (i)
+        {
+        case 0:
+            return rect.bl;
+        case 1:
+            return glm::vec2(rect.tr.x, rect.bl.y);
+        case 2:
+            return rect.tr;
+        case 3:
+            return glm::vec2(rect.bl.x, rect.tr.y);
+        default:
+            break;
+        }
+        return glm::vec2(0.0f);
+    }
+
 }
 
 void magnetar::Renderer2D::initialize()
 {
+    Renderer::set_blend_enabled(true);
+    Renderer::set_blend_func(BlendFactor::SRC_ALPHA, BlendFactor::ONE_MINUS_SRC_ALPHA);
     //==== Quad Batch =========================
     uint32_t index_data[QUAD_INDICES_COUNT];
 
@@ -179,9 +207,12 @@ void magnetar::Renderer2D::submit()
         Renderer::draw_indexed(DrawMode::TRIANGLES, batch->vertex_array, batch->index_buffer);
         batch->shader->unbind();
     }
+
+    for (uint32_t i = 0; i < MAX_TEXTURE_SLOTS; i++)
+        s_data.quads.textures[i] = nullptr;
 }
 
-void magnetar::Renderer2D::draw_quad(const glm::mat4 &transform, const glm::vec4 &color, const Ref<Texture2D> &texture)
+void magnetar::Renderer2D::draw_quad(const glm::mat4 &transform, const glm::vec4 &color, const Ref<Texture2D> &texture, const Rect &rect)
 {
     static glm::vec4 points[] = {
         glm::vec4(0.0f, 0.0f, 0.0f, 1.0f),
@@ -190,12 +221,12 @@ void magnetar::Renderer2D::draw_quad(const glm::mat4 &transform, const glm::vec4
         glm::vec4(0.0f, 1.0f, 0.0f, 1.0f),
     };
 
-    static glm::vec2 texture_coords[] = {
-        glm::vec2(0.0f, 0.0f),
-        glm::vec2(1.0f, 0.0f),
-        glm::vec2(1.0f, 1.0f),
-        glm::vec2(0.0f, 1.0f),
-    };
+    // static glm::vec2 texture_coords[] = {
+    //     glm::vec2(0.0f, 0.0f), // bl
+    //     glm::vec2(1.0f, 0.0f), // tl
+    //     glm::vec2(1.0f, 1.0f), // tr
+    //     glm::vec2(0.0f, 1.0f), // br
+    // };
 
     QuadBatch *batch = &s_data.quads;
 
@@ -229,7 +260,7 @@ void magnetar::Renderer2D::draw_quad(const glm::mat4 &transform, const glm::vec4
     for (uint32_t i = 0; i < VERTICES_PER_QUAD; i++)
     {
         batch->ptr->position = transform * points[i];
-        batch->ptr->texcoord = texture_coords[i];
+        batch->ptr->texcoord = get_indexed_uv(rect, i);
         batch->ptr->color = color;
         batch->ptr->texture = texture_slot;
         batch->ptr++;
@@ -253,19 +284,19 @@ void magnetar::Renderer2D::draw_quad(const glm::vec3 &position, const glm::vec2 
     draw_quad(transform, color);
 }
 
-void magnetar::Renderer2D::draw_quad(const glm::vec3 &position, const glm::vec2 &size, const Ref<Texture2D> &texture)
+void magnetar::Renderer2D::draw_quad(const glm::vec3 &position, const glm::vec2 &size, const Ref<Texture2D> &texture, const Rect &rect)
 {
     auto transform = glm::translate(glm::mat4(1.0f), position) *
                      glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
 
-    draw_quad(transform, glm::vec4(0.0f), texture);
+    draw_quad(transform, glm::vec4(0.0f), texture, rect);
 }
 
-void magnetar::Renderer2D ::draw_quad(const glm::vec3 &position, const glm::vec2 &size, float rotation, const Ref<Texture2D> &texture)
+void magnetar::Renderer2D ::draw_quad(const glm::vec3 &position, const glm::vec2 &size, float rotation, const Ref<Texture2D> &texture, const Rect &rect)
 {
     auto transform = glm::translate(glm::mat4(1.0f), position) *
                      glm::rotate(glm::mat4(1.0f), rotation, glm::vec3(0.0f, 0.0f, 1.0f)) *
                      glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
 
-    draw_quad(transform, glm::vec4(0.0f), texture);
+    draw_quad(transform, glm::vec4(0.0f), texture, rect);
 }

@@ -31,6 +31,9 @@ namespace magnetar
         virtual void draw_indexed(DrawMode mode, Ref<VertexArray> vao, Ref<IndexBuffer> ibo) const = 0;
         virtual void set_viewport(int x, int y, int width, int height) const = 0;
         virtual void set_clear_color(const glm::vec4& color) const = 0;
+        virtual void set_pixel_alignment(PixelStoreMode mode, int count) const = 0;
+        virtual void set_blend_enabled(bool enabled) const = 0;
+        virtual void set_blend_func(BlendFactor src, BlendFactor dst) const = 0;
 
         virtual const std::string &name() const = 0;
     };

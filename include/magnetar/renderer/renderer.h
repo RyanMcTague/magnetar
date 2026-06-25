@@ -29,6 +29,9 @@ namespace magnetar
         static void draw_indexed(DrawMode mode, Ref<VertexArray> vao, Ref<IndexBuffer> ibo);
         static void set_viewport(int x, int y, int width, int height);
         static void set_clear_color(const glm::vec4 &color);
+        static void set_pixel_alignment(PixelStoreMode mode, int count);
+        static void set_blend_enabled(bool enabled);
+        static void set_blend_func(BlendFactor src, BlendFactor dst);
 
         static void begin_scene(Ref<Camera> camera);
         static void submit(const Ref<IMesh> &mesh, const Ref<Material> &material, const glm::mat4 &transform);

@@ -68,6 +68,22 @@ namespace magnetar
         TEXTURE2D
     };
 
+    enum class MAGNETAR_API PixelStoreMode
+    {
+        PACK = 0,
+        UNPACK = 1,
+    };
+
+    enum class MAGNETAR_API BlendFactor
+    {
+        ZERO = 0,
+        ONE,
+        SRC_ALPHA,
+        ONE_MINUS_SRC_ALPHA,
+        DST_ALPHA,
+        ONE_MINUS_DST_ALPHA,
+    };
+
     MAGNETAR_API inline size_t renderer_data_type_size(RendererDataType type)
     {
         size_t size = 0;

@@ -70,6 +70,21 @@ void magnetar::Renderer::set_clear_color(const glm::vec4 &color)
     s_device->set_clear_color(color);
 }
 
+void magnetar::Renderer::set_pixel_alignment(PixelStoreMode mode, int count)
+{
+    s_device->set_pixel_alignment(mode, count);
+}
+
+void magnetar::Renderer::set_blend_enabled(bool enabled)
+{
+    s_device->set_blend_enabled(enabled);
+}
+
+void magnetar::Renderer::set_blend_func(BlendFactor src, BlendFactor dst)
+{
+    s_device->set_blend_func(src, dst);
+}
+
 void magnetar::Renderer::begin_scene(Ref<Camera> camera)
 {
     s_view_projection = camera->matrix();

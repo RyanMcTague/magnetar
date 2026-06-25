@@ -2,6 +2,7 @@
 #include "magnetar/core/base.h"
 #include "magnetar/core/layer.h"
 #include "magnetar/scene/scene.h"
+#include "magnetar/renderer/font.h"
 namespace magnetar
 {
     class MAGNETAR_API GameLayer: public Layer
@@ -16,5 +17,7 @@ namespace magnetar
         void set_scene(Ref<Scene> scene);
     private:
         Ref<Scene> m_scene;
+        Ref<Font> m_font;
+
     };
 }
