@@ -224,6 +224,95 @@ install(
 )
 
 ########################################################
+# SDK Export (non-CMake users)
+# Usage: cmake --install <build> --prefix ./sdk --component sdk
+########################################################
+install(
+    TARGETS magnetar
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    COMPONENT sdk
+)
+
+# Use install(CODE) + file(COPY FOLLOW_SYMLINK_CHAIN) so Conan cache symlinks
+# are dereferenced into real files instead of dangling symlinks in the SDK.
+install(CODE "
+    file(COPY \"${CMAKE_CURRENT_SOURCE_DIR}/magnetar/include/\"
+        DESTINATION \"\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}\"
+        FOLLOW_SYMLINK_CHAIN
+        FILES_MATCHING PATTERN \"*.h\" PATTERN \"*.hpp\" PATTERN \"*.inl\"
+    )
+" COMPONENT sdk)
+
+set(_MAGNETAR_SDK_TARGETS
+    fmt::fmt
+    spdlog::spdlog
+    glfw
+    magic_enum::magic_enum
+    glm::glm
+    yaml-cpp::yaml-cpp
+    assimp::assimp
+    EnTT::EnTT
+    Freetype::Freetype
+)
+
+foreach(_dep IN LISTS _MAGNETAR_SDK_TARGETS)
+    get_target_property(_incs ${_dep} INTERFACE_INCLUDE_DIRECTORIES)
+    if(_incs)
+        foreach(_dir IN LISTS _incs)
+            # Only copy from Conan cache or our own source tree.
+            # Reject system-wide prefixes (/usr, /opt, /System, /Library) — those
+            # are picked up when a dep resolves to a system install (e.g. Homebrew)
+            # instead of its Conan package, and copying them wholesale pulls in
+            # thousands of unrelated headers (at-spi2, gtk, etc.).
+            if(NOT _dir MATCHES "\\$<" AND EXISTS "${_dir}"
+               AND NOT _dir MATCHES "^/usr/"
+               AND NOT _dir MATCHES "^/opt/"
+               AND NOT _dir MATCHES "^/System/"
+               AND NOT _dir MATCHES "^/Library/")
+                install(CODE "
+                    file(COPY \"${_dir}/\"
+                        DESTINATION \"\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}\"
+                        FOLLOW_SYMLINK_CHAIN
+                        FILES_MATCHING PATTERN \"*.h\" PATTERN \"*.hpp\" PATTERN \"*.inl\"
+                    )
+                " COMPONENT sdk)
+            endif()
+        endforeach()
+    endif()
+
+    foreach(_prop IN ITEMS IMPORTED_LOCATION IMPORTED_LOCATION_RELEASE IMPORTED_LOCATION_DEBUG IMPORTED_LOCATION_RELWITHDEBINFO)
+        get_target_property(_lib ${_dep} ${_prop})
+        if(_lib AND EXISTS "${_lib}")
+            # Same guard: skip system-installed libs, only bundle Conan-managed ones
+            if(NOT _lib MATCHES "^/usr/" AND NOT _lib MATCHES "^/opt/"
+               AND NOT _lib MATCHES "^/System/" AND NOT _lib MATCHES "^/Library/")
+                install(FILES "${_lib}" DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT sdk)
+            endif()
+            break()
+        endif()
+    endforeach()
+endforeach()
+
+# Mono headers and library
+install(CODE "
+    file(COPY \"${MONO_INCLUDE_DIR}/\"
+        DESTINATION \"\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/mono-2.0\"
+        FOLLOW_SYMLINK_CHAIN
+        FILES_MATCHING PATTERN \"*.h\"
+    )
+" COMPONENT sdk)
+install(FILES "${MONO_LIBRARY}" DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT sdk)
+
+# C# script core assembly
+install(
+    FILES "${CMAKE_BINARY_DIR}/Magnetar-ScriptCore.dll"
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    COMPONENT sdk
+)
+
+########################################################
 # Export targets
 ########################################################
 install(
