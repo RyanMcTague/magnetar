@@ -320,7 +320,7 @@ endif()
 find_program(MCS_EXECUTABLE mcs REQUIRED)
 
 file(GLOB_RECURSE MAGNETAR_CS_SOURCES
-    "${CMAKE_SOURCE_DIR}/scripting/Core/*.cs"
+    "${CMAKE_SOURCE_DIR}/scripting/*.cs"
 )
 list(FILTER MAGNETAR_CS_SOURCES EXCLUDE REGEX ".*/obj/.*")
 

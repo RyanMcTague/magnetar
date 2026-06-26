@@ -7,6 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../scripting/Core/Core.csproj" />
+    <ProjectReference Include="../scripting/Core.csproj" />
   </ItemGroup>
 </Project>

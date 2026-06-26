@@ -1,4 +1,3 @@
-
 using Magnetar.Core;
 
 namespace Sample
