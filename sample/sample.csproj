@@ -7,6 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../Magnetar/Core/Core.csproj" />
+    <ProjectReference Include="../scripting/Core/Core.csproj" />
   </ItemGroup>
 </Project>

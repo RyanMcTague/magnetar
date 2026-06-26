@@ -36,8 +36,8 @@ void SandboxApp::on_initialize()
     InputSystem::register_action("down", actions::down, KeyboardKey::S);
     InputSystem::register_action("fire", actions::fire, KeyboardKey::SPACE);
 
-    ScriptEngine::load_assembly("./sample/Magnetar-ScriptCore.dll");
-    ScriptEngine::load_assembly("./sample/Sample.dll");
+    ScriptEngine::load_assembly("./.conan/build/Debug/Magnetar-ScriptCore.dll");
+    ScriptEngine::load_assembly("./.conan/build/Debug/Sample.dll");
 
     auto aspect_ratio = get_window()->aspect_ratio();
     auto winwidth = get_window()->width();

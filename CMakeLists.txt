@@ -30,7 +30,6 @@ find_package(assimp REQUIRED CONFIG)
 find_package(EnTT REQUIRED CONFIG)
 find_package(freetype REQUIRED CONFIG)
 
-
 find_path(
     MONO_INCLUDE_DIR
     mono/jit/jit.h
@@ -315,6 +314,32 @@ else()
     message(FATAL_ERROR "${PROJECT_NAME} does not support ${CMAKE_SYSTEM_NAME}")
 endif()
 
+########################################################
+# Mono C# Assembly
+########################################################
+find_program(MCS_EXECUTABLE mcs REQUIRED)
+
+file(GLOB_RECURSE MAGNETAR_CS_SOURCES
+    "${CMAKE_SOURCE_DIR}/scripting/Core/*.cs"
+)
+list(FILTER MAGNETAR_CS_SOURCES EXCLUDE REGEX ".*/obj/.*")
+
+set(MAGNETAR_CS_OUTPUT "${CMAKE_BINARY_DIR}/Magnetar-ScriptCore.dll")
+
+add_custom_command(
+    OUTPUT "${MAGNETAR_CS_OUTPUT}"
+    COMMAND "${MCS_EXECUTABLE}"
+        -target:library
+        -out:${MAGNETAR_CS_OUTPUT}
+        ${MAGNETAR_CS_SOURCES}
+    DEPENDS ${MAGNETAR_CS_SOURCES}
+    COMMENT "Compiling Magnetar C# assembly with Mono"
+    VERBATIM
+)
+
+add_custom_target(magnetar_csharp ALL
+    DEPENDS "${MAGNETAR_CS_OUTPUT}"
+)
 
 ########################################################
 # Sandbox
@@ -327,6 +352,31 @@ if(MAGNETAR_BUILD_SANDBOX)
         BUILD_RPATH "${MONO_ROOT}/lib"
         INSTALL_RPATH "${MONO_ROOT}/lib"
     )
+
+    file(GLOB_RECURSE SAMPLE_CS_SOURCES
+        "${CMAKE_SOURCE_DIR}/sample/*.cs"
+    )
+    list(FILTER SAMPLE_CS_SOURCES EXCLUDE REGEX ".*/obj/.*")
+
+    set(SAMPLE_CS_OUTPUT "${CMAKE_BINARY_DIR}/Sample.dll")
+
+    add_custom_command(
+        OUTPUT "${SAMPLE_CS_OUTPUT}"
+        COMMAND "${MCS_EXECUTABLE}"
+            -target:library
+            -out:${SAMPLE_CS_OUTPUT}
+            -r:${MAGNETAR_CS_OUTPUT}
+            ${SAMPLE_CS_SOURCES}
+        DEPENDS ${SAMPLE_CS_SOURCES}
+        COMMENT "Compiling Magnetar C# assembly with Mono"
+        VERBATIM
+    )
+
+    add_custom_target(sample_csharp ALL
+        DEPENDS "${SAMPLE_CS_OUTPUT}"
+    )
+    add_dependencies(sample_csharp magnetar_csharp)
+
 endif()
 
 ########################################################
