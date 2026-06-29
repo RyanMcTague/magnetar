@@ -5,6 +5,8 @@
 
 magnetar::Font::Font(const void *data, size_t size)
 {
+    m_size = 32;
+
     FT_Error error;
 
     FT_Library ft;
@@ -15,7 +17,7 @@ magnetar::Font::Font(const void *data, size_t size)
     error = FT_New_Memory_Face(ft, (uint8_t *)data, size, 0, &face);
     MT_ASSERT(error == FT_Err_Ok, "failed to load font");
 
-    FT_Set_Pixel_Sizes(face, 0, 32);
+    FT_Set_Pixel_Sizes(face, 0, m_size);
 
     glm::ivec2 atlas_size(0, 0);
 

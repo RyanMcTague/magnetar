@@ -428,6 +428,13 @@ void magnetar::Renderer2D::draw_text(const std::string &text, Ref<Font> font, co
 
     for (auto ch : text)
     {
+        if(ch == '\n')
+        {
+            x = position.x;
+            y -= font->size();
+            continue;
+        }
+
         Font::Glyph glyph = font->get(ch);
 
         float gx = x + glyph.bearing.x;

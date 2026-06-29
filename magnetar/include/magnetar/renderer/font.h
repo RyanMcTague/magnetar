@@ -30,9 +30,11 @@ namespace magnetar
         }
 
         Ref<Texture2D> texture() const { return m_texture; }
+        int size() const { return m_size;}
 
     private:
         std::unordered_map<char, Glyph> m_glyphs;
         Ref<Texture2D> m_texture;
+        int m_size;
     };
 }
