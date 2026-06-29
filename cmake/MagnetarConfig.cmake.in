@@ -8,7 +8,6 @@ find_dependency(glfw3 CONFIG)
 find_dependency(magic_enum CONFIG)
 find_dependency(glm CONFIG)
 find_dependency(yaml-cpp CONFIG)
-find_dependency(assimp CONFIG)
 find_dependency(EnTT CONFIG)
 find_dependency(freetype CONFIG)
 

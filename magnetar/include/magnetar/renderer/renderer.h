@@ -7,7 +7,6 @@
 #include "magnetar/renderer/shader.h"
 #include "magnetar/renderer/texture.h"
 #include "magnetar/renderer/graphics_device.h"
-#include "magnetar/renderer/render_command.h"
 #include "magnetar/renderer/camera.h"
 
 namespace magnetar
@@ -33,14 +32,9 @@ namespace magnetar
         static void set_blend_enabled(bool enabled);
         static void set_blend_func(BlendFactor src, BlendFactor dst);
 
-        static void begin_scene(Ref<Camera> camera);
-        static void submit(const Ref<IMesh> &mesh, const Ref<Material> &material, const glm::mat4 &transform);
-        static void end_scene();
-
     private:
         Renderer() = default;
         static UniqueRef<GraphicsDevice> s_device;
-        static std::vector<RenderCommand> s_render_commands;
         static glm::mat4 s_view_projection;
     };
 }

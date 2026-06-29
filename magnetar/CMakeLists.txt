@@ -9,8 +9,6 @@ target_sources(magnetar
             include/magnetar/assets/asset_handle.h
             include/magnetar/assets/loaders/texture_loader.h
             include/magnetar/assets/loaders/shader_loader.h
-            include/magnetar/assets/loaders/material_loader.h
-            include/magnetar/assets/loaders/mesh_loader.h
             include/magnetar/assets/loaders/font_loader.h
 
             include/magnetar/containers/tree.h
@@ -55,13 +53,10 @@ target_sources(magnetar
             include/magnetar/renderer/shader_library.h
             include/magnetar/renderer/shader.h
             include/magnetar/renderer/texture.h
-            include/magnetar/renderer/mesh.h
             include/magnetar/renderer/font.h
-            include/magnetar/renderer/render_command.h
             include/magnetar/renderer/buffer_mask.h
             include/magnetar/renderer/renderer.h
             include/magnetar/renderer/camera.h
-            include/magnetar/renderer/material.h
             include/magnetar/renderer/vertex_array.h
             include/magnetar/renderer/vertex_buffer.h
             include/magnetar/renderer/renderer2d.h
@@ -107,8 +102,6 @@ target_sources(magnetar
         src/assets/asset_manager.cpp
         src/assets/loaders/texture_loader.cpp
         src/assets/loaders/shader_loader.cpp
-        src/assets/loaders/material_loader.cpp
-        src/assets/loaders/mesh_loader.cpp
         src/assets/loaders/font_loader.cpp
 
         src/core/application.cpp
@@ -137,9 +130,7 @@ target_sources(magnetar
         src/renderer/shader.cpp
         src/renderer/shader_library.cpp
         src/renderer/buffer_layout.cpp
-        src/renderer/mesh.cpp
         src/renderer/renderer.cpp
-        src/renderer/material.cpp
         src/renderer/camera.cpp
         src/renderer/font.cpp
         src/renderer/renderer2d.cpp

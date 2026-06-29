@@ -26,7 +26,6 @@ find_package(glfw3 REQUIRED CONFIG)
 find_package(magic_enum REQUIRED CONFIG)
 find_package(glm REQUIRED CONFIG)
 find_package(yaml-cpp REQUIRED CONFIG)
-find_package(assimp REQUIRED CONFIG)
 find_package(EnTT REQUIRED CONFIG)
 find_package(freetype REQUIRED CONFIG)
 
@@ -114,7 +113,6 @@ target_link_libraries(magnetar
         magic_enum::magic_enum
         glm::glm
         yaml-cpp::yaml-cpp
-        assimp::assimp
         EnTT::EnTT
         Freetype::Freetype
         ${MONO_LIBRARY}
@@ -252,7 +250,6 @@ set(_MAGNETAR_SDK_TARGETS
     magic_enum::magic_enum
     glm::glm
     yaml-cpp::yaml-cpp
-    assimp::assimp
     EnTT::EnTT
     Freetype::Freetype
 )

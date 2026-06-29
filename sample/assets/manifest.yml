@@ -1,22 +1,6 @@
-- guid: 1000
-  type: material
-  path: ./sample/assets/materials/wall.material
-
-- guid: 1001
-  type: material
-  path: ./sample/assets/materials/blue.material
-
 - guid: 1002
   type: texture2D
   path: ./sample/assets/images/wall.jpg
-
-- guid: 1003
-  type: model
-  path: ./sample/assets/models/cube.obj
-
-- guid: 1004
-  type: model
-  path: ./sample/assets/models/square.obj
 
 - guid: 1005
   type: shader

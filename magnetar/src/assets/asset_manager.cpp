@@ -5,8 +5,6 @@
 
 #include "magnetar/assets/loaders/texture_loader.h"
 #include "magnetar/assets/loaders/shader_loader.h"
-#include "magnetar/assets/loaders/material_loader.h"
-#include "magnetar/assets/loaders/mesh_loader.h"
 #include "magnetar/assets/loaders/font_loader.h"
 
 magnetar::Ref<magnetar::AssetRegistry> magnetar::AssetManager::s_registry;
@@ -61,8 +59,6 @@ void magnetar::AssetManager::initialize(const char *raw_config)
     s_registry = create_reference<AssetRegistry>(raw_config);
     register_loader<Texture2DLoader>();
     register_loader<ShaderLoader>();
-    register_loader<MaterialLoader>();
-    register_loader<MeshLoader>();
     register_loader<FontLoader>();
 }
 
