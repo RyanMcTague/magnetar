@@ -22,17 +22,6 @@ namespace magnetar
             : position(position), rotation(rotation), scale(scale) {}
     };
 
-    struct MAGNETAR_API MeshRendererComponent
-    {
-        MT_DECLARE_CLASS_NAME(MeshRendererComponent)
-
-        AssetHandle mesh;
-        AssetHandle material;
-
-        MeshRendererComponent(AssetHandle mesh, AssetHandle material)
-            : mesh(mesh), material(material) {}
-    };
-
     struct MAGNETAR_API SpriteRendererComponent
     {
         MT_DECLARE_CLASS_NAME(SpriteRendererComponent)
@@ -40,9 +29,10 @@ namespace magnetar
         glm::vec2 size;
         glm::vec4 color;
         AssetHandle texture;
+        Rect rect;
 
-        SpriteRendererComponent(const glm::vec2 &size = glm::vec2(0.0f), const glm::vec4 &color = glm::vec4(0.0f), AssetHandle texture = 0)
-            : size(size), color(color), texture(texture) {}
+        SpriteRendererComponent(const glm::vec2 &size = glm::vec2(0.0f), const glm::vec4 &color = glm::vec4(0.0f), AssetHandle texture = 0, const Rect rect = Rect(1.0f))
+            : size(size), color(color), texture(texture), rect(rect) {}
     };
 
     struct MAGNETAR_API Camera2DComponent

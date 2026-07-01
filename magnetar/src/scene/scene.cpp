@@ -84,70 +84,16 @@ void magnetar::Scene::end_scene()
 
 void magnetar::Scene::on_render()
 {
-    {
-        auto view = view_with_components<TransformComponent, SpriteRendererComponent>();
-        for (auto [_, transform, sr] : view.each())
-        {
-            if (sr.texture)
-                Renderer2D::draw_quad(transform.position, sr.size, transform.rotation.z, AssetManager::load<Texture2D>(sr.texture));
-            else
-                Renderer2D::draw_quad(transform.position, sr.size, transform.rotation.z, sr.color);
-        }
-    }
-    {
-        auto view = view_with_components<TransformComponent, TextRendererComponent>();
-        for (auto [_, transform, tr] : view.each())
-        {
-            if (tr.font != 0)
-            {
-                Renderer2D::draw_text(tr.value, AssetManager::load<Font>(tr.font), transform.position, tr.color);
-            }
-        }
-    }
+    sprite_renderer_render();
+    text_renderer_render();
 }
 
 void magnetar::Scene::on_update(float delta_time)
 {
     ScriptEngine::update(delta_time);
     ScriptEngine::start_all_entity_instances();
-    {
-        auto view = view_with_components<TransformComponent, RigidBody2DComponent>();
-        for (auto [_, transform, rb] : view.each())
-        {
-            transform.position.x += rb.velocity.x * delta_time;
-            transform.position.y += rb.velocity.y * delta_time;
-            transform.rotation.z += rb.angular_velocity * delta_time;
-        }
-    }
-    {
-        auto view = view_with_components<TransformComponent, BoxColliderComponent>();
-        for (auto [handle, transform, collider] : view.each())
-        {
-            Rect rect;
-            rect.bl = glm::vec2(collider.position.x + transform.position.x, collider.position.y + transform.position.y);
-            rect.tr = glm::vec2(rect.bl.x + collider.size.x, rect.bl.y + collider.size.y);
-
-            for (auto [o_handle, o_transform, o_collider] : view.each())
-            {
-                if (handle == o_handle)
-                    continue;
-
-                Rect o_rect;
-                o_rect.bl = glm::vec2(o_collider.position.x + o_transform.position.x, o_collider.position.y + o_transform.position.y);
-                o_rect.tr = glm::vec2(o_rect.bl.x + o_collider.size.x, o_rect.bl.y + o_collider.size.y);
-
-                if (rect.is_overlapping(o_rect))
-                {
-                    auto instance = ScriptEngine::get_entity_instance(handle);
-                    auto o_instance = ScriptEngine::get_entity_instance(o_handle);
-                    if (instance && o_instance && instance->has_method("OnCollision"))
-                    {
-                        instance->invoke_on_collision(o_instance);
-                    }
-                }
-            }
-        }
-    }
+    rigid_body_update(delta_time);
+    box_collider_update(delta_time);
     flush_entities();
 }
 
@@ -167,5 +113,76 @@ void magnetar::Scene::on_component_removed(const EntityComponentRemovedEvent &ev
     if (event.component_class_name == std::string(MT_STATIC_CLASS_NAME(ScriptComponent)))
     {
         ScriptEngine::remove_entity_instance(event.handle);
+    }
+}
+
+void magnetar::Scene::sprite_renderer_render()
+{
+    auto view = view_with_components<TransformComponent, SpriteRendererComponent>();
+    for (auto [_, transform, sr] : view.each())
+    {
+        if (sr.texture)
+        {
+            auto texture = AssetManager::load<Texture2D>(sr.texture);
+            Renderer2D::draw_quad(transform.position, sr.size, transform.rotation.z, texture, sr.rect);
+        }
+        else
+        {
+            Renderer2D::draw_quad(transform.position, sr.size, transform.rotation.z, sr.color);
+        }
+    }
+}
+
+void magnetar::Scene::text_renderer_render()
+{
+    auto view = view_with_components<TransformComponent, TextRendererComponent>();
+    for (auto [_, transform, tr] : view.each())
+    {
+        if (tr.font != 0)
+        {
+            Renderer2D::draw_text(tr.value, AssetManager::load<Font>(tr.font), transform.position, tr.color);
+        }
+    }
+}
+
+void magnetar::Scene::rigid_body_update(float delta_time)
+{
+    auto view = view_with_components<TransformComponent, RigidBody2DComponent>();
+    for (auto [_, transform, rb] : view.each())
+    {
+        transform.position.x += rb.velocity.x * delta_time;
+        transform.position.y += rb.velocity.y * delta_time;
+        transform.rotation.z += rb.angular_velocity * delta_time;
+    }
+}
+
+void magnetar::Scene::box_collider_update(float)
+{
+    auto view = view_with_components<TransformComponent, BoxColliderComponent>();
+    for (auto [handle, transform, collider] : view.each())
+    {
+        Rect rect;
+        rect.bl = glm::vec2(collider.position.x + transform.position.x, collider.position.y + transform.position.y);
+        rect.tr = glm::vec2(rect.bl.x + collider.size.x, rect.bl.y + collider.size.y);
+
+        for (auto [o_handle, o_transform, o_collider] : view.each())
+        {
+            if (handle == o_handle)
+                continue;
+
+            Rect o_rect;
+            o_rect.bl = glm::vec2(o_collider.position.x + o_transform.position.x, o_collider.position.y + o_transform.position.y);
+            o_rect.tr = glm::vec2(o_rect.bl.x + o_collider.size.x, o_rect.bl.y + o_collider.size.y);
+
+            if (rect.is_overlapping(o_rect))
+            {
+                auto instance = ScriptEngine::get_entity_instance(handle);
+                auto o_instance = ScriptEngine::get_entity_instance(o_handle);
+                if (instance && o_instance && instance->has_method("OnCollision"))
+                {
+                    instance->invoke_on_collision(o_instance);
+                }
+            }
+        }
     }
 }

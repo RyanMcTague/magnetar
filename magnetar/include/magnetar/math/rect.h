@@ -29,6 +29,11 @@ namespace magnetar
             return fabsf(tr.y - bl.y);
         }
 
+        bool is_zero() const
+        {
+            return horizontal() == 0.0f || vertical() == 0.0f;
+        }
+
         bool is_inside(const Rect& o) const
         {
             return bl.x >= o.bl.x && tr.x <= o.tr.x &&

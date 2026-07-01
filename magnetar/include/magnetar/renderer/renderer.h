@@ -32,9 +32,12 @@ namespace magnetar
         static void set_blend_enabled(bool enabled);
         static void set_blend_func(BlendFactor src, BlendFactor dst);
 
+        static Ref<ShaderLibrary> shader_library() { return s_shader_library; }
+
     private:
         Renderer() = default;
         static UniqueRef<GraphicsDevice> s_device;
         static glm::mat4 s_view_projection;
+        static Ref<ShaderLibrary> s_shader_library;
     };
 }

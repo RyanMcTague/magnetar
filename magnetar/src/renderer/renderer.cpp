@@ -3,6 +3,7 @@
 
 magnetar::UniqueRef<magnetar::GraphicsDevice> magnetar::Renderer::s_device = nullptr;
 glm::mat4 magnetar::Renderer::s_view_projection = glm::mat4(1.0f);
+magnetar::Ref<magnetar::ShaderLibrary> magnetar::Renderer::s_shader_library = nullptr;
 
 void magnetar::Renderer::initialize()
 {
@@ -11,10 +12,12 @@ void magnetar::Renderer::initialize()
         return;
     first = false;
     s_device = create_unique_reference<GLGraphicsDevice>();
+    s_shader_library = create_reference<ShaderLibrary>();
 }
 
 void magnetar::Renderer::shutdown()
 {
+    s_shader_library = nullptr;
     s_device = nullptr;
 }
 

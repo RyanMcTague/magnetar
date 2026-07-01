@@ -86,6 +86,12 @@ namespace magnetar
 
         void on_component_added(const EntityComponentAddedEvent& event);
         void on_component_removed(const EntityComponentRemovedEvent& event);
+
+        void sprite_renderer_render();
+        void text_renderer_render();
+
+        void rigid_body_update(float delta_time);
+        void box_collider_update(float delta_time);
     };
 
 }

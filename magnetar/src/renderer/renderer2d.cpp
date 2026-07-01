@@ -162,6 +162,7 @@ namespace magnetar
     {
         QuadBatch quads;
         TextBatch text;
+        Ref<Texture2D> default_texture;
         glm::mat4 view_projection = glm::mat4(1.0f);
         glm::mat4 text_view_projection = glm::mat4(1.0f);
     };
@@ -192,6 +193,19 @@ void magnetar::Renderer2D::initialize()
 {
     Renderer::set_blend_enabled(true);
     Renderer::set_blend_func(BlendFactor::SRC_ALPHA, BlendFactor::ONE_MINUS_SRC_ALPHA);
+
+    //==== Default Texture =========================
+    TextureSpecification spec;
+    spec.format = TextureFormat::RGBA8;
+    spec.generate_mipmaps = true;
+    spec.height = 1;
+    spec.width = 1;
+    spec.wrap = TextureWrap::REPEAT;
+    spec.mag_filter = TextureFilter::LINEAR;
+    spec.min_filter = TextureFilter::LINEAR;
+
+    uint8_t texture_data[] = {0xff, 0xff, 0xff, 0xff};
+    s_data.default_texture = Renderer::create_texture2D(spec, texture_data);
 
     //==== Quad Batch =========================
     uint32_t index_data[QUAD_INDICES_COUNT];
@@ -249,13 +263,14 @@ void magnetar::Renderer2D::shutdown()
 {
     s_data.quads = QuadBatch();
     s_data.text = TextBatch();
+    s_data.default_texture = nullptr;
 }
 
 void magnetar::Renderer2D::start(const glm::mat4 &view_projection)
 {
     float width = Application::get()->get_window()->width();
     float height = Application::get()->get_window()->height();
-    
+
     s_data.text_view_projection = glm::ortho(0.0f, width, 0.0f, height, -1.0f, 1.0f);
     s_data.view_projection = view_projection;
 
@@ -428,7 +443,7 @@ void magnetar::Renderer2D::draw_text(const std::string &text, Ref<Font> font, co
 
     for (auto ch : text)
     {
-        if(ch == '\n')
+        if (ch == '\n')
         {
             x = position.x;
             y -= font->size();
